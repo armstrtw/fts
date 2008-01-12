@@ -107,3 +107,48 @@ SEXP fillValue(SEXP x, SEXP y) {
     return r_transform_1arg<INTSXP>::apply<FillValue, fillTraits>(x, y);
   }
 }
+
+SEXP toQuarterly(SEXP x) {
+switch(TYPEOF(x)) {
+  case REALSXP:
+    // build tseries from SEXP x
+    R_Backend_TSdata<double,Rtype<REALSXP>::ValueType,int>* tsData = R_Backend_TSdata<double,Rtype<REALSXP>::ValueType,int>::init(x);
+    TSeries<double,Rtype<REALSXP>::ValueType,int,R_Backend_TSdata,PosixDate> ts(tsData);
+    return ts.toQuarterly().getIMPL()->R_object;
+  case INTSXP:
+    // build tseries from SEXP x
+    R_Backend_TSdata<double,Rtype<INTSXP>::ValueType,int>* tsData = R_Backend_TSdata<double,Rtype<INTSXP>::ValueType,int>::init(x);
+    TSeries<double,Rtype<INTSXP>::ValueType,int,R_Backend_TSdata,PosixDate> ts(tsData);
+    return ts.toQuarterly().getIMPL()->R_object;
+  }
+}
+
+SEXP toMonthly(SEXP x) {
+switch(TYPEOF(x)) {
+  case REALSXP:
+    // build tseries from SEXP x
+    R_Backend_TSdata<double,Rtype<REALSXP>::ValueType,int>* tsData = R_Backend_TSdata<double,Rtype<REALSXP>::ValueType,int>::init(x);
+    TSeries<double,Rtype<REALSXP>::ValueType,int,R_Backend_TSdata,PosixDate> ts(tsData);
+    return ts.toMonthly().getIMPL()->R_object;
+  case INTSXP:
+    // build tseries from SEXP x
+    R_Backend_TSdata<double,Rtype<INTSXP>::ValueType,int>* tsData = R_Backend_TSdata<double,Rtype<INTSXP>::ValueType,int>::init(x);
+    TSeries<double,Rtype<INTSXP>::ValueType,int,R_Backend_TSdata,PosixDate> ts(tsData);
+    return ts.toMonthly().getIMPL()->R_object;
+  }
+}
+
+SEXP toWeekly(SEXP x) {
+switch(TYPEOF(x)) {
+  case REALSXP:
+    // build tseries from SEXP x
+    R_Backend_TSdata<double,Rtype<REALSXP>::ValueType,int>* tsData = R_Backend_TSdata<double,Rtype<REALSXP>::ValueType,int>::init(x);
+    TSeries<double,Rtype<REALSXP>::ValueType,int,R_Backend_TSdata,PosixDate> ts(tsData);
+    return ts.toWeekly().getIMPL()->R_object;
+  case INTSXP:
+    // build tseries from SEXP x
+    R_Backend_TSdata<double,Rtype<INTSXP>::ValueType,int>* tsData = R_Backend_TSdata<double,Rtype<INTSXP>::ValueType,int>::init(x);
+    TSeries<double,Rtype<INTSXP>::ValueType,int,R_Backend_TSdata,PosixDate> ts(tsData);
+    return ts.toWeekly().getIMPL()->R_object;
+  }
+}

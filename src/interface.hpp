@@ -15,6 +15,10 @@ extern "C" {
   SEXP fillForward(SEXP x);
   SEXP fillBackward(SEXP x);
   SEXP fillValue(SEXP x,SEXP value);
+
+  SEXP toQuarterly(SEXP x);
+  SEXP toMonthly(SEXP x);
+  SEXP toWeekly(SEXP x);
 }
 
 #endif // INTERFACE_HPP

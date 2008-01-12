@@ -464,16 +464,15 @@ fill.value <- function(x,value) {
 }
 
 daily2quarterly <- function(x) {
-    .Call("daily2quarterly",x,PACKAGE="Rseries")
+    .Call("toQuarterly",x,PACKAGE="Rseries")
 }
 
-
 daily2weekly <- function(x) {
-    .Call("daily2weekly",x,PACKAGE="Rseries")
+    .Call("toWeekly",x,PACKAGE="Rseries")
 }
 
 daily2monthly <- function(x) {
-    .Call("daily2monthly",x,PACKAGE="Rseries")
+    .Call("toMonthly",x,PACKAGE="Rseries")
 }
 
 ###############################################################
