@@ -15,6 +15,7 @@ extern "C" {
   SEXP movingCov(SEXP x, SEXP y, SEXP periods);
   SEXP movingCor(SEXP x, SEXP y, SEXP periods);
 
+  SEXP sinceNA(SEXP x);
   SEXP fillForward(SEXP x);
   SEXP fillBackward(SEXP x);
   SEXP fillValue(SEXP x,SEXP value);

@@ -113,6 +113,17 @@ SEXP movingCor(SEXP x, SEXP y, SEXP periods) {
   }
 }
 
+SEXP sinceNA(SEXP x) {
+
+  switch(TYPEOF(x)) {
+
+  case REALSXP:
+    return r_transform<REALSXP>::apply<SinceNA, SinceNATraits>(x);
+  case INTSXP:
+    return r_transform<INTSXP>::apply<SinceNA, SinceNATraits>(x);
+  }
+}
+
 
 SEXP fillForward(SEXP x) {
 

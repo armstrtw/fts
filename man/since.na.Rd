@@ -15,7 +15,7 @@ since.na(x)
 }
 \author{ Whit Armstrong }
 \examples{
-x <- rseries(rnorm(100)
+x <- rseries(rnorm(100))
 
 x[10,] <- NA
 
