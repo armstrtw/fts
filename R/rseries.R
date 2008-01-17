@@ -332,7 +332,11 @@ read.csv.rseries <- function(file,date.format="%Y-%m-%d %T") {
     ans <- as.matrix(read.csv(file,
                               row.names=1))
 
-    rseries(dates=as.POSIXct(strptime(rownames(ans),date.format)),
+    dts <- as.POSIXct(strptime(rownames(ans),date.format))
+
+    rownames(ans) <- NULL
+
+    rseries(dates=dts,
             data=ans)
 }
 
