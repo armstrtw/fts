@@ -51,15 +51,15 @@ moving.cov(x, y, periods)
 x <- rseries()
 y <- rseries()
 
-## take only odd rows
-y <- y[(1:nrow(y))%%2 == 1]
-
 x.mean <- moving.mean(x,20)
 x.sum <- moving.sum(x,20)
 x.max <- moving.max(x,20)
 x.min <- moving.min(x,20)
 x.sd <- moving.sd(x,20)
 x.rank <- moving.rank(x,20)
+
+## take only odd rows
+y <- y[(1:nrow(y))\%\%2 == 1]
 
 xy.cor <- moving.cor(x, y, 20)
 xy.cov <- moving.cov(x, y, 20)
