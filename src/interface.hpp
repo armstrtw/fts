@@ -12,9 +12,15 @@ extern "C" {
   SEXP movingStdev(SEXP x, SEXP periods);
   SEXP movingRank(SEXP x, SEXP periods);
 
+  SEXP movingCov(SEXP x, SEXP y, SEXP periods);
+  SEXP movingCor(SEXP x, SEXP y, SEXP periods);
+
   SEXP fillForward(SEXP x);
   SEXP fillBackward(SEXP x);
   SEXP fillValue(SEXP x,SEXP value);
+
+  SEXP lag(SEXP x, SEXP periods);
+  SEXP lead(SEXP x, SEXP periods);
 
   SEXP toQuarterly(SEXP x);
   SEXP toMonthly(SEXP x);

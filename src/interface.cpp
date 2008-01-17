@@ -3,10 +3,12 @@
 #include <tslib/vector.transform.hpp>
 
 #include "interface.hpp"
+#include "r2tseries.object.convert.hpp"
 #include "R.tseries.data.backend.hpp"
 #include "sexp.allocator.templates.hpp"
 #include "r.window.template.hpp"
 #include "r.transform.template.hpp"
+
 
 SEXP movingMean(SEXP x, SEXP periods) {
 
@@ -75,6 +77,43 @@ SEXP movingRank(SEXP x, SEXP periods) {
   }
 }
 
+SEXP movingCov(SEXP x, SEXP y, SEXP periods) {
+
+  if(TYPEOF(x)!=TYPEOF(y)) {
+    std::cerr << "movingCov: x and y must be the same type" << endl;
+  }
+
+  switch(TYPEOF(x)) {
+  case REALSXP:
+    return window_function<covTraits< Rtype<REALSXP>::ValueType >::ReturnType, Cov>(r_convert<REALSXP>::apply(x),
+                                                                                    r_convert<REALSXP>::apply(y),
+                                                                                    Rtype<INTSXP>::scalar(periods)).getIMPL()->R_object;
+  case INTSXP:
+    return window_function<covTraits< Rtype<INTSXP>::ValueType >::ReturnType, Cov>(r_convert<INTSXP>::apply(x),
+                                                                                   r_convert<INTSXP>::apply(y),
+                                                                                   Rtype<INTSXP>::scalar(periods)).getIMPL()->R_object;
+  }
+}
+
+SEXP movingCor(SEXP x, SEXP y, SEXP periods) {
+
+  if(TYPEOF(x)!=TYPEOF(y)) {
+    std::cerr << "movingCor: x and y must be the same type" << endl;
+  }
+
+  switch(TYPEOF(x)) {
+  case REALSXP:
+    return window_function<corTraits< Rtype<REALSXP>::ValueType >::ReturnType, Cor>(r_convert<REALSXP>::apply(x),
+                                                                                    r_convert<REALSXP>::apply(y),
+                                                                                    Rtype<INTSXP>::scalar(periods)).getIMPL()->R_object;
+  case INTSXP:
+    return window_function<corTraits< Rtype<INTSXP>::ValueType >::ReturnType, Cor>(r_convert<INTSXP>::apply(x),
+                                                                                   r_convert<INTSXP>::apply(y),
+                                                                                   Rtype<INTSXP>::scalar(periods)).getIMPL()->R_object;
+  }
+}
+
+
 SEXP fillForward(SEXP x) {
 
   switch(TYPEOF(x)) {
@@ -100,7 +139,6 @@ SEXP fillBackward(SEXP x) {
 SEXP fillValue(SEXP x, SEXP y) {
 
   switch(TYPEOF(x)) {
-
   case REALSXP:
     return r_transform_1arg<REALSXP>::apply<FillValue, fillTraits>(x, y);
   case INTSXP:
@@ -108,47 +146,48 @@ SEXP fillValue(SEXP x, SEXP y) {
   }
 }
 
-SEXP toQuarterly(SEXP x) {
-switch(TYPEOF(x)) {
+SEXP lag(SEXP x, SEXP periods) {
+  switch(TYPEOF(x)) {
   case REALSXP:
-    // build tseries from SEXP x
-    R_Backend_TSdata<double,Rtype<REALSXP>::ValueType,int>* tsData = R_Backend_TSdata<double,Rtype<REALSXP>::ValueType,int>::init(x);
-    TSeries<double,Rtype<REALSXP>::ValueType,int,R_Backend_TSdata,PosixDate> ts(tsData);
-    return ts.toQuarterly().getIMPL()->R_object;
+    return r_transform_1arg<REALSXP>::apply<Lag, lagleadTraits>(x, periods);
   case INTSXP:
-    // build tseries from SEXP x
-    R_Backend_TSdata<double,Rtype<INTSXP>::ValueType,int>* tsData = R_Backend_TSdata<double,Rtype<INTSXP>::ValueType,int>::init(x);
-    TSeries<double,Rtype<INTSXP>::ValueType,int,R_Backend_TSdata,PosixDate> ts(tsData);
-    return ts.toQuarterly().getIMPL()->R_object;
+    return r_transform_1arg<INTSXP>::apply<Lag, lagleadTraits>(x, periods);
+  }
+}
+
+SEXP lead(SEXP x, SEXP periods) {
+  switch(TYPEOF(x)) {
+  case REALSXP:
+    return r_transform_1arg<REALSXP>::apply<Lead, lagleadTraits>(x, periods);
+  case INTSXP:
+    return r_transform_1arg<INTSXP>::apply<Lead, lagleadTraits>(x, periods);
+  }
+}
+
+
+SEXP toQuarterly(SEXP x) {
+  switch(TYPEOF(x)) {
+  case REALSXP:
+    return r_convert<REALSXP>::apply(x).toQuarterly().getIMPL()->R_object;
+  case INTSXP:
+    return r_convert<INTSXP>::apply(x).toQuarterly().getIMPL()->R_object;
   }
 }
 
 SEXP toMonthly(SEXP x) {
-switch(TYPEOF(x)) {
+  switch(TYPEOF(x)) {
   case REALSXP:
-    // build tseries from SEXP x
-    R_Backend_TSdata<double,Rtype<REALSXP>::ValueType,int>* tsData = R_Backend_TSdata<double,Rtype<REALSXP>::ValueType,int>::init(x);
-    TSeries<double,Rtype<REALSXP>::ValueType,int,R_Backend_TSdata,PosixDate> ts(tsData);
-    return ts.toMonthly().getIMPL()->R_object;
+    return r_convert<REALSXP>::apply(x).toMonthly().getIMPL()->R_object;
   case INTSXP:
-    // build tseries from SEXP x
-    R_Backend_TSdata<double,Rtype<INTSXP>::ValueType,int>* tsData = R_Backend_TSdata<double,Rtype<INTSXP>::ValueType,int>::init(x);
-    TSeries<double,Rtype<INTSXP>::ValueType,int,R_Backend_TSdata,PosixDate> ts(tsData);
-    return ts.toMonthly().getIMPL()->R_object;
+    return r_convert<INTSXP>::apply(x).toMonthly().getIMPL()->R_object;
   }
 }
 
 SEXP toWeekly(SEXP x) {
-switch(TYPEOF(x)) {
+  switch(TYPEOF(x)) {
   case REALSXP:
-    // build tseries from SEXP x
-    R_Backend_TSdata<double,Rtype<REALSXP>::ValueType,int>* tsData = R_Backend_TSdata<double,Rtype<REALSXP>::ValueType,int>::init(x);
-    TSeries<double,Rtype<REALSXP>::ValueType,int,R_Backend_TSdata,PosixDate> ts(tsData);
-    return ts.toWeekly().getIMPL()->R_object;
+    return r_convert<REALSXP>::apply(x).toWeekly().getIMPL()->R_object;
   case INTSXP:
-    // build tseries from SEXP x
-    R_Backend_TSdata<double,Rtype<INTSXP>::ValueType,int>* tsData = R_Backend_TSdata<double,Rtype<INTSXP>::ValueType,int>::init(x);
-    TSeries<double,Rtype<INTSXP>::ValueType,int,R_Backend_TSdata,PosixDate> ts(tsData);
-    return ts.toWeekly().getIMPL()->R_object;
+    return r_convert<INTSXP>::apply(x).toWeekly().getIMPL()->R_object;
   }
 }

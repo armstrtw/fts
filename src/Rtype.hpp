@@ -20,7 +20,7 @@ template<>
 class Rtype<INTSXP> {
 public:
   typedef int ValueType;
-  static double scalar(SEXP x) {
+  static int scalar(SEXP x) {
     return INTEGER(x)[0];
   }
 };
@@ -29,7 +29,7 @@ template<>
 class Rtype<LGLSXP> {
 public:
   typedef int ValueType;
-  static double scalar(SEXP x) {
+  static int scalar(SEXP x) {
     return INTEGER(x)[0];
   }
 };
