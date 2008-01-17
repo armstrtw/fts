@@ -39,6 +39,6 @@ all.equal(x,y.csv)
 rds.fname <- paste(tempfile(),".rseries",sep="")
 write.rds.rseries(x,rds.fname)
 y.rds <- read.rds.rseries(rds.fname)
-all.equal(x,y.csv)
+all.equal(x,y.rds)
 }
 \keyword{ts}
