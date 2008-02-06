@@ -187,6 +187,20 @@ print.rseries <- function(x, ...) {
     x
 }
 
+## apply a function to an rseries row
+row.apply <- function(x,FUN,...) {
+    ans <- apply(x,1,FUN,...)
+
+    if(!is.null(dim(ans))) {
+        ans <- t(ans)
+        rownames(ans) <- NULL
+    }
+
+    rseries(data=ans,
+            dates=dates(x))
+}
+
+
 row.any <- function(x) {
     apply(x,1,any)
 }
@@ -194,6 +208,12 @@ row.any <- function(x) {
 row.all <- function(x) {
     apply(x,1,all)
 }
+
+## apply a function to an rseries column
+column.apply <- function(x,FUN,...) {
+    apply(x,2,FUN,...)
+}
+
 
 col.any <- function(x) {
     apply(x,2,any)
@@ -323,14 +343,13 @@ trim <- function(x,trim.dates) {
     x[new.dates,]
 }
 
-write.csv.rseries <- function(x,file,date.format="%Y-%m-%d %T") {
+write.csv.rseries <- function(x,file,date.format="%Y-%m-%d %T",...) {
     rownames(x) <- format(dates(x),date.format)
-    write.csv(x,file,na="=NA()")
+    write.csv(x,file,na="=NA()",...)
 }
 
-read.csv.rseries <- function(file,date.format="%Y-%m-%d %T") {
-    ans <- as.matrix(read.csv(file,
-                              row.names=1))
+read.csv.rseries <- function(file,date.format="%Y-%m-%d %T",...) {
+    ans <- as.matrix(read.csv(file,row.names=1,...))
 
     dts <- as.POSIXct(strptime(rownames(ans),date.format))
 
@@ -467,15 +486,15 @@ fill.value <- function(x,value) {
     .Call("fillValue",x,value,PACKAGE="Rseries")
 }
 
-daily2quarterly <- function(x) {
+to.quarterly <- function(x) {
     .Call("toQuarterly",x,PACKAGE="Rseries")
 }
 
-daily2weekly <- function(x) {
+to.weekly <- function(x) {
     .Call("toWeekly",x,PACKAGE="Rseries")
 }
 
-daily2monthly <- function(x) {
+to.monthly <- function(x) {
     .Call("toMonthly",x,PACKAGE="Rseries")
 }
 

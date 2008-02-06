@@ -20,9 +20,10 @@ export(
        write.csv.rseries,
        write.rds.rseries,
        print.rseries,
-       daily2quarterly,
-       daily2weekly,
-       daily2monthly,
+
+       to.quarterly,
+       to.weekly,
+       to.monthly,
 
        moving.mean,
        moving.sum,
@@ -49,8 +50,10 @@ export(
 
        remove.na.rows,
        remove.all.na.rows,
+       row.apply,
        row.any,
        row.all,
+       column.apply,
        col.any,
        col.all
 )

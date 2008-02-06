@@ -1,7 +1,7 @@
 \name{frequency.convert}
-\alias{daily2weekly}
-\alias{daily2monthly}
-\alias{daily2quarterly}
+\alias{to.weekly}
+\alias{to.monthly}
+\alias{to.quarterly}
 
 \title{Change Frequencies}
 \description{
@@ -9,9 +9,9 @@
   or from an irregular frequency to a regular frequency
 }
 \usage{
-daily2weekly(x)
-daily2monthly(x)
-daily2quarterly(x)
+to.weekly(x)
+to.monthly(x)
+to.quarterly(x)
 }
 \arguments{
   \item{x}{ An Rseries object }
@@ -23,8 +23,8 @@ daily2quarterly(x)
 \examples{
 x <- rseries()
 
-daily2weekly(x)
-daily2monthly(x)
-daily2quarterly(x)
+to.weekly(x)
+to.monthly(x)
+to.quarterly(x)
 }
 \keyword{ts}

@@ -13,14 +13,15 @@
 read.rds.rseries(file)
 write.rds.rseries(x,file)
 
-read.csv.rseries(file, date.format)
-write.csv.rseries(x, file, date.format)
+read.csv.rseries(file, date.format, ...)
+write.csv.rseries(x, file, date.format, ...)
 }
 \arguments{
   \item{x}{ An Rseries object }
   \item{file}{ filename of file to read/write}
   \item{date.format}{ a format string specifying the date format to use
     when reading / writing dates}
+  \item{\dots}{ further arguments to underlying read/write functions }
 }
 \value{
   a Rseries object for functions that read data
