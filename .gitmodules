@@ -1,0 +1,3 @@
+[submodule "tslib"]
+	path = tslib
+	url = git://repo.or.cz/tslib.git
