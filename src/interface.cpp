@@ -32,6 +32,17 @@ SEXP movingSum(SEXP x, SEXP periods) {
   }
 }
 
+SEXP movingProduct(SEXP x, SEXP periods) {
+
+  switch(TYPEOF(x)) {
+
+  case REALSXP:
+    return r_window<REALSXP>::apply<Prod, prodTraits>(x,periods);
+  case INTSXP:
+    return r_window<INTSXP>::apply<Prod, prodTraits>(x,periods);
+  }
+}
+
 
 SEXP movingMax(SEXP x, SEXP periods) {
 

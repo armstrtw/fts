@@ -7,6 +7,7 @@
 extern "C" {
   SEXP movingMean(SEXP x, SEXP periods);
   SEXP movingSum(SEXP x, SEXP periods);
+  SEXP movingProduct(SEXP x, SEXP periods);
   SEXP movingMax(SEXP x, SEXP periods);
   SEXP movingMin(SEXP x, SEXP periods);
   SEXP movingStdev(SEXP x, SEXP periods);

@@ -1,11 +1,11 @@
 ###############################################################
-################ Rseries class definitions ####################
+################ Fts class definitions ####################
 ###############################################################
 ###############################################################
 
-## layout of an rseries object is
+## layout of an fts object is
 ## a matrix with a dates attribute attached
-rseries <- function(data,dates) {
+fts <- function(data,dates) {
 
     if(missing(data) && !missing(dates)) {
         data <- rep(NA,length(dates))
@@ -43,43 +43,43 @@ rseries <- function(data,dates) {
 
     ## set dates attribute of answer
     attr(ans,"dates") <- dates
-    class(ans) <- c("rseries","matrix")
+    class(ans) <- c("fts","matrix")
     ans
 }
 
-as.rseries <- function(x) {
-    UseMethod("as.rseries")
+as.fts <- function(x) {
+    UseMethod("as.fts")
 }
 
-as.rseries.default <- function(x) {
+as.fts.default <- function(x) {
     if(!is.null(dim(x))) {
         dts <- rownames(x)
     } else {
         dts <- names(x)
     }
-    rseries(data=as.matrix(x),dates=dts)
+    fts(data=as.matrix(x),dates=dts)
 }
 
-as.matrix.rseries <- function(x, ...) {
+as.matrix.fts <- function(x, ...) {
     ans <- matrix(as.numeric(x),nrow=nrow(x),ncol=ncol(x))
     colnames(ans) <- colnames(x)
     rownames(ans) <- format(dates(x),"%Y%m%d")
     ans
 }
 
-Ops.rseries <- function (e1, e2) {
+Ops.fts <- function (e1, e2) {
 
     if(missing(e2)) {
         ans.data <- NextMethod()
         attr(ans.data,"dates") <- dates(e1)
-        class(ans.data) <- c("rseries","matrix")
+        class(ans.data) <- c("fts","matrix")
         ans.data
     } else {
 
         c.e1 <- class(e1)
         c.e2 <- class(e2)
 
-        if("rseries"%in%c.e1 && "rseries"%in%c.e2) {
+        if("fts"%in%c.e1 && "fts"%in%c.e2) {
             i.dates <- intersect(dates(e1),dates(e2))
             class(i.dates) <- c("POSIXt","POSIXct")
 
@@ -102,11 +102,11 @@ Ops.rseries <- function (e1, e2) {
                         e2 <- rep(e2,nce1)
                         ans.data <- NextMethod()
                     } else {
-                        stop("Ops.rseries: non conformable data.")
+                        stop("Ops.fts: non conformable data.")
                     }
                 }
                 attr(ans.data,"dates") <- i.dates
-                class(ans.data) <- c("rseries","matrix")
+                class(ans.data) <- c("fts","matrix")
                 ans.data
             } else {
                 ## no matching dates, return NULL
@@ -115,19 +115,19 @@ Ops.rseries <- function (e1, e2) {
 
         } else {
             ans.data <- NextMethod()
-            if("rseries"%in%c.e1) {
+            if("fts"%in%c.e1) {
                 ans.dates <- attr(e1,"dates")
             } else {
                 ans.dates <- attr(e2,"dates")
             }
             attr(ans.data,"dates") <- ans.dates
-            class(ans.data) <- c("rseries","matrix")
+            class(ans.data) <- c("fts","matrix")
             ans.data
         }
     }
 }
 
-print.rseries <- function(x, ...) {
+print.fts <- function(x, ...) {
     cnms <- colnames(x)
     dnms <- list(format(dates(x)),cnms)
     dims <- dim(x)
@@ -138,7 +138,7 @@ print.rseries <- function(x, ...) {
     invisible(x)
 }
 
-"[.rseries" <- function(x,i,j,...,drop=FALSE) {
+"[.fts" <- function(x,i,j,...,drop=FALSE) {
 
     if(missing(i)) i <- 1:nrow(x)
     if(missing(j)) j <- 1:ncol(x)
@@ -160,7 +160,7 @@ print.rseries <- function(x, ...) {
     ans.dates <- dates(x)[i]
     ans <- unclass(x)[i,j,...,drop=drop]
     attr(ans,"dates") <- ans.dates
-    class(ans) <- c("rseries","matrix")
+    class(ans) <- c("fts","matrix")
 
     ticker <- attr(x,"ticker")
     if(!is.null(ticker)) attr(ans,"ticker") <- ticker
@@ -174,7 +174,7 @@ print.rseries <- function(x, ...) {
     ans
 }
 
-"[<-.rseries" <- function(x, i = TRUE, j = TRUE, ..., value) {
+"[<-.fts" <- function(x, i = TRUE, j = TRUE, ..., value) {
     ## if we have dates, then use them
     if(!missing(i)) {
         if("POSIXct"%in%class(i)) {
@@ -183,11 +183,11 @@ print.rseries <- function(x, ...) {
     }
     x <- unclass(x)
     x <- NextMethod()
-    class(x) <- "rseries"
+    class(x) <- "fts"
     x
 }
 
-## apply a function to an rseries row
+## apply a function to an fts row
 row.apply <- function(x,FUN,...) {
     ans <- apply(x,1,FUN,...)
 
@@ -196,7 +196,7 @@ row.apply <- function(x,FUN,...) {
         rownames(ans) <- NULL
     }
 
-    rseries(data=ans,
+    fts(data=ans,
             dates=dates(x))
 }
 
@@ -209,7 +209,7 @@ row.all <- function(x) {
     apply(x,1,all)
 }
 
-## apply a function to an rseries column
+## apply a function to an fts column
 column.apply <- function(x,FUN,...) {
     apply(x,2,FUN,...)
 }
@@ -231,20 +231,20 @@ remove.all.na.rows <- function(x) {
     x[!row.all(is.na(x)),]
 }
 
-as.data.frame.rseries <- function(x,row.names = NULL, optional = FALSE, ...) {
+as.data.frame.fts <- function(x,row.names = NULL, optional = FALSE, ...) {
     ans <- as.data.frame.matrix(unclass(x))
     rownames(ans) <- dates(x)
     ans
 }
 
-as.matrix.rseries <- function(x, ...) {
+as.matrix.fts <- function(x, ...) {
     rownames(x) <- format(dates(x))
     attr(x,"dates") <- NULL
     class(x) <- "matrix"
     x
 }
 
-rbind.rseries <- function(...) {
+rbind.fts <- function(...) {
     x <- list(...)
 
     ## check for same number of cols
@@ -266,10 +266,10 @@ rbind.rseries <- function(...) {
     ## must do data before we sort dates
     ans.data <- ans.data[new.order,,drop=F]
     ans.dates <- ans.dates[new.order]
-    rseries(dates=ans.dates,data=ans.data)
+    fts(dates=ans.dates,data=ans.data)
 }
 
-cbind.rseries <- function(...) {
+cbind.fts <- function(...) {
     x <- list(...)
 
     ans.dates <- sort(unique(unlist(lapply(x,dates))))
@@ -298,7 +298,7 @@ cbind.rseries <- function(...) {
     cnames.list <- lapply(x,colnames)
     colnames(ans) <- fix.cnames(cnames.list)
     attr(ans,"dates") <- ans.dates
-    class(ans) <- "rseries"
+    class(ans) <- "fts"
     ans
 }
 
@@ -331,7 +331,7 @@ pad <- function(x,pad.dates) {
     class(new.dates) <- c("POSIXt","POSIXct")
     ans <- matrix(nrow=length(new.dates),ncol=ncol(x))
     attr(ans,"dates") <- new.dates
-    class(ans) <- c("rseries","matrix")
+    class(ans) <- c("fts","matrix")
     ans[dates(x),] <- x
     colnames(ans) <- colnames(x)
     ans
@@ -343,37 +343,37 @@ trim <- function(x,trim.dates) {
     x[new.dates,]
 }
 
-write.csv.rseries <- function(x,file,date.format="%Y-%m-%d %T",...) {
+write.csv.fts <- function(x,file,date.format="%Y-%m-%d %T",...) {
     rownames(x) <- format(dates(x),date.format)
     write.csv(x,file,na="=NA()",...)
 }
 
-read.csv.rseries <- function(file,date.format="%Y-%m-%d %T",...) {
+read.csv.fts <- function(file,date.format="%Y-%m-%d %T",...) {
     ans <- as.matrix(read.csv(file,row.names=1,...))
 
     dts <- as.POSIXct(strptime(rownames(ans),date.format))
 
     rownames(ans) <- NULL
 
-    rseries(dates=dts,
+    fts(dates=dts,
             data=ans)
 }
 
-read.rds.rseries <- function(file) {
+read.rds.fts <- function(file) {
     x <- .readRDS(file)
     x
 }
 
-write.rds.rseries <- function(x,file) {
+write.rds.fts <- function(x,file) {
     .saveRDS(x,file)
 }
 
 
-head.rseries <- function(x,n=10,...) {
+head.fts <- function(x,n=10,...) {
     x[1:n,]
 }
 
-tail.rseries <- function(x,n=10,...) {
+tail.fts <- function(x,n=10,...) {
     nr <- nrow(x)
     x[(nr-n+1):nr,]
 }
@@ -385,7 +385,7 @@ cumsum <- function(x) {
     UseMethod("cumsum")
 }
 
-cumsum.rseries <- function(x) {
+cumsum.fts <- function(x) {
     apply(x,2,cumsum)
 }
 
@@ -398,7 +398,7 @@ dates <- function(x) {
     UseMethod("dates")
 }
 
-dates.rseries <- function(x) {
+dates.fts <- function(x) {
     attr(x,"dates")
 }
 
@@ -410,7 +410,7 @@ dates.rseries <- function(x) {
     x
 }
 
-## return the dates just when the rseries is true
+## return the dates just when the fts is true
 event.dates <- function(x) {
     stopifnot(ncol(x)==1)
     dates(x)[as.logical(x)&!is.na(x)]
@@ -424,86 +424,90 @@ event.dates <- function(x) {
 
 
 moving.mean <- function(x,periods) {
-    .Call("movingMean",x,as.integer(periods),PACKAGE="Rseries")
+    .Call("movingMean",x,as.integer(periods),PACKAGE="fts")
 }
 
 moving.sum <- function(x,periods) {
-    .Call("movingSum",x,as.integer(periods),PACKAGE="Rseries")
+    .Call("movingSum",x,as.integer(periods),PACKAGE="fts")
+}
+
+moving.product <- function(x,periods) {
+    .Call("movingProduct",x,as.integer(periods),PACKAGE="fts")
 }
 
 moving.max <- function(x,periods) {
-    .Call("movingMax",x,as.integer(periods),PACKAGE="Rseries")
+    .Call("movingMax",x,as.integer(periods),PACKAGE="fts")
 }
 
 moving.min <- function(x,periods) {
-    .Call("movingMin",x,as.integer(periods),PACKAGE="Rseries")
+    .Call("movingMin",x,as.integer(periods),PACKAGE="fts")
 }
 
 moving.rank <- function(x,periods) {
-    .Call("movingRank",x,as.integer(periods),PACKAGE="Rseries")
+    .Call("movingRank",x,as.integer(periods),PACKAGE="fts")
 }
 
 moving.sd <- function(x,periods) {
-    .Call("movingStdev",x,as.integer(periods),PACKAGE="Rseries")
+    .Call("movingStdev",x,as.integer(periods),PACKAGE="fts")
 }
 
 moving.cor <- function(x,y,periods) {
-    .Call("movingCor", x, y, as.integer(periods))
+    .Call("movingCor", x, y, as.integer(periods),PACKAGE="fts")
 }
 
 moving.cov <- function(x,y,periods) {
-    .Call("movingCov", x, y, as.integer(periods))
+    .Call("movingCov", x, y, as.integer(periods),PACKAGE="fts")
 }
 
 
 since.na <- function(x) {
-    .Call("sinceNA",x,PACKAGE="Rseries")
+    .Call("sinceNA",x,PACKAGE="fts")
 }
 
-lag.rseries <- function(x, k, ...) {
+lag.fts <- function(x, k, ...) {
     if(k < 0) stop("lag: only positive values of k are allowed")
-    .Call("lag", x, as.integer(k),PACKAGE="Rseries")
+    .Call("lag", x, as.integer(k),PACKAGE="fts")
 }
 
 lead <- function(x, k, ...) {
     UseMethod("lead")
 }
 
-lead.rseries <- function(x, k, ...) {
+lead.fts <- function(x, k, ...) {
     if(k < 0) stop("only positive values of k are allowed")
-    .Call("lead",x ,as.integer(k),PACKAGE="Rseries")
+    .Call("lead",x ,as.integer(k),PACKAGE="fts")
 }
 
 fill.fwd <- function(x) {
-    .Call("fillForward",x,PACKAGE="Rseries")
+    .Call("fillForward",x,PACKAGE="fts")
 }
 
 fill.bwd <- function(x) {
-    .Call("fillBackward",x,PACKAGE="Rseries")
+    .Call("fillBackward",x,PACKAGE="fts")
 }
 
 fill.value <- function(x,value) {
-    .Call("fillValue",x,value,PACKAGE="Rseries")
+    .Call("fillValue",x,value,PACKAGE="fts")
 }
 
 to.quarterly <- function(x) {
-    .Call("toQuarterly",x,PACKAGE="Rseries")
+    .Call("toQuarterly",x,PACKAGE="fts")
 }
 
 to.weekly <- function(x) {
-    .Call("toWeekly",x,PACKAGE="Rseries")
+    .Call("toWeekly",x,PACKAGE="fts")
 }
 
 to.monthly <- function(x) {
-    .Call("toMonthly",x,PACKAGE="Rseries")
+    .Call("toMonthly",x,PACKAGE="fts")
 }
 
 ###############################################################
-############ Plotting functions for Rseries Objects ###########
+############ Plotting functions for Fts Objects ###########
 ###############################################################
 ###############################################################
 
-plot.rseries <- function(x,type="l",...) {
+plot.fts <- function(x,type="l",...) {
 
     ## can only plot 1 column for now
     if("close"%in%colnames(x)) x <- x[,"close"]

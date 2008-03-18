@@ -9,7 +9,7 @@ using std::vector;
 using std::string;
 
 void addPOSIXattributes(SEXP x);
-void addRseriesClass(SEXP x);
+void addFtsClass(SEXP x);
 void addDates(SEXP r_object,SEXP r_dates);
 void setDates(SEXP x, SEXP dates);
 SEXP getDatesSEXP(const SEXP x);

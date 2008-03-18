@@ -14,14 +14,14 @@ to.monthly(x)
 to.quarterly(x)
 }
 \arguments{
-  \item{x}{ An Rseries object }
+  \item{x}{ An Fts object }
 }
 \value{
-  an Rseries object
+  an Fts object
 }
 \author{ Whit Armstrong }
 \examples{
-x <- rseries()
+x <- fts()
 
 to.weekly(x)
 to.monthly(x)

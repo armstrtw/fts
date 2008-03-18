@@ -1,19 +1,19 @@
 \name{lead.lag}
 %\alias{lag}
 \alias{lead}
-\alias{lead.rseries}
-\alias{lag.rseries}
+\alias{lead.fts}
+\alias{lag.fts}
 
-\title{Shift an Rseries ojbect in time}
+\title{Shift an Fts ojbect in time}
 \description{
-  Shift an Rseries ojbect forward or backwards in time be the supplied
+  Shift an Fts ojbect forward or backwards in time be the supplied
   number of periods
 }
 \usage{
 lead(x,k, ...)
 }
 \arguments{
-  \item{x}{ An Rseries object }
+  \item{x}{ An Fts object }
   \item{k}{ number of periods to shift }
   \item{\dots}{ further arguments to function }
 }
@@ -21,11 +21,11 @@ lead(x,k, ...)
   removed elements are replaced with NA
 }
 \value{
-  an Rseries object
+  an Fts object
 }
 \author{ Whit Armstrong }
 \examples{
-x <- rseries(rnorm(20))
+x <- fts(rnorm(20))
 
 lag(x,10)
 lead(x,10)

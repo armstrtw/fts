@@ -1,6 +1,7 @@
 \name{moving}
 \alias{moving.mean}
 \alias{moving.sum}
+\alias{moving.product}
 \alias{moving.max}
 \alias{moving.min}
 \alias{moving.sd}
@@ -26,33 +27,34 @@ moving.cov(x, y, periods)
 }
 
 \arguments{
-  \item{x}{ An Rseries object }
-  \item{y}{ An Rseries object }
+  \item{x}{ An Fts object }
+  \item{y}{ An Fts object }
   \item{periods}{ integer: number of periods in window }
 }
 
 
 \details{
   apply a function that takes a vector and returns a scalar on a rolling
-  basis to an rseries object
+  basis to an fts object
 
-  asking for a window larger than the number of rows of the rseries
-  object will result in an rseries of all NA w/ the same number of rows as the
+  asking for a window larger than the number of rows of the fts
+  object will result in an fts of all NA w/ the same number of rows as the
   input
 
-  for functions that take two rseries objects the date intersection is
+  for functions that take two fts objects the date intersection is
   taken before the window function is applied
 }
 \value{
-  an rseries object
+  an fts object
 }
 \author{ Whit Armstrong }
 \examples{
-x <- rseries()
-y <- rseries()
+x <- fts()
+y <- fts()
 
 x.mean <- moving.mean(x,20)
 x.sum <- moving.sum(x,20)
+x.prod <- moving.product(x,20)
 x.max <- moving.max(x,20)
 x.min <- moving.min(x,20)
 x.sd <- moving.sd(x,20)

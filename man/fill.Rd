@@ -14,15 +14,15 @@ fill.bwd(x)
 fill.value(x,value)
 }
 \arguments{
-  \item{x}{ An Rseries object }
+  \item{x}{ An Fts object }
   \item{value}{ a value to replace the missing values}
 }
 \value{
-  an Rseries object
+  an Fts object
 }
 \author{ Whit Armstrong }
 \examples{
-x <- rseries(rnorm(10))
+x <- fts(rnorm(10))
 
 x[5,] <- NA
 fill.fwd(x)

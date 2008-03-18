@@ -1,4 +1,4 @@
-\name{rseries.logical}
+\name{fts.logical}
 \alias{col.any}
 \alias{col.all}
 \alias{row.any}
@@ -23,7 +23,7 @@ row.all(x)
 \author{ Whit Armstrong }
 \examples{
 
-x <- rseries(matrix(rnorm(100),nrow=50))
+x <- fts(matrix(rnorm(100),nrow=50))
 jj <- x > 0
 row.all(jj)
 }

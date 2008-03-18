@@ -80,7 +80,7 @@ R_Backend_TSdata<TDATE,TDATA,TSDIM>::R_Backend_TSdata(const TSDIM rows, const TS
   PROTECT(R_dates  = R_allocator<TDATE>::Vector(rows));
   addPOSIXattributes(R_dates);
   setDates(R_object,R_dates);
-  addRseriesClass(R_object);
+  addFtsClass(R_object);
 
   UNPROTECT(1); // dates only
 }

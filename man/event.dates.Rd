@@ -2,14 +2,14 @@
 \alias{event.dates}
 \title{ Extract Dates }
 \description{
-  Extract the dates from a one column LOGICAL Rseries object where value is TRUE
+  Extract the dates from a one column LOGICAL Fts object where value is TRUE
 }
 \usage{
 event.dates(x)
 }
 
 \arguments{
-  \item{x}{ An Rseries object }
+  \item{x}{ An Fts object }
 }
 \details{
   removes NA values before extracting dates
@@ -19,7 +19,7 @@ event.dates(x)
 }
 \author{ Whit Armstrong }
 \examples{
-x <- rseries()
+x <- fts()
 x.bool <- x > 10
 event.dates(x.bool)
 

@@ -11,14 +11,14 @@ remove.na.rows(x)
 remove.all.na.rows(x)
 }
 \arguments{
-  \item{x}{ An Rseries object }
+  \item{x}{ An Fts object }
 }
 \value{
-  an Rseries object
+  an Fts object
 }
 \author{ Whit Armstrong }
 \examples{
-x <- rseries(matrix(rnorm(20),ncol=2))
+x <- fts(matrix(rnorm(20),ncol=2))
 
 x[5,1] <- NA
 x[10,] <- NA

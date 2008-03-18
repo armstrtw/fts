@@ -10,10 +10,10 @@ void addPOSIXattributes(SEXP x) {
   UNPROTECT(1);
 }
 
-void addRseriesClass(SEXP x) {
+void addFtsClass(SEXP x) {
   SEXP r_tseries_class;
   PROTECT(r_tseries_class = allocVector(STRSXP, 2));
-  SET_STRING_ELT(r_tseries_class, 0, mkChar("rseries"));
+  SET_STRING_ELT(r_tseries_class, 0, mkChar("fts"));
   SET_STRING_ELT(r_tseries_class, 1, mkChar("matrix"));
   classgets(x, r_tseries_class);
   UNPROTECT(1);

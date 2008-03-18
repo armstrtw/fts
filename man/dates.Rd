@@ -1,25 +1,25 @@
 \name{dates}
 \alias{dates}
-\alias{dates.rseries}
+\alias{dates.fts}
 \title{ Extract Dates }
 \description{
-  shortcut wrapper to extract dates from an Rseries object
+  shortcut wrapper to extract dates from an Fts object
 }
 \usage{
 dates(x)
 }
 \arguments{
-  \item{x}{ An Rseries object }
+  \item{x}{ An Fts object }
 }
 \details{
-  extracts the dates attribute from an Rseries object
+  extracts the dates attribute from an Fts object
 }
 \value{
   a vector of dates
 }
 \author{ Whit Armstrong }
 \examples{
-x <- rseries()
+x <- fts()
 dates(x)
 }
 \keyword{ts}

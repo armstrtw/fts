@@ -1,30 +1,30 @@
-\name{as.rseries}
-\alias{as.rseries}
-\alias{as.rseries.default}
-\alias{as.rseries.data.frame}
-\alias{as.rseries.matrix}
-\alias{as.data.frame.rseries}
-\alias{as.matrix.rseries}
+\name{as.fts}
+\alias{as.fts}
+\alias{as.fts.default}
+\alias{as.fts.data.frame}
+\alias{as.fts.matrix}
+\alias{as.data.frame.fts}
+\alias{as.matrix.fts}
 
 
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{ Convert from/to rseries }
+\title{ Convert from/to fts }
 \description{
-convert an object into an rseries and vice versa
+convert an object into an fts and vice versa
 }
 \usage{
-as.rseries(x)
+as.fts(x)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{ an R matrix or data.frame }
 }
 \details{
-  converts a rectanular object into an Rseries object
+  converts a rectanular object into an Fts object
   must be able to convert rownames into some form of dates
 }
 \value{
-  an Rseries object
+  an Fts object
 }
 \author{ Whit Armstrong }
 \examples{
@@ -32,7 +32,7 @@ N <- 100
 xm <- matrix(rnorm(N))
 dts <- format(seq(from=Sys.time(),length.out=N,by="DSTday"),"\%Y-\%m-\%d")
 rownames(xm) <- dts
-x.from.m <- as.rseries(xm)
-x.from.df <- as.rseries(as.data.frame(xm))
+x.from.m <- as.fts(xm)
+x.from.df <- as.fts(as.data.frame(xm))
 }
 \keyword{ts}

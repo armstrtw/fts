@@ -8,14 +8,14 @@ Count number of rows since an NA has occurred
 since.na(x)
 }
 \arguments{
-  \item{x}{ An Rseries object }
+  \item{x}{ An Fts object }
 }
 \value{
-  an Rseries object
+  an Fts object
 }
 \author{ Whit Armstrong }
 \examples{
-x <- rseries(rnorm(100))
+x <- fts(rnorm(100))
 
 x[10,] <- NA
 
