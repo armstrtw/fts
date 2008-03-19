@@ -39,7 +39,7 @@ SEXP string2sexp(const vector<string>& x) {
   SEXP ans;
   PROTECT(ans = allocVector(STRSXP,x.size()));
 
-  for(int i=0; i < x.size(); i++) {
+  for(int i=0; i < static_cast<int>(x.size()); i++) {
     SET_STRING_ELT(ans, i, mkChar(x[i].c_str()));
   }
   UNPROTECT(1);
@@ -54,7 +54,7 @@ void setColnamesMatrix(const SEXP x, const vector<string>& s) {
 
   if(cn_size!=ncols(x))
     return;
-  
+
   PROTECT(cnames = string2sexp(s));
   PROTECT(dimnames = allocVector(VECSXP, 2));
   SET_VECTOR_ELT(dimnames, 0, R_NilValue);
@@ -67,7 +67,7 @@ void getColnamesMatrix(const SEXP x, vector<string>& ans) {
 
   SEXP dimnames, cnames;
 
-  PROTECT(dimnames = getAttrib(x, R_DimNamesSymbol)); 
+  PROTECT(dimnames = getAttrib(x, R_DimNamesSymbol));
 
   if(dimnames==R_NilValue) {
     UNPROTECT(1);  // dimnames

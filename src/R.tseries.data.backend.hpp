@@ -86,7 +86,7 @@ R_Backend_TSdata<TDATE,TDATA,TSDIM>::R_Backend_TSdata(const TSDIM rows, const TS
 }
 
 template <typename TDATE,typename TDATA, typename TSDIM>
-R_Backend_TSdata<TDATE,TDATA,TSDIM>::R_Backend_TSdata(SEXP x) {  
+R_Backend_TSdata<TDATE,TDATA,TSDIM>::R_Backend_TSdata(SEXP x) {
   R_object = x;
   refcount_ = 1;
   release_data_ = false;
@@ -121,7 +121,7 @@ void R_Backend_TSdata<TDATE,TDATA,TSDIM>::detach() {
 
 template <typename TDATE,typename TDATA, typename TSDIM>
 void R_Backend_TSdata<TDATE,TDATA,TSDIM>::setColnames(const vector<string>& cnames) {
-  if(cnames.size() != ncols(R_object)) {
+  if(static_cast<TSDIM>(cnames.size()) != ncols(R_object)) {
     return;
   }
   setColnamesMatrix(R_object, cnames);
