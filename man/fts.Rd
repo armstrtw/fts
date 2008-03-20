@@ -35,6 +35,6 @@ native R matrix and the dates are attached as an attribute to the matrix
 \examples{
 x <- fts()
 y <- fts(data=1:100)
-y <- fts(dates=seq.POSIXt(from=as.POSIXct(Sys.time()),by="months",length.out=12))
+z <- fts(dates=seq.POSIXt(from=as.POSIXct(Sys.time()),by="months",length.out=12))
 }
 \keyword{ts}
