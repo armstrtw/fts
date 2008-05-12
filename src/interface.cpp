@@ -102,6 +102,31 @@ SEXP movingRank(SEXP x, SEXP periods) {
   }
 }
 
+SEXP expandingMax(SEXP x) {
+  switch(TYPEOF(x)) {
+
+  case REALSXP:
+    return r_transform<REALSXP>::apply<ExpandingMaximum, fillTraits>(x);
+  case INTSXP:
+    return r_transform<INTSXP>::apply<ExpandingMaximum, fillTraits>(x);
+  default:
+    return R_NilValue;
+  }
+}
+
+SEXP expandingMin(SEXP x) {
+  switch(TYPEOF(x)) {
+
+  case REALSXP:
+    return r_transform<REALSXP>::apply<ExpandingMinimum, fillTraits>(x);
+  case INTSXP:
+    return r_transform<INTSXP>::apply<ExpandingMinimum, fillTraits>(x);
+  default:
+    return R_NilValue;
+  }
+}
+
+
 SEXP movingCov(SEXP x, SEXP y, SEXP periods) {
 
   if(TYPEOF(x)!=TYPEOF(y)) {

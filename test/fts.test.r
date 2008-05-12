@@ -5,6 +5,8 @@ NC <- 20
 NR <- 10000
 WIN <- 50
 
+gctorture(TRUE)
+
 raw.data <- matrix(rnorm(NR*NC),nrow=NR,ncol=NC)
 
 x <- fts(raw.data)

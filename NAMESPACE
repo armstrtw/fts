@@ -32,6 +32,8 @@ export(
        moving.min,
        moving.rank,
        moving.sd,
+       expanding.max,
+       expanding.min,
        moving.cor,
        moving.cov,
        since.na,

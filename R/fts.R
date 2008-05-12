@@ -375,9 +375,12 @@ head.fts <- function(x,n=10,...) {
 
 tail.fts <- function(x,n=10,...) {
     nr <- nrow(x)
-    x[(nr-n+1):nr,]
+    if(n>=nr) {
+        x
+    } else {
+        x[(nr-n+1):nr,]
+    }
 }
-
 
 cumsum.default <- cumsum
 
@@ -450,6 +453,15 @@ moving.rank <- function(x,periods) {
 moving.sd <- function(x,periods) {
     .Call("movingStdev",x,as.integer(periods),PACKAGE="fts")
 }
+
+expanding.max <- function(x) {
+    .Call("expandingMax",x,PACKAGE="fts")
+}
+
+expanding.min <- function(x) {
+    .Call("expandingMin",x,PACKAGE="fts")
+}
+
 
 moving.cor <- function(x,y,periods) {
     .Call("movingCor", x, y, as.integer(periods),PACKAGE="fts")
