@@ -15,8 +15,8 @@
   apply summary functions on an expanding basis
 }
 \usage{
-expanding.max(x, periods)
-expanding.min(x, periods)
+expanding.max(x)
+expanding.min(x)
 }
 
 \arguments{
@@ -35,7 +35,7 @@ expanding.min(x, periods)
 \examples{
 x <- fts()
 
-x.emax <- expanding.max(x,20)
-x.emin <- expanding.min(x,20)
+x.emax <- expanding.max(x)
+x.emin <- expanding.min(x)
 }
 \keyword{ts}
