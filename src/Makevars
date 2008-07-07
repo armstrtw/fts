@@ -1,2 +1,1 @@
-##PKG_CXXFLAGS = -I$(R_PACKAGE_DIR)/src
 PKG_CXXFLAGS = -I./tslib
