@@ -6,8 +6,6 @@
 \alias{as.data.frame.fts}
 \alias{as.matrix.fts}
 
-
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{ Convert from/to fts }
 \description{
 convert an object into an fts and vice versa
@@ -15,7 +13,7 @@ convert an object into an fts and vice versa
 \usage{
 as.fts(x)
 }
-%- maybe also 'usage' for other objects documented here.
+
 \arguments{
   \item{x}{ an R matrix or data.frame }
 }

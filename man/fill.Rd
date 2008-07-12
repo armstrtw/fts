@@ -1,4 +1,5 @@
 \name{fill}
+\alias{fill}
 \alias{fill.fwd}
 \alias{fill.bwd}
 \alias{fill.value}

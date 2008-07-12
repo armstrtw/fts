@@ -1,5 +1,5 @@
 \name{read.write.fts}
-
+\alias{read.write.fts}
 \alias{read.rds.fts}
 \alias{write.rds.fts}
 \alias{read.csv.fts}

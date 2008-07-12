@@ -1,4 +1,5 @@
 \name{frequency.convert}
+\alias{frequency.convert}
 \alias{to.weekly}
 \alias{to.monthly}
 \alias{to.quarterly}

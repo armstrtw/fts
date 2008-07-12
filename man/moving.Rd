@@ -1,4 +1,5 @@
 \name{moving}
+\alias{moving functions}
 \alias{moving.mean}
 \alias{moving.sum}
 \alias{moving.product}

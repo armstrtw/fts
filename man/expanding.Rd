@@ -1,4 +1,5 @@
 \name{expanding}
+\alias{expanding}
 \alias{expanding.mean}
 \alias{expanding.sum}
 \alias{expanding.product}

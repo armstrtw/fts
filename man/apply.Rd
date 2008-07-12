@@ -1,4 +1,5 @@
 \name{apply}
+\alias{apply}
 \alias{row.apply}
 \alias{column.apply}
 

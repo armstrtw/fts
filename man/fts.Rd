@@ -18,7 +18,7 @@
 \usage{
 fts(data, dates)
 }
-%- maybe also 'usage' for other objects documented here.
+
 \arguments{
   \item{data}{a matrix, dataframe, or vector}
   \item{dates}{a vector of dates (default format is POSIXct) }
@@ -36,5 +36,22 @@ native R matrix and the dates are attached as an attribute to the matrix
 x <- fts()
 y <- fts(data=1:100)
 z <- fts(dates=seq.POSIXt(from=as.POSIXct(Sys.time()),by="months",length.out=12))
+
+xx <- x[1:10,]
+
+## intersection of dates is taken for Arith methods
+xyp <- x + y
+xys <- x - y
+xym <- x * y
+xyd <- x / y
+xyg <- x > y
+xyl <- x < y
+
+head(x,5)
+tail(y,10)
+cxy <- cbind(x,y)
+rxy <- rbind(x,y)
+print(x)
+plot(x)
 }
 \keyword{ts}

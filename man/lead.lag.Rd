@@ -1,5 +1,4 @@
 \name{lead.lag}
-%\alias{lag}
 \alias{lead}
 \alias{lead.fts}
 \alias{lag.fts}
