@@ -23,9 +23,12 @@ row.all(x)
 }
 \author{ Whit Armstrong }
 \examples{
-
 x <- fts(matrix(rnorm(100),nrow=50))
 jj <- x > 0
 row.all(jj)
+row.any(jj)
+
+col.any(x > 0)
+col.all(x > -3)
 }
 \keyword{ts}

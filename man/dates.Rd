@@ -3,7 +3,7 @@
 \alias{dates.fts}
 \title{ Extract Dates }
 \description{
-  shortcut wrapper to extract dates from an Fts object
+  Extract dates from an Fts object
 }
 \usage{
 dates(x)

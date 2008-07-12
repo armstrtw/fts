@@ -1,5 +1,5 @@
 \name{moving}
-\alias{moving functions}
+\alias{moving.functions}
 \alias{moving.mean}
 \alias{moving.sum}
 \alias{moving.product}
@@ -62,6 +62,8 @@ x.sd <- moving.sd(x,20)
 x.rank <- moving.rank(x,20)
 
 ## take only odd rows
+## to illustrate that teh correlation and covariance
+## will only be calculated for the intersection of the dates
 y <- y[(1:nrow(y))\%\%2 == 1]
 
 xy.cor <- moving.cor(x, y, 20)

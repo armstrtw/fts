@@ -26,7 +26,12 @@ x[10,] <- NA
 
 print(x)
 
+## will drop rows where NA's appear
+## in any of the columns
 remove.na.rows(x)
+
+## will drop rows where NA's appear
+## in all of the columns
 remove.all.na.rows(x)
 }
 \keyword{ts}

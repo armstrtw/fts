@@ -1,4 +1,5 @@
 \name{pad}
+\alias{pad.trim}
 \alias{pad}
 \alias{trim}
 \title{pad and trim dates}

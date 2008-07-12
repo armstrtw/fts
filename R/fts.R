@@ -197,7 +197,7 @@ row.apply <- function(x,FUN,...) {
     }
 
     fts(data=ans,
-            dates=dates(x))
+        dates=dates(x))
 }
 
 
@@ -209,18 +209,17 @@ row.all <- function(x) {
     apply(x,1,all)
 }
 
-## apply a function to an fts column
-column.apply <- function(x,FUN,...) {
-    apply(x,2,FUN,...)
-}
-
-
 col.any <- function(x) {
     apply(x,2,any)
 }
 
 col.all <- function(x) {
     apply(x,2,all)
+}
+
+## apply a function to an fts column
+column.apply <- function(x,FUN,...) {
+    apply(x,2,FUN,...)
 }
 
 remove.na.rows <- function(x) {
@@ -312,19 +311,6 @@ fix.cnames <- function(cnames.list) {
     unlist(cnames.list)
 }
 
-
-## lag.default <- function(x,...) {
-##     if(delay>=NROW(x)) stop("not enough rows")
-
-##     index <- c(rep(NA,delay),1:(length(x)-delay))
-
-##     if(is.null(dim(x))) {
-##         x[index]
-##     } else {
-##         x[index,]
-##     }
-##}
-
 pad <- function(x,pad.dates) {
 
     new.dates <- sort(unique(c(dates(x),pad.dates)))
@@ -382,14 +368,24 @@ tail.fts <- function(x,n=10,...) {
     }
 }
 
-cumsum.default <- cumsum
-
-cumsum <- function(x) {
-    UseMethod("cumsum")
+cumsum.fts <- function(x) {
+    fts(data=apply(x,2,cumsum),
+        dates=dates(x))
 }
 
-cumsum.fts <- function(x) {
-    apply(x,2,cumsum)
+cumprod.fts <- function(x) {
+    fts(data=apply(x,2,cumprod),
+        dates=dates(x))
+}
+
+cummax.fts <- function(x) {
+    fts(data=apply(x,2,cummax),
+        dates=dates(x))
+}
+
+cummin.fts <- function(x) {
+    fts(data=apply(x,2,cummin),
+        dates=dates(x))
 }
 
 ###############################################################

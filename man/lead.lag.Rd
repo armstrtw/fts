@@ -1,5 +1,6 @@
 \name{lead.lag}
 \alias{lead}
+\alias{lag}
 \alias{lead.fts}
 \alias{lag.fts}
 
@@ -9,7 +10,8 @@
   number of periods
 }
 \usage{
-lead(x,k, ...)
+lead(x, k, ...)
+lag(x, k, ...)
 }
 \arguments{
   \item{x}{ An Fts object }
@@ -24,10 +26,9 @@ lead(x,k, ...)
 }
 \author{ Whit Armstrong }
 \examples{
-x <- fts(rnorm(20))
-
-lag(x,10)
-lead(x,10)
-
+x <- fts(rnorm(5))
+print(x)
+lag(x,1)
+lead(x,1)
 }
 \keyword{ts}

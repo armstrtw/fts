@@ -3,6 +3,7 @@ Title: R interface to tseries library
 Version: 0.5.0
 Maintainer: Whit Armstrong <armstrong.whit@gmail.com>
 Author: Whit Armstrong <armstrong.whit@gmail.com>
+Depends: utils, stats
 Description: fast operations for time series objects
 License: GPL Version 3
 

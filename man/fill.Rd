@@ -23,15 +23,16 @@ fill.value(x,value)
 }
 \author{ Whit Armstrong }
 \examples{
-x <- fts(rnorm(10))
-
-x[5,] <- NA
+x <- fts(rnorm(50))
+x[x > 0,] <- NA
 fill.fwd(x)
 
-x[5,] <- NA
+x <- fts(rnorm(50))
+x[x > 0,] <- NA
 fill.bwd(x)
 
-x[5,] <- NA
+x <- fts(rnorm(50))
+x[x > 0,] <- NA
 fill.value(x,100.0)
 }
 \keyword{ts}

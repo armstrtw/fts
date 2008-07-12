@@ -11,7 +11,7 @@
 \alias{expanding.cor}
 \alias{expanding.cov}
 
-\title{Moving Functions}
+\title{Expanding Window Functions}
 \description{
   apply summary functions on an expanding basis
 }
