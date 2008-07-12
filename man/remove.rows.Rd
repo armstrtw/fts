@@ -1,4 +1,5 @@
 \name{remove.rows}
+\alias{remove.rows}
 \alias{remove.na.rows}
 \alias{remove.all.na.rows}
 \title{Remove Rows}

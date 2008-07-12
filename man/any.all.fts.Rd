@@ -1,4 +1,5 @@
 \name{fts.logical}
+\alias{fts.logical}}
 \alias{col.any}
 \alias{col.all}
 \alias{row.any}
