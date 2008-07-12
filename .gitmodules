@@ -1,3 +1,9 @@
 [submodule "src/tslib"]
 	path = src/tslib
 	url = git://repo.or.cz/tslib.git
+[submodule "src/R.tslib.backend"]
+	path = src/R.tslib.backend
+	url = /home/whit/dvl/R.packages/R.tslib.backend/.git
+[submodule "src/RAbstraction"]
+	path = src/RAbstraction
+	url = /home/whit/dvl/R.packages/RAbstraction/.git

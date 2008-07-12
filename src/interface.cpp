@@ -2,10 +2,10 @@
 #include <tslib/vector.summary.hpp>
 #include <tslib/vector.transform.hpp>
 
+#include <R.tseries.data.backend.hpp>
+#include <R.tseries.object.convert.hpp>
+#include <Rsexp.allocator.templates.hpp>
 #include "interface.hpp"
-#include "r2tseries.object.convert.hpp"
-#include "R.tseries.data.backend.hpp"
-#include "sexp.allocator.templates.hpp"
 #include "r.window.template.hpp"
 #include "r.transform.template.hpp"
 

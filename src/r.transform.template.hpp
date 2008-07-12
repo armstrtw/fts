@@ -3,10 +3,9 @@
 
 #include <Rinternals.h>
 #include <tslib/tseries.hpp>
-
-#include "R.tseries.data.backend.hpp"
-#include "sexp.allocator.templates.hpp"
-#include "Rtype.hpp"
+#include <R.tseries.data.backend.hpp>
+#include <Rsexp.allocator.templates.hpp>
+#include <Rtype.hpp>
 
 
 using namespace tslib;
