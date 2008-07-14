@@ -397,11 +397,16 @@ dates <- function(x) {
     UseMethod("dates")
 }
 
+"dates<-" <- function(x, value) {
+    UseMethod("dates<-")
+}
+
+
 dates.fts <- function(x) {
     attr(x,"dates")
 }
 
-"dates<-" <- function(x,value) {
+"dates<-.fts" <- function(x, value) {
     ## FIXME: might put something here to convert
     ## POSIXlt to POSIXct
     stopifnot(length(value)==length(dates(x)))

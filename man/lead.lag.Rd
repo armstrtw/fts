@@ -1,8 +1,8 @@
 \name{lead.lag}
+\alias{lead.lag.fts}
 \alias{lead}
-\alias{lag}
-\alias{lead.fts}
 \alias{lag.fts}
+\alias{lead.fts}
 
 \title{Shift an Fts ojbect in time}
 \description{
@@ -10,8 +10,8 @@
   number of periods
 }
 \usage{
-lead(x, k, ...)
-lag(x, k, ...)
+\method{lead}{fts}(x, k, \dots)
+\method{lag}{fts}(x, k, \dots)
 }
 \arguments{
   \item{x}{ An Fts object }

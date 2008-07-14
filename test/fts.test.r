@@ -5,7 +5,7 @@ NC <- 20
 NR <- 10000
 WIN <- 50
 
-gctorture(TRUE)
+##gctorture(TRUE)
 
 raw.data <- matrix(rnorm(NR*NC),nrow=NR,ncol=NC)
 
@@ -16,17 +16,22 @@ do.test <- function(test.name, fts.data, zoo.data, fts.func, zoo.func, win) {
     cat(test.name,"\n")
 
     fts.time <- system.time(fts.result <- fts.func(fts.data, win))
-    zoo.time <- system.time(zoo.result <- zoo.func(zoo.data, win))
+    zoo.time <- system.time(zoo.result <- rollapply(zoo.data, win, zoo.func))
 
     stopifnot(all.equal(as.vector(fts.result[-(1:(win-1)),]),as.vector(zoo.result)))
 
-    ans <- list(test=test.name,
-                fts.time=fts.time,
-                zoo.time=zoo.time)
+    ## ratio of speeds is result
+    ans <- zoo.time/fts.time
 
-    ans
+    ans[c("user.self","elapsed")]
 }
 
-mean.test <- do.test("moving.mean", x, x.zoo, moving.mean, rollmean, WIN)
-max.test <- do.test("moving.max", x, x.zoo, moving.max, rollmax, WIN)
-##min.test <- do.test("moving.min", x, x.zoo, moving.min, rollmin, WIN)
+test.list <- list()
+test.list[["sum"]] <- do.test("moving.sum", x, x.zoo, moving.sum, sum, WIN)
+test.list[["mean"]] <- do.test("moving.mean", x, x.zoo, moving.mean, mean, WIN)
+test.list[["max"]] <- do.test("moving.max", x, x.zoo, moving.max, max, WIN)
+test.list[["min"]] <- do.test("moving.min", x, x.zoo, moving.min, min, WIN)
+
+res <- do.call(cbind,test.list)
+
+print(res)

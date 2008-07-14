@@ -3,7 +3,10 @@
 \alias{Ops.fts}
 \alias{[.fts}
 \alias{[<-.fts}
+\alias{dates}
 \alias{dates<-}
+\alias{dates.fts}
+\alias{dates<-.fts}
 \alias{cbind.fts}
 \alias{rbind.fts}
 \alias{head.fts}
@@ -17,11 +20,20 @@
 }
 \usage{
 fts(data, dates)
+
+\method{head}{fts}(x, n = 10,\dots)
+\method{tail}{fts}(x, n = 10,\dots)
+\method{dates}{fts}(x)
+\method{dates}{fts}(x) <- value
 }
 
 \arguments{
   \item{data}{a matrix, dataframe, or vector}
   \item{dates}{a vector of dates (default format is POSIXct) }
+  \item{x}{an fts object}
+  \item{n}{an integer specifying the number of rows}
+  \item{value}{a vector of POSIXct dates}
+  \item{\dots}{further arguments to function}
 }
 \details{
 fts is an S3 class in which the fts object is represented as a
