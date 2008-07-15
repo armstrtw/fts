@@ -5,9 +5,9 @@
 #include <R.tseries.data.backend.hpp>
 #include <R.tseries.object.convert.hpp>
 #include <Rsexp.allocator.templates.hpp>
-#include "interface.hpp"
-#include "r.window.template.hpp"
-#include "r.transform.template.hpp"
+#include "interface.h"
+#include "r.window.template.h"
+#include "r.transform.template.h"
 
 
 SEXP movingMean(SEXP x, SEXP periods) {
