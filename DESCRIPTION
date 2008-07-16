@@ -5,5 +5,4 @@ Maintainer: Whit Armstrong <armstrong.whit@gmail.com>
 Author: Whit Armstrong <armstrong.whit@gmail.com>
 Depends: utils, stats
 Description: fast operations for time series objects
-License: GPL Version 3
-
+License: GPL-3
