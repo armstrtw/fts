@@ -57,6 +57,7 @@ export(
        dates.fts,
        "dates<-",
        event.dates,
+       intersect.all,
 
        remove.na.rows,
        remove.all.na.rows,
@@ -65,7 +66,9 @@ export(
        row.all,
        column.apply,
        col.any,
-       col.all
+       col.all,
+
+       lm.fts
 )
 
 S3method("Ops", "fts")

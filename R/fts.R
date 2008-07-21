@@ -420,6 +420,22 @@ event.dates <- function(x) {
     dates(x)[as.logical(x)&!is.na(x)]
 }
 
+## find date intersection of all tseries
+intersect.all <- function(...) {
+    x <- list(...)
+    dts <- lapply(x,dates)
+    ans <- dts[[1]]
+
+    if(length(dts) > 1) {
+        for(i in 2:length(x)) {
+            ans <- intersect(ans,dts[[i]])
+        }
+    }
+
+    class(ans) <- c("POSIXt","POSIXct")
+    ans
+}
+
 
 ###############################################################
 ################ Calls to External Library ####################
@@ -526,4 +542,23 @@ plot.fts <- function(x,type="l",...) {
     if("close"%in%colnames(x)) x <- x[,"close"]
 
     plot(dates(x),x,type=type,...)
+}
+
+###############################################################
+############ Regression for Fts Objects #######################
+###############################################################
+###############################################################
+
+lm.fts <- function(y,...) {
+    x <- list(...)
+
+    i.dts <- intersect(dates(y),
+                       do.call(intersect.all,x))
+    class(i.dts) <- c("POSIXt","POSIXct")
+
+    x <- lapply(x,"[",i.dts,)
+    x <- unclass(do.call(cbind,x))
+    y <- unclass(y[i.dts,])
+
+    lm(y~x)
 }
