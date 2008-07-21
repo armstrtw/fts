@@ -11,6 +11,7 @@ export(
        fts,
        as.fts,
        as.fts.default,
+       as.fts.zoo,
        as.matrix.fts,
        Ops.fts,
        "[.fts",

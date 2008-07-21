@@ -60,6 +60,13 @@ as.fts.default <- function(x) {
     fts(data=as.matrix(x),dates=dts)
 }
 
+as.fts.zoo <- function(x) {
+    stopifnot(inherits(index(x), "POSIXct"))
+
+    fts(data=coredata(x),
+        dates=index(x))
+}
+
 as.matrix.fts <- function(x, ...) {
     ans <- matrix(as.numeric(x),nrow=nrow(x),ncol=ncol(x))
     colnames(ans) <- colnames(x)

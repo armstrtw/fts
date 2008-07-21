@@ -3,6 +3,7 @@
 \alias{as.fts.default}
 \alias{as.fts.data.frame}
 \alias{as.fts.matrix}
+\alias{as.fts.zoo}
 \alias{as.data.frame.fts}
 \alias{as.matrix.fts}
 
@@ -12,6 +13,7 @@ convert an object into an fts and vice versa
 }
 \usage{
 as.fts(x)
+as.fts.zoo(x)
 }
 
 \arguments{
