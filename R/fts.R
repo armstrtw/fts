@@ -556,7 +556,7 @@ plot.fts <- function(x,type="l",...) {
 ###############################################################
 ###############################################################
 
-lm.fts <- function(y,...) {
+lm.fts <- function(y,...,origin=F) {
     x <- list(...)
 
     i.dts <- intersect(dates(y),
@@ -567,5 +567,10 @@ lm.fts <- function(y,...) {
     x <- unclass(do.call(cbind,x))
     y <- unclass(y[i.dts,])
 
-    lm(y~x)
+    if(origin) {
+        ans <- lm( y ~ 0 + x)
+    } else {
+        ans <- lm(y~x)
+    }
+    ans
 }
