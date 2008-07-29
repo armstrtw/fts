@@ -336,9 +336,9 @@ trim <- function(x,trim.dates) {
     x[new.dates,]
 }
 
-write.csv.fts <- function(x,file,date.format="%Y-%m-%d %T",...) {
-    rownames(x) <- format(dates(x),date.format)
-    write.csv(x,file,na="=NA()",...)
+write.csv.fts <- function(x, file, date.format="%Y-%m-%d %T", ...) {
+    rownames(x) <- format(dates(x), date.format)
+    write.csv(x, file, ...)
 }
 
 read.csv.fts <- function(file,date.format="%Y-%m-%d %T",...) {
