@@ -55,5 +55,26 @@ public:
   }
 };
 
+template<>
+class r_window<LGLSXP> {
+public:
+  template<template<class> class windowFunction, template<class> class windowFunctionTraits>
+  static SEXP apply(SEXP x, SEXP periods) {
+
+    int p = static_cast<int>(Rtype<INTSXP>::scalar(periods));
+
+    // build tseries from SEXP x
+    R_Backend_TSdata<double,Rtype<LGLSXP>::ValueType,int>* tsData = R_Backend_TSdata<double,Rtype<LGLSXP>::ValueType,int>::init(x);
+    TSeries<double,Rtype<LGLSXP>::ValueType,int,R_Backend_TSdata,PosixDate> ts(tsData);
+
+    // define our answer type based on windowFunctionTraits return type
+    typedef typename windowFunctionTraits< Rtype<LGLSXP>::ValueType  >::ReturnType ansType;
+
+    TSeries<double,ansType,int,R_Backend_TSdata,PosixDate> ans = ts.window<ansType,windowFunction>(p);
+
+    return ans.getIMPL()->R_object;
+  }
+};
+
 
 #endif // R_WINDOW_TEMPLATE_HPP
