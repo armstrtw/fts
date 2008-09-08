@@ -11,274 +11,72 @@
 
 
 SEXP movingMean(SEXP x, SEXP periods) {
-
-  switch(TYPEOF(x)) {
-
-  case REALSXP:
-    return r_window<REALSXP>::apply<Mean, meanTraits>(x,periods);
-  case INTSXP:
-    return r_window<INTSXP>::apply<Mean, meanTraits>(x,periods);
-  case LGLSXP:
-    return r_window<LGLSXP>::apply<Mean, meanTraits>(x,periods);
-  default:
-    return R_NilValue;
-  }
+  return windowSpecializer<Mean, meanTraits>(x,periods);
 }
 
 SEXP movingSum(SEXP x, SEXP periods) {
-
-  switch(TYPEOF(x)) {
-
-  case REALSXP:
-    return r_window<REALSXP>::apply<Sum, sumTraits>(x,periods);
-  case INTSXP:
-    return r_window<INTSXP>::apply<Sum, sumTraits>(x,periods);
-  case LGLSXP:
-    return r_window<LGLSXP>::apply<Sum, sumTraits>(x,periods);
-  default:
-    return R_NilValue;
-  }
+  return windowSpecializer<Sum, sumTraits>(x,periods);
 }
 
 SEXP movingProduct(SEXP x, SEXP periods) {
-
-  switch(TYPEOF(x)) {
-
-  case REALSXP:
-    return r_window<REALSXP>::apply<Prod, prodTraits>(x,periods);
-  case INTSXP:
-    return r_window<INTSXP>::apply<Prod, prodTraits>(x,periods);
-  case LGLSXP:
-    return r_window<LGLSXP>::apply<Prod, prodTraits>(x,periods);
-  default:
-    return R_NilValue;
-  }
+  return windowSpecializer<Prod, prodTraits>(x,periods);
 }
 
-
 SEXP movingMax(SEXP x, SEXP periods) {
-
-  switch(TYPEOF(x)) {
-
-  case REALSXP:
-    return r_window<REALSXP>::apply<Max, maxTraits>(x,periods);
-  case INTSXP:
-    return r_window<INTSXP>::apply<Max, maxTraits>(x,periods);
-  case LGLSXP:
-    return r_window<LGLSXP>::apply<Max, maxTraits>(x,periods);
-  default:
-    return R_NilValue;
-  }
+  return windowSpecializer<Max, maxTraits>(x,periods);
 }
 
 SEXP movingMin(SEXP x, SEXP periods) {
-
-  switch(TYPEOF(x)) {
-
-  case REALSXP:
-    return r_window<REALSXP>::apply<Min, minTraits>(x,periods);
-  case INTSXP:
-    return r_window<INTSXP>::apply<Min, minTraits>(x,periods);
-  case LGLSXP:
-    return r_window<LGLSXP>::apply<Min, minTraits>(x,periods);
-  default:
-    return R_NilValue;
-  }
+    return windowSpecializer<Min, minTraits>(x,periods);
 }
 
 SEXP movingStdev(SEXP x, SEXP periods) {
-
-  switch(TYPEOF(x)) {
-
-  case REALSXP:
-    return r_window<REALSXP>::apply<Stdev, stdevTraits>(x,periods);
-  case INTSXP:
-    return r_window<INTSXP>::apply<Stdev, stdevTraits>(x,periods);
-  case LGLSXP:
-    return r_window<LGLSXP>::apply<Stdev, stdevTraits>(x,periods);
-  default:
-    return R_NilValue;
-  }
+    return windowSpecializer<Stdev, stdevTraits>(x,periods);
 }
 
 SEXP movingRank(SEXP x, SEXP periods) {
-
-  switch(TYPEOF(x)) {
-
-  case REALSXP:
-    return r_window<REALSXP>::apply<Rank, rankTraits>(x,periods);
-  case INTSXP:
-    return r_window<INTSXP>::apply<Rank, rankTraits>(x,periods);
-  case LGLSXP:
-    return r_window<LGLSXP>::apply<Rank, rankTraits>(x,periods);
-  default:
-    return R_NilValue;
-  }
+  return windowSpecializer<Rank, rankTraits>(x,periods);
 }
 
 SEXP expandingMax(SEXP x) {
-  switch(TYPEOF(x)) {
-
-  case REALSXP:
-    return r_transform<REALSXP>::apply<ExpandingMaximum, fillTraits>(x);
-  case INTSXP:
-    return r_transform<INTSXP>::apply<ExpandingMaximum, fillTraits>(x);
-  case LGLSXP:
-    return r_transform<LGLSXP>::apply<ExpandingMaximum, fillTraits>(x);
-  default:
-    return R_NilValue;
-  }
+  return transformSpecializer<ExpandingMaximum, fillTraits>(x);
 }
 
 SEXP expandingMin(SEXP x) {
-  switch(TYPEOF(x)) {
-
-  case REALSXP:
-    return r_transform<REALSXP>::apply<ExpandingMinimum, fillTraits>(x);
-  case INTSXP:
-    return r_transform<INTSXP>::apply<ExpandingMinimum, fillTraits>(x);
-  case LGLSXP:
-    return r_transform<LGLSXP>::apply<ExpandingMinimum, fillTraits>(x);
-  default:
-    return R_NilValue;
-  }
-}
-
-
-SEXP movingCov(SEXP x, SEXP y, SEXP periods) {
-
-  if(TYPEOF(x)!=TYPEOF(y)) {
-    std::cerr << "movingCov: x and y must be the same type" << endl;
-  }
-
-  switch(TYPEOF(x)) {
-  case REALSXP:
-    return window_function<covTraits< Rtype<REALSXP>::ValueType >::ReturnType, Cov>(r_convert<REALSXP>::apply(x),
-                                                                                    r_convert<REALSXP>::apply(y),
-                                                                                    Rtype<INTSXP>::scalar(periods)).getIMPL()->R_object;
-  case INTSXP:
-    return window_function<covTraits< Rtype<INTSXP>::ValueType >::ReturnType, Cov>(r_convert<INTSXP>::apply(x),
-                                                                                   r_convert<INTSXP>::apply(y),
-                                                                                   Rtype<INTSXP>::scalar(periods)).getIMPL()->R_object;
-  case LGLSXP:
-    return window_function<covTraits< Rtype<LGLSXP>::ValueType >::ReturnType, Cov>(r_convert<LGLSXP>::apply(x),
-                                                                                   r_convert<LGLSXP>::apply(y),
-                                                                                   Rtype<INTSXP>::scalar(periods)).getIMPL()->R_object;
-  default:
-    return R_NilValue;
-  }
-}
-
-SEXP movingCor(SEXP x, SEXP y, SEXP periods) {
-
-  if(TYPEOF(x)!=TYPEOF(y)) {
-    std::cerr << "movingCor: x and y must be the same type" << endl;
-  }
-
-  switch(TYPEOF(x)) {
-  case REALSXP:
-    return window_function<corTraits< Rtype<REALSXP>::ValueType >::ReturnType, Cor>(r_convert<REALSXP>::apply(x),
-                                                                                    r_convert<REALSXP>::apply(y),
-                                                                                    Rtype<INTSXP>::scalar(periods)).getIMPL()->R_object;
-  case INTSXP:
-    return window_function<corTraits< Rtype<INTSXP>::ValueType >::ReturnType, Cor>(r_convert<INTSXP>::apply(x),
-                                                                                   r_convert<INTSXP>::apply(y),
-                                                                                   Rtype<INTSXP>::scalar(periods)).getIMPL()->R_object;
-  case LGLSXP:
-    return window_function<corTraits< Rtype<LGLSXP>::ValueType >::ReturnType, Cor>(r_convert<LGLSXP>::apply(x),
-                                                                                   r_convert<LGLSXP>::apply(y),
-                                                                                   Rtype<INTSXP>::scalar(periods)).getIMPL()->R_object;
-  default:
-    return R_NilValue;
-  }
+  return transformSpecializer<ExpandingMinimum, fillTraits>(x);
 }
 
 SEXP sinceNA(SEXP x) {
-
-  switch(TYPEOF(x)) {
-
-  case REALSXP:
-    return r_transform<REALSXP>::apply<SinceNA, SinceNATraits>(x);
-  case INTSXP:
-    return r_transform<INTSXP>::apply<SinceNA, SinceNATraits>(x);
-  case LGLSXP:
-    return r_transform<LGLSXP>::apply<SinceNA, SinceNATraits>(x);
-  default:
-    return R_NilValue;
-  }
+  return transformSpecializer<SinceNA, SinceNATraits>(x);
 }
 
-
 SEXP fillForward(SEXP x) {
-
-  switch(TYPEOF(x)) {
-
-  case REALSXP:
-    return r_transform<REALSXP>::apply<FillFwd, fillTraits>(x);
-  case INTSXP:
-    return r_transform<INTSXP>::apply<FillFwd, fillTraits>(x);
-  case LGLSXP:
-    return r_transform<LGLSXP>::apply<FillFwd, fillTraits>(x);
-  default:
-    return R_NilValue;
-  }
+  return transformSpecializer<FillFwd, fillTraits>(x);
 }
 
 SEXP fillBackward(SEXP x) {
-
-  switch(TYPEOF(x)) {
-
-  case REALSXP:
-    return r_transform<REALSXP>::apply<FillBwd, fillTraits>(x);
-  case INTSXP:
-    return r_transform<INTSXP>::apply<FillBwd, fillTraits>(x);
-  case LGLSXP:
-    return r_transform<LGLSXP>::apply<FillBwd, fillTraits>(x);
-  default:
-    return R_NilValue;
-  }
+  return transformSpecializer<FillBwd, fillTraits>(x);
 }
 
 SEXP fillValue(SEXP x, SEXP y) {
-
-  switch(TYPEOF(x)) {
-  case REALSXP:
-    return r_transform_1arg<REALSXP>::apply<FillValue, fillTraits>(x, y);
-  case INTSXP:
-    return r_transform_1arg<INTSXP>::apply<FillValue, fillTraits>(x, y);
-  case LGLSXP:
-    return r_transform_1arg<LGLSXP>::apply<FillValue, fillTraits>(x, y);
-  default:
-    return R_NilValue;
-  }
+  return transformSpecializer_1arg<FillValue, fillTraits>(x, y);
 }
 
 SEXP lag(SEXP x, SEXP periods) {
-  switch(TYPEOF(x)) {
-  case REALSXP:
-    return r_transform_1arg<REALSXP>::apply<Lag, lagleadTraits>(x, periods);
-  case INTSXP:
-    return r_transform_1arg<INTSXP>::apply<Lag, lagleadTraits>(x, periods);
-  case LGLSXP:
-    return r_transform_1arg<LGLSXP>::apply<Lag, lagleadTraits>(x, periods);
-  default:
-    return R_NilValue;
-  }
+  return transformSpecializer_1arg<Lag, lagleadTraits>(x, periods);
 }
 
 SEXP lead(SEXP x, SEXP periods) {
-  switch(TYPEOF(x)) {
-  case REALSXP:
-    return r_transform_1arg<REALSXP>::apply<Lead, lagleadTraits>(x, periods);
-  case INTSXP:
-    return r_transform_1arg<INTSXP>::apply<Lead, lagleadTraits>(x, periods);
-  case LGLSXP:
-    return r_transform_1arg<LGLSXP>::apply<Lead, lagleadTraits>(x, periods);
-  default:
-    return R_NilValue;
-  }
+  return transformSpecializer_1arg<Lead, lagleadTraits>(x, periods);
 }
 
+SEXP movingCov(SEXP x, SEXP y, SEXP periods) {
+  return windowSpecializer_2args<Cov,covTraits>(x,y,periods);
+}
+
+SEXP movingCor(SEXP x, SEXP y, SEXP periods) {
+  return windowSpecializer_2args<Cov,covTraits>(x,y,periods);
+}
 
 SEXP toQuarterly(SEXP x) {
   switch(TYPEOF(x)) {

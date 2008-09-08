@@ -30,6 +30,21 @@ public:
   }
 };
 
+template<template<class> class transformFunction, template<class> class transformFunctionTraits>
+SEXP transformSpecializer(SEXP x) {
+  switch(TYPEOF(x)) {
+  case REALSXP:
+    return r_transform<REALSXP>::apply<transformFunction, transformFunctionTraits>(x);
+  case INTSXP:
+    return r_transform<INTSXP>::apply<transformFunction, transformFunctionTraits>(x);
+  case LGLSXP:
+    return r_transform<LGLSXP>::apply<transformFunction, transformFunctionTraits>(x);
+  default:
+    return R_NilValue;
+  }
+}
+
+
 template<SEXPTYPE RTYPE>
 class r_transform_1arg {
   typedef typename Rtype<RTYPE>::ValueType VT;
@@ -52,6 +67,20 @@ public:
     return ans.getIMPL()->R_object;
   }
 };
+
+template<template<class> class transformFunction, template<class> class transformFunctionTraits>
+SEXP transformSpecializer_1arg(SEXP x, SEXP y) {
+  switch(TYPEOF(x)) {
+  case REALSXP:
+    return r_transform_1arg<REALSXP>::apply<transformFunction, transformFunctionTraits>(x, y);
+  case INTSXP:
+    return r_transform_1arg<INTSXP>::apply<transformFunction, transformFunctionTraits>(x, y);
+  case LGLSXP:
+    return r_transform_1arg<LGLSXP>::apply<transformFunction, transformFunctionTraits>(x, y);
+  default:
+    return R_NilValue;
+  }
+}
 
 
 #endif // R_TRANSFORM_TEMPLATE_HPP
