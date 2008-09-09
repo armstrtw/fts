@@ -25,6 +25,40 @@
 #include <R.tseries.data.backend.hpp>
 #include <Rtype.hpp>
 
+namespace tslib {
+
+  template<typename ReturnType,
+           class TDATE,
+           class TDATA,
+           class TSDIM,
+           template<typename,typename,typename> class TSDATABACKEND,
+           template<typename> class DatePolicy,
+           template<class U, class V, class W, template<typename,typename,typename> class DATABACKEND, template<typename> class DP> class TSeries>
+  const TSeries<TDATE,ReturnType,TSDIM,TSDATABACKEND,DatePolicy> analog(const TSeries<TDATE,TDATA,TSDIM,TSDATABACKEND,DatePolicy>& stationaryTS,
+                                                                        const TSeries<TDATE,TDATA,TSDIM,TSDATABACKEND,DatePolicy>& movingTS,
+                                                                        const size_t p) {
+    TSeries<double,ReturnType,int,R_Backend_TSdata,PosixDate> ans = TSeries<double,ReturnType,int,R_Backend_TSdata,PosixDate>(movingTS.nrow() - (p - 1), 1);
+    std::copy(movingTS.getDates() + (p - 1), movingTS.getDates()+movingTS.nrow(), ans.getDates());
+
+    std::vector<std::string> colnames;
+    colnames.push_back("analog");
+    ans.setColnames(colnames);
+
+    TDATA* stationary_begin = stationaryTS.getData() + stationaryTS.nrow() - p;
+    TDATA* stationary_end = stationaryTS.getData() + stationaryTS.nrow();
+    TDATA* moving_begin = movingTS.getData();
+    TDATA* moving_end = movingTS.getData() + movingTS.nrow();
+    ReturnType* ans_data = ans.getData();
+
+    while(moving_begin != moving_end - (p - 1)) {
+      *ans_data = tslib::Cor<ReturnType>::apply(stationary_begin, stationary_end, moving_begin, moving_begin + p);
+      ++moving_begin;
+      ++ans_data;
+    }
+    return ans;
+  }
+} // namespace tslib
+
 template<SEXPTYPE RTYPE>
 class analogFunction {
   typedef typename Rtype<RTYPE>::ValueType VT;
@@ -56,31 +90,7 @@ public:
     R_Backend_TSdata<double,VT,int>* movingTSData = R_Backend_TSdata<double,VT,int>::init(moving);
     TSeries<double,VT,int,R_Backend_TSdata,PosixDate> movingTS(movingTSData);
 
-    TSeries<double,ansType,int,R_Backend_TSdata,PosixDate> ans = TSeries<double,ansType,int,R_Backend_TSdata,PosixDate>(movingTS.nrow() - (p - 1), 1);
-    std::copy(movingTS.getDates() + (p - 1), movingTS.getDates()+movingTS.nrow(), ans.getDates());
-
-    std::cout << "ans nrow" << ans.nrow() << std::endl;
-
-    std::vector<std::string> colnames;
-    colnames.push_back("analog");
-    ans.setColnames(colnames);
-
-    VT* stationary_begin = stationaryTS.getData() + stationaryTS.nrow() - p;
-    VT* stationary_end = stationaryTS.getData() + stationaryTS.nrow();
-    VT* moving_begin = movingTS.getData() + (p - 1);
-    VT* moving_end = movingTS.getData() + movingTS.nrow();
-    ansType* ans_data = ans.getData();
-
-    std::cout << "stationary: " << std::distance(stationary_begin,stationary_end) << std::endl;
-    std::cout << "moving: " << std::distance(moving_begin,moving_end) << std::endl;
-
-    while(moving_begin != moving_end) {
-      *ans_data = tslib::Cor<ansType>::apply(stationary_begin, stationary_end, moving_begin - (p - 1), moving_begin);
-      // std::cout << *ans_data << std::endl;
-      ++moving_begin;
-      ++ans_data;
-    }
-
+    TSeries<double,ansType,int,R_Backend_TSdata,PosixDate> ans = tslib::analog<ansType>(stationaryTS,movingTS,p);
     return ans.getIMPL()->R_object;
   }
 };
