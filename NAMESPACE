@@ -51,6 +51,7 @@ export(
        fill.fwd,
        fill.bwd,
        fill.value,
+       analog,
 
        plot.fts,
 

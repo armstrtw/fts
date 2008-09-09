@@ -15,6 +15,7 @@ extern "C" {
 
   SEXP movingCov(SEXP x, SEXP y, SEXP periods);
   SEXP movingCor(SEXP x, SEXP y, SEXP periods);
+  SEXP analog(SEXP x, SEXP y, SEXP periods);
 
   SEXP expandingMax(SEXP x);
   SEXP expandingMin(SEXP x);

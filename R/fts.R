@@ -538,6 +538,10 @@ to.monthly <- function(x) {
     .Call("toMonthly",x,PACKAGE="fts")
 }
 
+analog <- function(stationary, moving, window) {
+    .Call("analog", stationary, moving, as.integer(window), PACKAGE="fts")
+}
+
 ###############################################################
 ############ Plotting functions for Fts Objects ###########
 ###############################################################

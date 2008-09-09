@@ -8,6 +8,7 @@
 #include "interface.h"
 #include "r.window.template.h"
 #include "r.transform.template.h"
+#include "analog.h"
 
 
 SEXP movingMean(SEXP x, SEXP periods) {
@@ -76,6 +77,19 @@ SEXP movingCov(SEXP x, SEXP y, SEXP periods) {
 
 SEXP movingCor(SEXP x, SEXP y, SEXP periods) {
   return windowSpecializer_2args<Cov,covTraits>(x,y,periods);
+}
+
+SEXP analog(SEXP x, SEXP y, SEXP periods) {
+  switch(TYPEOF(x)) {
+  case REALSXP:
+    return analogFunction<REALSXP>::apply(x,y,periods);
+  case INTSXP:
+    return analogFunction<INTSXP>::apply(x,y,periods);
+  case LGLSXP:
+    return analogFunction<LGLSXP>::apply(x,y,periods);
+  default:
+    return R_NilValue;
+  }
 }
 
 SEXP toQuarterly(SEXP x) {
