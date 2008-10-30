@@ -538,7 +538,7 @@ to.monthly <- function(x) {
     .Call("toMonthly",x,PACKAGE="fts")
 }
 
-analog <- function(stationary, moving, window) {
+analog <- function(stationary, moving=stationary, window) {
     .Call("analog", stationary, moving, as.integer(window), PACKAGE="fts")
 }
 
