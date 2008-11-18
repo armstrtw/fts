@@ -526,6 +526,10 @@ fill.value <- function(x,value) {
     .Call("fillValue",x,value,PACKAGE="fts")
 }
 
+monthly.sum <- function(x) {
+    .Call("monthlySum",x,PACKAGE="fts")
+}
+
 to.quarterly <- function(x) {
     .Call("toQuarterly",x,PACKAGE="fts")
 }

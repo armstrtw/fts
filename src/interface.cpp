@@ -79,6 +79,10 @@ SEXP movingCor(SEXP x, SEXP y, SEXP periods) {
   return windowSpecializer_2args<Cov,covTraits>(x,y,periods);
 }
 
+SEXP monthlySum(SEXP x) {
+  return timeWindowSpecializer<Sum, sumTraits, yyyymm>(x);
+}
+
 SEXP analog(SEXP x, SEXP y, SEXP periods) {
   switch(TYPEOF(x)) {
   case REALSXP:

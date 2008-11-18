@@ -52,6 +52,7 @@ export(
        fill.bwd,
        fill.value,
        analog,
+       monthly.sum,
 
        plot.fts,
 

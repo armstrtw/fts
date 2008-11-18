@@ -32,6 +32,27 @@ public:
 };
 
 template<SEXPTYPE RTYPE>
+class r_time_window {
+    typedef typename Rtype<RTYPE>::ValueType VT;
+public:
+  template<template<class> class windowFunction, template<class> class windowFunctionTraits, template<class, template<typename> class,class> class PFUNC>
+  static SEXP apply(SEXP x) {
+
+    // define our answer type based on windowFunctionTraits return type
+    typedef typename windowFunctionTraits<VT>::ReturnType ansType;
+
+    // build tseries from SEXP x
+    R_Backend_TSdata<double,VT,int>* tsData = R_Backend_TSdata<double,VT,int>::init(x);
+    TSeries<double,VT,int,R_Backend_TSdata,PosixDate> ts(tsData);
+
+    TSeries<double,ansType,int,R_Backend_TSdata,PosixDate> ans = ts.template time_window<ansType, windowFunction, int, PFUNC>();
+
+    return ans.getIMPL()->R_object;
+  }
+};
+
+
+template<SEXPTYPE RTYPE>
 class r_window_2args {
     typedef typename Rtype<RTYPE>::ValueType VT;
 public:
@@ -89,6 +110,19 @@ SEXP windowSpecializer_2args(SEXP x, SEXP y, SEXP periods) {
   }
 }
 
+template<template<class> class windowFunction, template<class> class windowFunctionTraits, template<class, template<typename> class,class> class PFUNC>
+SEXP timeWindowSpecializer(SEXP x) {
+  switch(TYPEOF(x)) {
+  case REALSXP:
+    return r_time_window<REALSXP>::apply<windowFunction, windowFunctionTraits, PFUNC>(x);
+  case INTSXP:
+    return r_time_window<INTSXP>::apply<windowFunction, windowFunctionTraits, PFUNC>(x);
+  case LGLSXP:
+    return r_time_window<LGLSXP>::apply<windowFunction, windowFunctionTraits, PFUNC>(x);
+  default:
+    return R_NilValue;
+  }
+}
 
 
 #endif // R_WINDOW_TEMPLATE_HPP
