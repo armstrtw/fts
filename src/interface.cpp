@@ -76,7 +76,7 @@ SEXP movingCov(SEXP x, SEXP y, SEXP periods) {
 }
 
 SEXP movingCor(SEXP x, SEXP y, SEXP periods) {
-  return windowSpecializer_2args<Cov,covTraits>(x,y,periods);
+  return windowSpecializer_2args<Cor,corTraits>(x,y,periods);
 }
 
 SEXP monthlySum(SEXP x) {
