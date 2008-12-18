@@ -1,3 +1,5 @@
+// -*- mode: C++; c-indent-level: 2; c-basic-offset: 2; tab-width: 8 -*-
+
 #ifndef INTERFACE_HPP
 #define INTERFACE_HPP
 

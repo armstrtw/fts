@@ -1,3 +1,4 @@
+// -*- mode: C++; c-indent-level: 2; c-basic-offset: 2; tab-width: 8 -*-
 #ifndef R_WINDOW_TEMPLATE_HPP
 #define R_WINDOW_TEMPLATE_HPP
 
@@ -11,7 +12,7 @@ using namespace tslib;
 
 template<SEXPTYPE RTYPE>
 class r_window {
-    typedef typename Rtype<RTYPE>::ValueType VT;
+  typedef typename Rtype<RTYPE>::ValueType VT;
 public:
   template<template<class> class windowFunction, template<class> class windowFunctionTraits>
   static SEXP apply(SEXP x, SEXP periods) {
@@ -33,7 +34,7 @@ public:
 
 template<SEXPTYPE RTYPE>
 class r_time_window {
-    typedef typename Rtype<RTYPE>::ValueType VT;
+  typedef typename Rtype<RTYPE>::ValueType VT;
 public:
   template<template<class> class windowFunction, template<class> class windowFunctionTraits, template<class, template<typename> class,class> class PFUNC>
   static SEXP apply(SEXP x) {
@@ -54,7 +55,7 @@ public:
 
 template<SEXPTYPE RTYPE>
 class r_window_2args {
-    typedef typename Rtype<RTYPE>::ValueType VT;
+  typedef typename Rtype<RTYPE>::ValueType VT;
 public:
   template<template<class> class windowFunction, template<class> class windowFunctionTraits>
   static SEXP apply(SEXP x, SEXP y, SEXP periods) {
