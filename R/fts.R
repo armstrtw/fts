@@ -74,6 +74,14 @@ as.matrix.fts <- function(x, ...) {
     ans
 }
 
+## create an fts object given dates and column names
+template.fts <- function(dates,cnames) {
+    ans <- fts(dates=dates,
+               data=matrix(nrow=length(dates),ncol=length(cnames)))
+    colnames(ans) <- cnames
+    ans
+}
+
 Ops.fts <- function (e1, e2) {
 
     if(missing(e2)) {
@@ -542,7 +550,7 @@ to.monthly <- function(x) {
     .Call("toMonthly",x,PACKAGE="fts")
 }
 
-analog <- function(stationary, moving=stationary, window) {
+analog <- function(stationary, window, moving=stationary) {
     .Call("analog", stationary, moving, as.integer(window), PACKAGE="fts")
 }
 

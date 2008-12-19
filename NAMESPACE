@@ -13,6 +13,7 @@ export(
        as.fts.default,
        as.fts.zoo,
        as.matrix.fts,
+       template.fts,
        Ops.fts,
        "[.fts",
        "[<-.fts",
