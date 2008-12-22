@@ -60,6 +60,7 @@ export(
        dates,
        dates.fts,
        "dates<-",
+       "dates<-.fts",
        event.dates,
        intersect.all,
 
