@@ -424,7 +424,7 @@ dates.fts <- function(x) {
 "dates<-.fts" <- function(x, value) {
     ## FIXME: might put something here to convert
     ## POSIXlt to POSIXct
-    stopifnot(length(value)==length(dates(x)))
+    stopifnot(length(value)==NROW(x))
     attr(x,"dates") <- value
     x
 }
