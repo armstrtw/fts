@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include <tslib/tseries.hpp>
 #include <tslib/vector.summary.hpp>
 #include <tslib/vector.transform.hpp>
@@ -9,6 +11,9 @@
 #include "r.window.template.h"
 #include "r.transform.template.h"
 #include "analog.h"
+
+using std::cerr;
+using std::endl;
 
 
 SEXP movingMean(SEXP x, SEXP periods) {
@@ -63,12 +68,50 @@ SEXP fillValue(SEXP x, SEXP y) {
   return transformSpecializer_1arg<FillValue, fillTraits>(x, y);
 }
 
-SEXP lag(SEXP x, SEXP periods) {
-  return transformSpecializer_1arg<Lag, lagleadTraits>(x, periods);
+SEXP lag(SEXP x, SEXP periods_sexp) {
+  R_len_t periods = Rtype<INTSXP>::scalar(periods_sexp);
+
+  if(periods < 0) {
+    cerr << "only positive values of k are allowed" << endl;
+  }
+  try {
+    switch(TYPEOF(x)) {
+    case REALSXP:
+      return r_convert<REALSXP>::apply(x).lag(periods).getIMPL()->R_object;
+    case INTSXP:
+      return r_convert<INTSXP>::apply(x).lag(periods).getIMPL()->R_object;
+    case LGLSXP:
+      return r_convert<LGLSXP>::apply(x).lag(periods).getIMPL()->R_object;
+    default:
+      return R_NilValue;
+    }
+  } catch(TSeriesError& e) {
+    cerr << e.what() << endl;
+    return R_NilValue;
+  }
 }
 
-SEXP lead(SEXP x, SEXP periods) {
-  return transformSpecializer_1arg<Lead, lagleadTraits>(x, periods);
+SEXP lead(SEXP x, SEXP periods_sexp) {
+  R_len_t periods = Rtype<INTSXP>::scalar(periods_sexp);
+
+  if(periods < 0) {
+    cerr << "only positive values of k are allowed" << endl;
+  }
+  try {
+    switch(TYPEOF(x)) {
+    case REALSXP:
+      return r_convert<REALSXP>::apply(x).lead(periods).getIMPL()->R_object;
+    case INTSXP:
+      return r_convert<INTSXP>::apply(x).lead(periods).getIMPL()->R_object;
+    case LGLSXP:
+      return r_convert<LGLSXP>::apply(x).lead(periods).getIMPL()->R_object;
+    default:
+      return R_NilValue;
+    }
+  } catch(TSeriesError& e) {
+    cerr << e.what() << endl;
+    return R_NilValue;
+  }
 }
 
 SEXP movingCov(SEXP x, SEXP y, SEXP periods) {
@@ -77,6 +120,10 @@ SEXP movingCov(SEXP x, SEXP y, SEXP periods) {
 
 SEXP movingCor(SEXP x, SEXP y, SEXP periods) {
   return windowSpecializer_2args<Cor,corTraits>(x,y,periods);
+}
+
+SEXP dailySum(SEXP x) {
+  return timeWindowSpecializer<Sum, sumTraits, yyyymmdd>(x);
 }
 
 SEXP monthlySum(SEXP x) {

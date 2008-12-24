@@ -30,6 +30,7 @@ extern "C" {
   SEXP lag(SEXP x, SEXP periods);
   SEXP lead(SEXP x, SEXP periods);
 
+  SEXP dailySum(SEXP x);
   SEXP monthlySum(SEXP x);
 
   SEXP toQuarterly(SEXP x);
