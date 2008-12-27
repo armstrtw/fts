@@ -74,6 +74,12 @@ as.matrix.fts <- function(x, ...) {
     ans
 }
 
+as.dataframe.fts <- function(x, ...) {
+    ans <- data.frame(x)
+    rownames(ans) <- format(dates(x),"%Y%m%d")
+    ans
+}
+
 ## create an fts object given dates and column names
 template.fts <- function(dates,cnames) {
     ans <- fts(dates=dates,
