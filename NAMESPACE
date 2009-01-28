@@ -73,7 +73,11 @@ export(
        col.any,
        col.all,
 
-       lm.fts
+       lm.fts,
+
+       ## technical analysis
+       ema,
+       rsi
 )
 
 S3method("Ops", "fts")

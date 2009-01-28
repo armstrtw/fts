@@ -596,3 +596,23 @@ lm.fts <- function(y,...,origin=F) {
     }
     ans
 }
+
+###############################################################
+################### Technical Analysis  #######################
+###############################################################
+###############################################################
+ema <- function(x,periods) {
+    .Call("ema",x,as.integer(periods),PACKAGE="fts")
+}
+
+rsi <- function(x,periods) {
+    x.up <- x
+    x.up[x<0] <- 0
+    x.down <- x
+    x.down[x>0] <- 0
+
+    x.avg.up <- ema(x.up, periods)
+    x.avg.down <- ema(x.down, periods)
+
+    100 - 100/(1 - x.avg.up/x.avg.down)
+}
