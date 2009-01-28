@@ -181,3 +181,7 @@ SEXP toWeekly(SEXP x) {
     return R_NilValue;
   }
 }
+
+SEXP ema(SEXP x, SEXP periods) {
+  return transformSpecializer_1arg<EMA, emaTraits>(x, periods);
+}

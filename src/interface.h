@@ -36,6 +36,9 @@ extern "C" {
   SEXP toQuarterly(SEXP x);
   SEXP toMonthly(SEXP x);
   SEXP toWeekly(SEXP x);
+
+  SEXP rsi(SEXP x, SEXP periods);
+  SEXP ema(SEXP x, SEXP periods);
 }
 
 #endif // INTERFACE_HPP
