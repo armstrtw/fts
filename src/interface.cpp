@@ -114,6 +114,29 @@ SEXP lead(SEXP x, SEXP periods_sexp) {
   }
 }
 
+SEXP diff(SEXP x, SEXP periods_sexp) {
+  R_len_t periods = Rtype<INTSXP>::scalar(periods_sexp);
+
+  if(periods < 0) {
+    cerr << "only positive values of k are allowed" << endl;
+  }
+  try {
+    switch(TYPEOF(x)) {
+    case REALSXP:
+      return r_convert<REALSXP>::apply(x).diff(periods).getIMPL()->R_object;
+    case INTSXP:
+      return r_convert<INTSXP>::apply(x).diff(periods).getIMPL()->R_object;
+    case LGLSXP:
+      return r_convert<LGLSXP>::apply(x).diff(periods).getIMPL()->R_object;
+    default:
+      return R_NilValue;
+    }
+  } catch(TSeriesError& e) {
+    cerr << e.what() << endl;
+    return R_NilValue;
+  }
+}
+
 SEXP movingCov(SEXP x, SEXP y, SEXP periods) {
   return windowSpecializer_2args<Cov,covTraits>(x,y,periods);
 }

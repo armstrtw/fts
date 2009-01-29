@@ -49,6 +49,7 @@ export(
        lead,
        lead.fts,
        lag.fts,
+       diff.fts,
        fill.fwd,
        fill.bwd,
        fill.value,

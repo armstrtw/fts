@@ -528,6 +528,11 @@ lead.fts <- function(x, k, ...) {
     .Call("lead",x ,as.integer(k),PACKAGE="fts")
 }
 
+diff.fts <- function(x, k, ...) {
+    if(k < 0) stop("diff: only positive values of k are allowed")
+    .Call("diff", x, as.integer(k),PACKAGE="fts")
+}
+
 fill.fwd <- function(x) {
     .Call("fillForward",x,PACKAGE="fts")
 }
