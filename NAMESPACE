@@ -1,9 +1,5 @@
 useDynLib(fts)
 
-importFrom(utils,
-           head,
-           tail)
-
 importFrom(stats,
            lag)
 
@@ -17,8 +13,6 @@ export(
        Ops.fts,
        "[.fts",
        "[<-.fts",
-       head.fts,
-       tail.fts,
        as.data.frame.fts,
        cbind.fts,
        rbind.fts,
@@ -87,9 +81,6 @@ S3method("cummax", "fts")
 S3method("cummin", "fts")
 S3method("cumprod", "fts")
 S3method("cumsum", "fts")
-
-S3method("head", "fts")
-S3method("tail", "fts")
 
 S3method("lag", "fts")
 

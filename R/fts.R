@@ -204,7 +204,7 @@ print.fts <- function(x, ...) {
     }
     x <- unclass(x)
     x <- NextMethod()
-    class(x) <- "fts"
+    class(x) <- c("fts","matrix")
     x
 }
 
@@ -318,7 +318,7 @@ cbind.fts <- function(...) {
     cnames.list <- lapply(x,colnames)
     colnames(ans) <- fix.cnames(cnames.list)
     attr(ans,"dates") <- ans.dates
-    class(ans) <- "fts"
+    class(ans) <- c("fts","matrix")
     ans
 }
 
@@ -373,20 +373,6 @@ read.rds.fts <- function(file) {
 
 write.rds.fts <- function(x,file) {
     .saveRDS(x,file)
-}
-
-
-head.fts <- function(x,n=10,...) {
-    x[1:n,]
-}
-
-tail.fts <- function(x,n=10,...) {
-    nr <- nrow(x)
-    if(n>=nr) {
-        x
-    } else {
-        x[(nr-n+1):nr,]
-    }
 }
 
 cumsum.fts <- function(x) {

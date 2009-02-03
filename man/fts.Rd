@@ -9,8 +9,6 @@
 \alias{dates<-.fts}
 \alias{cbind.fts}
 \alias{rbind.fts}
-\alias{head.fts}
-\alias{tail.fts}
 \alias{print.fts}
 \alias{plot.fts}
 
@@ -20,9 +18,6 @@
 }
 \usage{
 fts(data, dates)
-
-\method{head}{fts}(x, n = 10,\dots)
-\method{tail}{fts}(x, n = 10,\dots)
 \method{dates}{fts}(x)
 \method{dates}{fts}(x) <- value
 }
@@ -31,7 +26,6 @@ fts(data, dates)
   \item{data}{a matrix, dataframe, or vector}
   \item{dates}{a vector of dates (default format is POSIXct) }
   \item{x}{an fts object}
-  \item{n}{an integer specifying the number of rows}
   \item{value}{a vector of POSIXct dates}
   \item{\dots}{further arguments to function}
 }
@@ -59,8 +53,6 @@ xyd <- x / y
 xyg <- x > y
 xyl <- x < y
 
-head(x,5)
-tail(y,10)
 cxy <- cbind(x,y)
 rxy <- rbind(x,y)
 print(x)
