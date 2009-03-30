@@ -252,9 +252,7 @@ remove.all.na.rows <- function(x) {
 }
 
 as.data.frame.fts <- function(x,row.names = NULL, optional = FALSE, ...) {
-    ans <- as.data.frame.matrix(unclass(x))
-    rownames(ans) <- dates(x)
-    ans
+    data.frame(asofdate=dates(x),as.data.frame.matrix(unclass(x)))
 }
 
 as.matrix.fts <- function(x, ...) {
