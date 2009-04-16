@@ -34,6 +34,7 @@ extern "C" {
   SEXP dailySum(SEXP x);
   SEXP monthlySum(SEXP x);
 
+  SEXP toYearly(SEXP x);
   SEXP toQuarterly(SEXP x);
   SEXP toMonthly(SEXP x);
   SEXP toWeekly(SEXP x);

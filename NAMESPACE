@@ -24,6 +24,7 @@ export(
        write.rds.fts,
        print.fts,
 
+       to.yearly,
        to.quarterly,
        to.weekly,
        to.monthly,

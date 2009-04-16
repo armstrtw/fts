@@ -166,6 +166,19 @@ SEXP analog(SEXP x, SEXP y, SEXP periods) {
   }
 }
 
+SEXP toYearly(SEXP x) {
+  switch(TYPEOF(x)) {
+  case REALSXP:
+    return r_convert<REALSXP>::apply(x).toYearly().getIMPL()->R_object;
+  case INTSXP:
+    return r_convert<INTSXP>::apply(x).toYearly().getIMPL()->R_object;
+  case LGLSXP:
+    return r_convert<LGLSXP>::apply(x).toYearly().getIMPL()->R_object;
+  default:
+    return R_NilValue;
+  }
+}
+
 SEXP toQuarterly(SEXP x) {
   switch(TYPEOF(x)) {
   case REALSXP:

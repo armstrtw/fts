@@ -545,6 +545,10 @@ to.monthly <- function(x) {
     .Call("toMonthly",x,PACKAGE="fts")
 }
 
+to.yearly <- function(x) {
+    .Call("toYearly",x,PACKAGE="fts")
+}
+
 analog <- function(stationary, window, moving=stationary) {
     .Call("analog", stationary, moving, as.integer(window), PACKAGE="fts")
 }
