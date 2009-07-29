@@ -73,7 +73,25 @@ export(
 
        ## technical analysis
        ema,
-       rsi
+       rsi,
+       month,
+       day,
+       ma.crossover.up,
+       ma.crossover.down,
+       lower.low,
+       higher.high,
+       repeated,
+       new.low,
+       new.high,
+       above.ma,
+       below.ma,
+       higher.low,
+       lower.high,
+       up,
+       down,
+       pct.chg,
+       inside.day,
+       outside.day
 )
 
 S3method("Ops", "fts")

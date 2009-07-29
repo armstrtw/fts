@@ -26,20 +26,17 @@ fts <- function(data,dates) {
     } else if (length(dates) != NROW(data)) {
         stop("Dates and data must be same length.")
     }
-    data <- unclass(data)
 
-    if(is.null(dim(data))) {
-        dim(data) <- c(length(data),1)
-    }
     if(is.numeric(dates)&&is.null(class(dates))) {
         class(dates) <- c("POSIXt","POSIXct")
     } else {
         dates <- as.POSIXct(dates)
     }
-    ans <- data
+
+    ans <- as.matrix(data)
 
     ## kill old rownames
-    rownames(data) <- NULL
+    rownames(ans) <- NULL
 
     ## set dates attribute of answer
     attr(ans,"dates") <- dates
@@ -608,4 +605,123 @@ rsi <- function(x,periods) {
     x.avg.down <- ema(x.down, periods)
 
     100 - 100/(1 - x.avg.up/x.avg.down)
+}
+
+month <- function(x) {
+    fts(dates=dates(x),data=as.POSIXlt(dates(x))$mon+1)
+}
+
+day <- function(x) {
+    fts(dates = dates(x), data = as.POSIXlt(dates(x))$wday)
+}
+
+ma.crossover.down <- function(x,n) {
+    has.close <- !is.null(colnames(x)) && "close" %in% colnames(x)
+    stopifnot(has.close || ncol(x) == 1)
+    col <- ifelse(has.close,"close",1)
+
+    x <- x[,col]
+
+    xma <- moving.mean(x,n)
+
+    x < xma & lag(x,1) > lag(xma,1)
+}
+
+ma.crossover.up <- function(x,n) {
+    has.close <- !is.null(colnames(x)) && "close" %in% colnames(x)
+    stopifnot(has.close || ncol(x) == 1)
+    col <- ifelse(has.close,"close",1)
+
+    x <- x[,col]
+
+    xma <- moving.mean(x,n)
+
+    x > xma & lag(x,1) < lag(xma,1)
+}
+
+lower.low <- function(x) {
+    stopifnot("low" %in% colnames(x))
+    xl <- x[,"low"]
+    xl < lag(xl,1)
+}
+
+higher.high <- function(x) {
+    stopifnot("high" %in% colnames(x))
+    xh <- x[,"high"]
+    xh > lag(xh,1)
+}
+
+repeated <- function(x, times) {
+    stopifnot(ncol(x)==1 && mode(x)=="logical")
+    moving.sum(x,times)==as.integer(times)
+}
+
+new.low <- function(x,n) {
+    stopifnot("low" %in% colnames(x))
+    moving.rank(x[,"low"],n)==1
+}
+
+new.high <- function(x,n) {
+    stopifnot("high" %in% colnames(x))
+    moving.rank(x[,"high"],n)==as.integer(n)
+}
+
+above.ma <- function(x,n) {
+    stopifnot("close" %in% colnames(x))
+    xc <- x[,"close"]
+    xc > moving.mean(xc,n)
+}
+
+below.ma <- function(x,n) {
+    stopifnot("close" %in% colnames(x))
+    xc <- x[,"close"]
+    xc < moving.mean(xc,n)
+}
+
+higher.low <- function(x) {
+    stopifnot("low" %in% colnames(x))
+    xl <- x[,"low"]
+    xl > lag(xl,1)
+}
+
+lower.high <- function(x) {
+    stopifnot("high" %in% colnames(x))
+    xh <- x[,"high"]
+    xh < lag(xh,1)
+}
+
+up <- function(x) {
+    stopifnot("close" %in% colnames(x))
+    xc <- x[,"close"]
+    xc > lag(xc,1)
+}
+
+down <- function(x) {
+    stopifnot("close" %in% colnames(x))
+    xc <- x[,"close"]
+    xc < lag(xc,1)
+}
+
+pct.chg <- function(x) {
+    stopifnot("close" %in% colnames(x))
+    xc <- x[,"close"]
+    diff(xc,1) / lag(xc,1) * 100
+}
+
+inside.day <- function(x) {
+    stopifnot(all(c("high","low") %in% colnames(x)))
+
+    xh <- x[,"high"]
+    xl <- x[,"low"]
+
+    xh < lag(xh,1) & xl > lag(xl,1)
+}
+
+outside.day <- function(x) {
+    stopifnot(all(c("high","low") %in% colnames(x)))
+
+    xh <- x[,"high"]
+    xl <- x[,"low"]
+
+    xh > lag(xh,1) & xl < lag(xl,1)
 }
