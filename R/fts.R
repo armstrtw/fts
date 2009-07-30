@@ -725,3 +725,8 @@ outside.day <- function(x) {
 
     xh > lag(xh,1) & xl < lag(xl,1)
 }
+
+hl.oc.ratio <- function(x) {
+    stopifnot(all(c("open","high","low","close") %in% colnames(x)))
+    abs(x[,"close"] - x[,"open"]) / (x[,"high"] - x[,"low"])
+}
