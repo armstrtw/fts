@@ -496,8 +496,9 @@ since.na <- function(x) {
 }
 
 lag.fts <- function(x, k, ...) {
-    if(k < 0) stop("lag: only positive values of k are allowed")
-    .Call("lag", x, as.integer(k),PACKAGE="fts")
+    stopifnot(k > 0)
+    ans <- .Call("lag", x, as.integer(k),PACKAGE="fts")
+    ans
 }
 
 lead <- function(x, k, ...) {
@@ -510,8 +511,10 @@ lead.fts <- function(x, k, ...) {
 }
 
 diff.fts <- function(x, k, ...) {
-    if(k < 0) stop("diff: only positive values of k are allowed")
-    .Call("diff", x, as.integer(k),PACKAGE="fts")
+    stopifnot(k > 0)
+    ans <- .Call("diff", x, as.integer(k),PACKAGE="fts")
+    attr(ans,"ticker") <- attr(x,"ticker")
+    ans
 }
 
 fill.fwd <- function(x) {
