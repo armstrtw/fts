@@ -26,8 +26,12 @@ export(
 
        to.yearly,
        to.quarterly,
-       to.weekly,
        to.monthly,
+       to.weekly,
+       to.daily,
+       to.hourly,
+       to.minute,
+       to.second,
 
        moving.mean,
        moving.sum,

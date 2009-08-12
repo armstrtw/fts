@@ -38,6 +38,10 @@ extern "C" {
   SEXP toQuarterly(SEXP x);
   SEXP toMonthly(SEXP x);
   SEXP toWeekly(SEXP x);
+  SEXP toDaily(SEXP x);
+  SEXP toHourly(SEXP x);
+  SEXP toMinute(SEXP x);
+  SEXP toSecond(SEXP x);
 
   SEXP rsi(SEXP x, SEXP periods);
   SEXP ema(SEXP x, SEXP periods);

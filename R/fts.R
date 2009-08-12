@@ -533,20 +533,36 @@ monthly.sum <- function(x) {
     .Call("monthlySum",x,PACKAGE="fts")
 }
 
-to.quarterly <- function(x) {
-    .Call("toQuarterly",x,PACKAGE="fts")
+to.yearly <- function(x) {
+    .Call("toYearly",x,PACKAGE="fts")
 }
 
-to.weekly <- function(x) {
-    .Call("toWeekly",x,PACKAGE="fts")
+to.quarterly <- function(x) {
+    .Call("toQuarterly",x,PACKAGE="fts")
 }
 
 to.monthly <- function(x) {
     .Call("toMonthly",x,PACKAGE="fts")
 }
 
-to.yearly <- function(x) {
-    .Call("toYearly",x,PACKAGE="fts")
+to.weekly <- function(x) {
+    .Call("toWeekly",x,PACKAGE="fts")
+}
+
+to.daily <- function(x) {
+    .Call("toDaily",x,PACKAGE="fts")
+}
+
+to.hourly <- function(x) {
+    .Call("toHourly",x,PACKAGE="fts")
+}
+
+to.minute <- function(x) {
+    .Call("toMinute",x,PACKAGE="fts")
+}
+
+to.second <- function(x) {
+    .Call("toSecond",x,PACKAGE="fts")
 }
 
 analog <- function(stationary, window, moving=stationary) {
