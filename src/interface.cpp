@@ -169,11 +169,11 @@ SEXP analog(SEXP x, SEXP y, SEXP periods) {
 SEXP toYearly(SEXP x) {
   switch(TYPEOF(x)) {
   case REALSXP:
-    return r_convert<REALSXP>::apply(x).toYearly().getIMPL()->R_object;
+    return r_convert<REALSXP>::apply(x).freq<yyyyqq>().getIMPL()->R_object;
   case INTSXP:
-    return r_convert<INTSXP>::apply(x).toYearly().getIMPL()->R_object;
+    return r_convert<INTSXP>::apply(x).freq<yyyyqq>().getIMPL()->R_object;
   case LGLSXP:
-    return r_convert<LGLSXP>::apply(x).toYearly().getIMPL()->R_object;
+    return r_convert<LGLSXP>::apply(x).freq<yyyyqq>().getIMPL()->R_object;
   default:
     return R_NilValue;
   }
@@ -182,11 +182,11 @@ SEXP toYearly(SEXP x) {
 SEXP toQuarterly(SEXP x) {
   switch(TYPEOF(x)) {
   case REALSXP:
-    return r_convert<REALSXP>::apply(x).toQuarterly().getIMPL()->R_object;
+    return r_convert<REALSXP>::apply(x).freq<yyyy>().getIMPL()->R_object;
   case INTSXP:
-    return r_convert<INTSXP>::apply(x).toQuarterly().getIMPL()->R_object;
+    return r_convert<INTSXP>::apply(x).freq<yyyy>().getIMPL()->R_object;
   case LGLSXP:
-    return r_convert<LGLSXP>::apply(x).toQuarterly().getIMPL()->R_object;
+    return r_convert<LGLSXP>::apply(x).freq<yyyy>().getIMPL()->R_object;
   default:
     return R_NilValue;
   }
@@ -195,11 +195,11 @@ SEXP toQuarterly(SEXP x) {
 SEXP toMonthly(SEXP x) {
   switch(TYPEOF(x)) {
   case REALSXP:
-    return r_convert<REALSXP>::apply(x).toMonthly().getIMPL()->R_object;
+    return r_convert<REALSXP>::apply(x).freq<yyyymm>().getIMPL()->R_object;
   case INTSXP:
-    return r_convert<INTSXP>::apply(x).toMonthly().getIMPL()->R_object;
+    return r_convert<INTSXP>::apply(x).freq<yyyymm>().getIMPL()->R_object;
   case LGLSXP:
-    return r_convert<LGLSXP>::apply(x).toMonthly().getIMPL()->R_object;
+    return r_convert<LGLSXP>::apply(x).freq<yyyymm>().getIMPL()->R_object;
   default:
     return R_NilValue;
   }
@@ -208,11 +208,11 @@ SEXP toMonthly(SEXP x) {
 SEXP toWeekly(SEXP x) {
   switch(TYPEOF(x)) {
   case REALSXP:
-    return r_convert<REALSXP>::apply(x).toWeekly().getIMPL()->R_object;
+    return r_convert<REALSXP>::apply(x).freq<yyyyww>().getIMPL()->R_object;
   case INTSXP:
-    return r_convert<INTSXP>::apply(x).toWeekly().getIMPL()->R_object;
+    return r_convert<INTSXP>::apply(x).freq<yyyyww>().getIMPL()->R_object;
   case LGLSXP:
-    return r_convert<LGLSXP>::apply(x).toWeekly().getIMPL()->R_object;
+    return r_convert<LGLSXP>::apply(x).freq<yyyyww>().getIMPL()->R_object;
   default:
     return R_NilValue;
   }
