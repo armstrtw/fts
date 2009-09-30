@@ -96,7 +96,9 @@ export(
        pct.chg,
        inside.day,
        outside.day,
-       hl.oc.ratio
+       hl.oc.ratio,
+       gap.up,
+       gap.down
 )
 
 S3method("Ops", "fts")

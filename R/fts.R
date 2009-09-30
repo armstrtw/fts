@@ -749,3 +749,17 @@ hl.oc.ratio <- function(x) {
     stopifnot(all(c("open","high","low","close") %in% colnames(x)))
     abs(x[,"close"] - x[,"open"]) / (x[,"high"] - x[,"low"])
 }
+
+gap.up <- function(x) {
+    stopifnot(all(c("open","high","low","close") %in% colnames(x)))
+    xh <- x[,"high"]
+    xo <- x[,"open"]
+    xo > lag(xh,1)
+}
+
+gap.down <- function(x) {
+    stopifnot(all(c("open","high","low","close") %in% colnames(x)))
+    xl <- x[,"low"]
+    xo <- x[,"open"]
+    xo < lag(xl,1)
+}
