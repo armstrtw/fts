@@ -345,20 +345,14 @@ trim <- function(x,trim.dates) {
     x[new.dates,]
 }
 
-write.csv.fts <- function(x, file, date.format="%Y-%m-%d %T", ...) {
-    rownames(x) <- format(dates(x), date.format)
-    write.csv(x, file, ...)
+write.csv.fts <- function(x, file, ...) {
+    write.csv(as.data.frame(x), file,row.names=FALSE, ...)
 }
 
-read.csv.fts <- function(file,date.format="%Y-%m-%d %T",...) {
-    ans <- as.matrix(read.csv(file,row.names=1,...))
-
-    dts <- as.POSIXct(strptime(rownames(ans),date.format))
-
-    rownames(ans) <- NULL
-
-    fts(dates=dts,
-            data=ans)
+read.csv.fts <- function(file,...) {
+    fts.data <- read.csv(file,...)
+    fts(dates=fts.data[,"asofdate"],
+        data=as.matrix(fts.data[,-match("asofdate",colnames(fts.data))]))
 }
 
 read.rds.fts <- function(file) {
