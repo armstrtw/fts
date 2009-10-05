@@ -57,6 +57,14 @@ as.fts.default <- function(x) {
     fts(data=as.matrix(x),dates=dts)
 }
 
+as.fts.data.frame <- function(x) {
+    cnames <-  colnames(x)
+    ans <- fts(dates=x[,"asofdate"],
+               data=as.matrix(x[,-match("asofdate",cnames)]))
+    colnames(ans) <- cnames[-1]
+    ans
+}
+
 as.fts.zoo <- function(x) {
     stopifnot(inherits(index(x), "POSIXct"))
 
@@ -349,10 +357,12 @@ write.csv.fts <- function(x, file, ...) {
     write.csv(as.data.frame(x), file,row.names=FALSE, ...)
 }
 
-read.csv.fts <- function(file,...) {
+read.csv.fts <- function(file,date.colname="asofdate",...) {
     fts.data <- read.csv(file,...)
-    fts(dates=fts.data[,"asofdate"],
-        data=as.matrix(fts.data[,-match("asofdate",colnames(fts.data))]))
+    date.colnumber <- match(date.colname,colnames(fts.data))
+    date.colnumber <- ifelse(is.na(date.colnumber),1,date.colnumber)
+    fts(dates=fts.data[,date.colnumber],
+        data=as.matrix(fts.data[,-date.colnumber]))
 }
 
 read.rds.fts <- function(file) {
@@ -652,6 +662,10 @@ ma.crossover.up <- function(x,n) {
     x > xma & lag(x,1) < lag(xma,1)
 }
 
+ma.crossover <- function(x,n) {
+    ma.crossover.up(x,n) - ma.crossover.down(x,n)
+}
+
 lower.low <- function(x) {
     stopifnot("low" %in% colnames(x))
     xl <- x[,"low"]
@@ -689,6 +703,10 @@ below.ma <- function(x,n) {
     stopifnot("close" %in% colnames(x))
     xc <- x[,"close"]
     xc < moving.mean(xc,n)
+}
+
+ma.d <- function(x,n) {
+    above.ma(x,n) - below.ma(x,n)
 }
 
 higher.low <- function(x) {
@@ -730,6 +748,18 @@ inside.day <- function(x) {
     xh < lag(xh,1) & xl > lag(xl,1)
 }
 
+inside.day.up <- function(x) {
+    inside.day(x) & up(x)
+}
+
+inside.day.down <- function(x) {
+    inside.day(x) & down(x)
+}
+
+inside.day.direction <- function(x) {
+    inside.day.up(x) - inside.day.down(x)
+}
+
 outside.day <- function(x) {
     stopifnot(all(c("high","low") %in% colnames(x)))
 
@@ -737,6 +767,18 @@ outside.day <- function(x) {
     xl <- x[,"low"]
 
     xh > lag(xh,1) & xl < lag(xl,1)
+}
+
+outside.day.up <- function(x) {
+    outside.day(x) & up(x)
+}
+
+outside.day.down <- function(x) {
+    outside.day(x) & down(x)
+}
+
+outside.day.direction <- function(x) {
+    outside.day.up(x) - outside.day.down(x)
 }
 
 hl.oc.ratio <- function(x) {
@@ -756,4 +798,89 @@ gap.down <- function(x) {
     xl <- x[,"low"]
     xo <- x[,"open"]
     xo < lag(xl,1)
+}
+
+gap.up.continue <- function(x) {
+    gap.up(x) & up(x)
+}
+
+gap.down.continue <- function(x) {
+    gap.down(x) & down(x)
+}
+
+gap.continue <- function(x) {
+    gap.up.continue(x) - gap.down.continue(x)
+}
+
+gap.up.reverse <- function(x) {
+    gap.up(x) & down(x)
+}
+
+gap.down.reverse <- function(x) {
+    gap.down(x) & up(x)
+}
+
+gap.reverse <- function(x) {
+    gap.up.reverse(x) - gap.down.reverse(x)
+}
+
+gap.direction <- function(x) {
+    gap.up(x) - gap.down(x)
+}
+
+rsi.crossover.up <- function(x,periods,thresh) {
+    stopifnot("close" %in% colnames(x))
+    xc <- x[,"close"]
+    xd <- diff(xc,1)
+    x.rsi <- rsi(xd,periods)
+    x.rsi <- x.rsi[!is.na(x.rsi),]
+    x.rsi < thresh & lag(x.rsi,1) > thresh
+}
+
+rsi.crossover.down <- function(x, periods, thresh) {
+    stopifnot("close" %in% colnames(x))
+    xc <- x[,"close"]
+    xd <- diff(xc,1)
+    x.rsi <- rsi(xd,periods)
+    x.rsi <- x.rsi[!is.na(x.rsi),]
+    x.rsi > thresh & lag(x.rsi,1) < thresh
+}
+
+rsi.crossover <- function(x,periods, up.thresh, down.thresh) {
+    rsi.crossover.up(x,periods,up.thresh) - rsi.crossover.down(x,periods,down.thresh)
+}
+
+ma.distance <- function(x, periods) {
+    stopifnot("close" %in% colnames(x))
+    xc <- x[,"close"]
+    xma <- moving.mean(xc,periods)
+    (xc - xma) / xc * 100
+}
+
+trend.day.up <- function(x,thresh=0.2) {
+    stopifnot(all(c("open","high","low","close") %in% colnames(x)))
+    xo <- x[,"open"]
+    xh <- x[,"high"]
+    xl <- x[,"low"]
+    xc <- x[,"close"]
+    day.range <- xh - xl
+    open.low <- (xo - xl) / day.range
+    high.close <- (xh - xc) / day.range
+    open.low <= thresh & high.close <= thresh
+}
+
+trend.day.down <- function(x,thresh=0.2) {
+    stopifnot(all(c("open","high","low","close") %in% colnames(x)))
+    xo <- x[,"open"]
+    xh <- x[,"high"]
+    xl <- x[,"low"]
+    xc <- x[,"close"]
+    day.range <- xh - xl
+    open.high <- (xh - xo) / day.range
+    low.close <- (xc - xl) / day.range
+    open.high <= thresh & low.close <= thresh
+}
+
+trend.day <- function(x,thresh=.2) {
+    trend.day.up(x,thresh) - trend.day.down(x,thresh)
 }

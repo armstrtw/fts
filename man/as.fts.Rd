@@ -33,6 +33,6 @@ xm <- matrix(rnorm(N))
 dts <- format(seq(from=Sys.time(),length.out=N,by="DSTday"),"\%Y-\%m-\%d")
 rownames(xm) <- dts
 x.from.m <- as.fts(xm)
-x.from.df <- as.fts(as.data.frame(xm))
+x.from.df <- as.fts(data.frame(asofdate=dts,my.data=xm))
 }
 \keyword{ts}
