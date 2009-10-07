@@ -13,13 +13,13 @@
 read.rds.fts(file)
 write.rds.fts(x,file)
 
-read.csv.fts(file, date.colname = "asofdate", ...)
+read.csv.fts(file, date.format="%Y-%m-%d", ...)
 write.csv.fts(x, file, ...)
 }
 \arguments{
   \item{x}{ An Fts object }
   \item{file}{ filename of file to read/write}
-  \item{date.colname}{ column name of the dates column }
+  \item{date.format}{ the format of the date strings }
   \item{\dots}{ further arguments to underlying read/write functions }
 }
 \value{

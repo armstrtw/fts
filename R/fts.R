@@ -357,12 +357,10 @@ write.csv.fts <- function(x, file, ...) {
     write.csv(as.data.frame(x), file,row.names=FALSE, ...)
 }
 
-read.csv.fts <- function(file,date.colname="asofdate",...) {
+read.csv.fts <- function(file,date.format="%Y-%m-%d",...) {
     fts.data <- read.csv(file,...)
-    date.colnumber <- match(date.colname,colnames(fts.data))
-    date.colnumber <- ifelse(is.na(date.colnumber),1,date.colnumber)
-    fts(dates=fts.data[,date.colnumber],
-        data=as.matrix(fts.data[,-date.colnumber]))
+    fts(dates=as.POSIXct(strptime(fts.data[,1],date.format)),
+        data=as.matrix(fts.data[,-1]))
 }
 
 read.rds.fts <- function(file) {
