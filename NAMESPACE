@@ -33,6 +33,7 @@ export(
        to.hourly,
        to.minute,
        to.second,
+       to.day.of.week,
 
        moving.mean,
        moving.sum,
@@ -79,6 +80,7 @@ export(
        ## technical analysis
        ema,
        rsi,
+       year,
        month,
        day,
        ma.crossover.up,

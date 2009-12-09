@@ -357,10 +357,14 @@ write.csv.fts <- function(x, file, ...) {
     write.csv(as.data.frame(x), file,row.names=FALSE, ...)
 }
 
-read.csv.fts <- function(file,date.format="%Y-%m-%d",...) {
+read.csv.fts <- function(file, date.column=1, date.format="%Y-%m-%d",...) {
     fts.data <- read.csv(file,...)
-    fts(dates=as.POSIXct(strptime(fts.data[,1],date.format)),
-        data=as.matrix(fts.data[,-1]))
+
+    if(mode(date.column)=="character")
+        date.column <- match(date.column,colnames(fts.data))
+
+    fts(dates=as.POSIXct(strptime(fts.data[,date.column],date.format)),
+        data=as.matrix(fts.data[, -date.column, drop=F]))
 }
 
 read.rds.fts <- function(file) {
@@ -567,6 +571,22 @@ to.second <- function(x) {
     .Call("toSecond",x,PACKAGE="fts")
 }
 
+to.day.of.week <- function(x,day.of.week,beginning.of.period=TRUE) {
+    dts <- dates(x)
+    end.date <- dts[nrow(x)]
+    end.date <- end.date + 6 * 60*60*24
+    pad.days <- seq.POSIXt(from=dts[1],to=end.date,by="DSTday")
+    pad.days <- pad.days[as.POSIXlt(pad.days)$wday==day.of.week]
+    x.filled <- fill.fwd(pad(x,as.POSIXct(pad.days)))
+    ans <- x.filled[as.POSIXlt(dates(x.filled))$wday == day.of.week,]
+    if(beginning.of.period) {
+        new.dates <- dates(ans) - 60*60*24 * 6
+        new.dates <- new.dates - ((as.POSIXlt(new.dates)$hour + 1) %% 24 -1) * 60*60
+        dates(ans) <- new.dates
+    }
+    ans
+}
+
 analog <- function(stationary, window, moving=stationary) {
     .Call("analog", stationary, moving, as.integer(window), PACKAGE="fts")
 }
@@ -626,6 +646,10 @@ rsi <- function(x,periods) {
     x.avg.down <- ema(x.down, periods)
 
     100 - 100/(1 - x.avg.up/x.avg.down)
+}
+
+year <- function(x) {
+    fts(dates=dates(x),data=as.POSIXlt(dates(x))$year+1900)
 }
 
 month <- function(x) {
@@ -844,8 +868,8 @@ rsi.crossover.down <- function(x, periods, thresh) {
     x.rsi > thresh & lag(x.rsi,1) < thresh
 }
 
-rsi.crossover <- function(x,periods, up.thresh, down.thresh) {
-    rsi.crossover.up(x,periods,up.thresh) - rsi.crossover.down(x,periods,down.thresh)
+rsi.crossover <- function(x,periods, thresh) {
+    rsi.crossover.up(x,periods,thresh) - rsi.crossover.down(x,periods,thresh)
 }
 
 ma.distance <- function(x, periods) {

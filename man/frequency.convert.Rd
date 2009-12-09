@@ -3,6 +3,12 @@
 \alias{to.weekly}
 \alias{to.monthly}
 \alias{to.quarterly}
+\alias{to.daily}
+\alias{to.hourly}
+\alias{to.minute}
+\alias{to.second}
+\alias{to.yearly}
+
 
 \title{Change Frequencies}
 \description{
