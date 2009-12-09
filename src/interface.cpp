@@ -68,6 +68,20 @@ SEXP fillValue(SEXP x, SEXP y) {
   return transformSpecializer_1arg<FillValue, fillTraits>(x, y);
 }
 
+SEXP pad(SEXP x, SEXP padDates) {
+  double* dts = REAL(padDates);
+  switch(TYPEOF(x)) {
+    case REALSXP:
+      return r_convert<REALSXP>::apply(x).pad(dts, dts + length(padDates)).getIMPL()->R_object;
+    case INTSXP:
+      return r_convert<INTSXP>::apply(x).pad(dts, dts + length(padDates)).getIMPL()->R_object;
+    case LGLSXP:
+      return r_convert<LGLSXP>::apply(x).pad(dts, dts + length(padDates)).getIMPL()->R_object;
+    default:
+      return R_NilValue;
+  }
+}
+
 SEXP lag(SEXP x, SEXP periods_sexp) {
   R_len_t periods = Rtype<INTSXP>::scalar(periods_sexp);
 

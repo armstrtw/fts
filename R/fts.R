@@ -335,18 +335,6 @@ fix.cnames <- function(cnames.list) {
     unlist(cnames.list)
 }
 
-pad <- function(x,pad.dates) {
-
-    new.dates <- sort(unique(c(dates(x),pad.dates)))
-    class(new.dates) <- c("POSIXt","POSIXct")
-    ans <- matrix(nrow=length(new.dates),ncol=ncol(x))
-    attr(ans,"dates") <- new.dates
-    class(ans) <- c("fts","matrix")
-    ans[dates(x),] <- x
-    colnames(ans) <- colnames(x)
-    ans
-}
-
 trim <- function(x,trim.dates) {
     new.dates <- sort(intersect(dates(x),trim.dates))
     class(new.dates) <- c("POSIXt","POSIXct")
@@ -533,6 +521,10 @@ fill.bwd <- function(x) {
 
 fill.value <- function(x,value) {
     .Call("fillValue",x,value,PACKAGE="fts")
+}
+
+pad <- function(x,pad.dates) {
+    .Call("pad",x,pad.dates,PACKAGE="fts")
 }
 
 monthly.sum <- function(x) {

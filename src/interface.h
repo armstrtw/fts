@@ -27,6 +27,7 @@ extern "C" {
   SEXP fillBackward(SEXP x);
   SEXP fillValue(SEXP x,SEXP value);
 
+  SEXP pad(SEXP x, SEXP padDates);
   SEXP lag(SEXP x, SEXP periods);
   SEXP lead(SEXP x, SEXP periods);
   SEXP diff(SEXP x, SEXP periods);
