@@ -18,7 +18,7 @@ do.test <- function(test.name, fts.data, zoo.data, fts.func, zoo.func, win) {
     fts.time <- system.time(fts.result <- fts.func(fts.data, win))
     zoo.time <- system.time(zoo.result <- rollapply(zoo.data, win, zoo.func))
 
-    stopifnot(all.equal(as.vector(fts.result[-(1:(win-1)),]),as.vector(zoo.result)))
+    stopifnot(all.equal(as.vector(fts.result),as.vector(zoo.result)))
 
     ## ratio of speeds is result
     ans <- zoo.time/fts.time
