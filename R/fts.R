@@ -588,10 +588,11 @@ analog <- function(stationary, window, moving=stationary) {
 ###############################################################
 ###############################################################
 
-plot.fts <- function(x,type="l",...) {
+plot.fts <- function(x, type="l", xlab="Date", ylab=substitute(x), ...) {
     x.range <- c(min(dates(x)), max(dates(x)))
     y.range <- c(min(x, na.rm=TRUE), max(x, na.rm=TRUE))
-    plot(x.range,y.range,type="n",...)
+    plot(x.range, y.range, type="n", xlab=xlab, ylab=ylab, ...)
+
     for (i in seq(ncol(x))) {
         lines(dates(x),x[,i],type=type,...)
     }
