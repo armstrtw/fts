@@ -588,12 +588,17 @@ analog <- function(stationary, window, moving=stationary) {
 ###############################################################
 ###############################################################
 
-plot.fts <- function(x,type="l",...) {
+plot.fts <- function(x, type="l", xlab="Date", ylab=substitute(x), ...) {
+    x.range <- c(min(dates(x)), max(dates(x)))
+    y.range <- c(min(x, na.rm=TRUE), max(x, na.rm=TRUE))
+    plot(x.range, y.range, type="n", xlab=xlab, ylab=ylab, ...)
 
-    ## can only plot 1 column for now
-    if("close"%in%colnames(x)) x <- x[,"close"]
-
-    plot(dates(x),x,type=type,...)
+    params <- lapply(list(type = type, ...), rep, length.out = ncol(x))
+    for (i in seq(ncol(x))) {
+        args <- c(list(xy.coords(dates(x), x[,i])),
+                  lapply(params, `[`, i))
+        do.call(plot.xy, args)
+    }
 }
 
 ###############################################################
