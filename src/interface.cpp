@@ -12,10 +12,6 @@
 #include "r.transform.template.h"
 #include "analog.h"
 
-using std::cerr;
-using std::endl;
-
-
 SEXP movingMean(SEXP x, SEXP periods) {
   return windowSpecializer<Mean, meanTraits>(x,periods);
 }
@@ -86,7 +82,7 @@ SEXP lag(SEXP x, SEXP periods_sexp) {
   R_len_t periods = Rtype<INTSXP>::scalar(periods_sexp);
 
   if(periods < 0) {
-    cerr << "only positive values of k are allowed" << endl;
+    Rprintf("only positive values of k are allowed.\n");
   }
   try {
     switch(TYPEOF(x)) {
@@ -100,7 +96,7 @@ SEXP lag(SEXP x, SEXP periods_sexp) {
       return R_NilValue;
     }
   } catch(TSeriesError& e) {
-    cerr << e.what() << endl;
+    Rprintf("%s\n",e.what());
     return R_NilValue;
   }
 }
@@ -109,7 +105,7 @@ SEXP lead(SEXP x, SEXP periods_sexp) {
   R_len_t periods = Rtype<INTSXP>::scalar(periods_sexp);
 
   if(periods < 0) {
-    cerr << "only positive values of k are allowed" << endl;
+    Rprintf("only positive values of k are allowed.\n");
   }
   try {
     switch(TYPEOF(x)) {
@@ -123,7 +119,7 @@ SEXP lead(SEXP x, SEXP periods_sexp) {
       return R_NilValue;
     }
   } catch(TSeriesError& e) {
-    cerr << e.what() << endl;
+    Rprintf("%s\n",e.what());
     return R_NilValue;
   }
 }
@@ -132,7 +128,7 @@ SEXP diff(SEXP x, SEXP periods_sexp) {
   R_len_t periods = Rtype<INTSXP>::scalar(periods_sexp);
 
   if(periods < 0) {
-    cerr << "only positive values of k are allowed" << endl;
+    Rprintf("only positive values of k are allowed.\n");
   }
   try {
     switch(TYPEOF(x)) {
@@ -146,7 +142,7 @@ SEXP diff(SEXP x, SEXP periods_sexp) {
       return R_NilValue;
     }
   } catch(TSeriesError& e) {
-    cerr << e.what() << endl;
+    Rprintf("%s\n",e.what());
     return R_NilValue;
   }
 }

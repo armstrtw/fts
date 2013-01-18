@@ -60,7 +60,7 @@ public:
   template<template<class> class windowFunction, template<class> class windowFunctionTraits>
   static SEXP apply(SEXP x, SEXP y, SEXP periods) {
     if(TYPEOF(x)!=TYPEOF(y)) {
-      std::cerr << "x and y must be the same type" << std::endl;
+      Rprintf("x and y must be the same type.");
       return R_NilValue;
     }
 

@@ -68,19 +68,19 @@ public:
   static SEXP apply(SEXP stationary, SEXP moving, SEXP periods) {
 
     if(TYPEOF(stationary)!=TYPEOF(moving)) {
-      std::cerr << "stationary and moving must be the same type" << std::endl;
+      Rprintf("stationary and moving must be the same type.\n");
       return R_NilValue;
     }
 
     int p = static_cast<int>(Rtype<INTSXP>::scalar(periods));
 
     if(p > nrows(stationary) || p > nrows(moving)) {
-      std::cerr << "periods is greater than supplied timeseries." << std::endl;
+      Rprintf("periods is greater than supplied timeseries.\n");
       return R_NilValue;
     }
 
     if(ncols(stationary) > 1 || ncols(moving) > 1) {
-      std::cerr << "don't know which column to use. please re-run using 1 column time series for moving and stationary." << std::endl;
+      Rprintf("don't know which column to use. please re-run using 1 column time series for moving and stationary.\n");
       return R_NilValue;
     }
     
