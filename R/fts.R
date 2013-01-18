@@ -27,7 +27,7 @@ fts <- function(data,dates) {
         stop("Dates and data must be same length.")
     }
 
-    if(is.numeric(dates)&&is.null(class(dates))) {
+    if(is.numeric(dates) && is.null(class(dates))){
         class(dates) <- c("POSIXt","POSIXct")
     } else {
         dates <- as.POSIXct(dates)
@@ -66,10 +66,10 @@ as.fts.data.frame <- function(x) {
 }
 
 as.fts.zoo <- function(x) {
-    stopifnot(inherits(index(x), "POSIXct"))
+    stopifnot(inherits(attr(x,"index"), "POSIXct"))
 
-    fts(data=coredata(x),
-        dates=index(x))
+    fts(data=unclass(x),
+        dates=attr(x,"index"))
 }
 
 as.matrix.fts <- function(x, ...) {
@@ -355,15 +355,6 @@ read.csv.fts <- function(file, date.column=1, date.format="%Y-%m-%d",...) {
         data=as.matrix(fts.data[, -date.column, drop=F]))
 }
 
-read.rds.fts <- function(file) {
-    x <- .readRDS(file)
-    x
-}
-
-write.rds.fts <- function(x,file) {
-    .saveRDS(x,file)
-}
-
 cumsum.fts <- function(x) {
     fts(data=apply(x,2,cumsum),
         dates=dates(x))
@@ -490,7 +481,7 @@ since.na <- function(x) {
 }
 
 lag.fts <- function(x, k, ...) {
-    stopifnot(k > 0)
+    stopifnot(k > -1)
     ans <- .Call("lag", x, as.integer(k),PACKAGE="fts")
     ans
 }
@@ -623,6 +614,12 @@ lm.fts <- function(y,...,origin=F) {
         ans <- lm(y~x)
     }
     ans
+}
+
+## drop out rows that do not have the required number of observations
+filter.min.obs <- function(x,obs.required) {
+    obs <- apply(!is.na(x),1,sum)
+    x[obs >= obs.required,]
 }
 
 ###############################################################
@@ -902,4 +899,15 @@ trend.day.down <- function(x,thresh=0.2) {
 
 trend.day <- function(x,thresh=.2) {
     trend.day.up(x,thresh) - trend.day.down(x,thresh)
+}
+
+cor.by.row <- function(x,y) {
+    i.dts <- sort(intersect(dates(x),dates(y)))
+    class(i.dts) <- "POSIXct"
+    ans <- template.fts(i.dts,"cor")
+
+    for(i in 1:length(i.dts)) {
+        ans[i,] <- cor(as.vector(x[i.dts[i],]),as.vector(y[i.dts[i],]))
+    }
+    ans
 }
