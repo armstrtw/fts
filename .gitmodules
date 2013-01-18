@@ -1,9 +1,3 @@
 [submodule "src/tslib"]
 	path = src/tslib
 	url = git://github.com/armstrtw/tslib.git
-[submodule "src/R.tslib.backend"]
-	path = src/R.tslib.backend
-	url = git://github.com/armstrtw/r.tslib.backend.git
-[submodule "src/RAbstraction"]
-	path = src/RAbstraction
-	url = git://github.com/armstrtw/rabstraction.git
