@@ -2,6 +2,7 @@
 \alias{pad.trim}
 \alias{pad}
 \alias{trim}
+\alias{filter.min.obs}
 \title{pad and trim dates}
 \description{
   add dates to an Fts object by padding w/ additional dates or
@@ -10,15 +11,17 @@
 \usage{
 pad(x, pad.dates)
 trim(x, trim.dates)
+filter.min.obs(x, obs.required)
 }
 
 \arguments{
   \item{x}{ An Fts object }
-  \item{pad.dates}{ a vector of dates }
-  \item{trim.dates}{ a vector of dates }
+  \item{pad.dates}{a vector of dates.}
+  \item{trim.dates}{a vector of dates.}
+  \item{obs.required}{number of required observations per row.}
 }
 \value{
-  an Fts object
+  an fts object
 }
 \author{ Whit Armstrong }
 \examples{

@@ -10,6 +10,7 @@
 
 \alias{moving.cor}
 \alias{moving.cov}
+\alias{cor.by.row}
 
 \title{Moving Functions}
 \description{
@@ -25,6 +26,8 @@ moving.rank(x, periods)
 
 moving.cor(x, y, periods)
 moving.cov(x, y, periods)
+
+cor.by.row(x,y)
 }
 
 \arguments{
@@ -36,7 +39,10 @@ moving.cov(x, y, periods)
 
 \details{
   apply a function that takes a vector and returns a scalar on a rolling
-  basis to an fts object
+  basis to an fts object.
+
+  For cor.by.row, the indicator is not rolling, but is the result of the
+  application of the cor function to matching rows of x and y.
 
   asking for a window larger than the number of rows of the fts
   object will result in an fts of all NA w/ the same number of rows as the

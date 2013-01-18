@@ -1,7 +1,5 @@
 \name{read.write.fts}
 \alias{read.write.fts}
-\alias{read.rds.fts}
-\alias{write.rds.fts}
 \alias{read.csv.fts}
 \alias{write.csv.fts}
 
@@ -10,9 +8,6 @@
   Read / Write files to csv or .RDS format
 }
 \usage{
-read.rds.fts(file)
-write.rds.fts(x,file)
-
 read.csv.fts(file, date.column=1, date.format="\%Y-\%m-\%d", ...)
 write.csv.fts(x, file, ...)
 }
@@ -36,10 +31,5 @@ write.csv.fts(x,csv.fname)
 y.csv <- read.csv.fts(csv.fname)
 
 all.equal(x,y.csv)
-
-rds.fname <- paste(tempfile(),".fts",sep="")
-write.rds.fts(x,rds.fname)
-y.rds <- read.rds.fts(rds.fname)
-all.equal(x,y.rds)
 }
 \keyword{ts}

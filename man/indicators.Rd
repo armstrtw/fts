@@ -32,6 +32,7 @@
 \alias{ma.d}
 \alias{ma.distance}
 \alias{month}
+\alias{year}
 \alias{monthly.sum}
 \alias{new.high}
 \alias{new.low}
@@ -59,7 +60,7 @@ above.ma(x,n)
 analog(stationary,window,moving = stationary)
 below.ma(x,n)
 day(x)
-diff.fts(x,k,\dots)
+\method{diff}{fts}(x,k,\dots)
 up(x)
 down(x)
 ema(x,periods)
@@ -87,6 +88,7 @@ ma.crossover.up(x,n)
 ma.d(x,n)
 ma.distance(x,periods)
 month(x)
+year(x)
 monthly.sum(x)
 new.high(x,n)
 new.low(x,n)
@@ -123,7 +125,7 @@ trend.day.up(x,thresh)
   removed elements are replaced with NA
 }
 \value{
-  an Fts object
+  an fts object
 }
 \author{ Whit Armstrong }
 \examples{

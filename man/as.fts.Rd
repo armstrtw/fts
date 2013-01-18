@@ -13,7 +13,6 @@ convert an object into an fts and vice versa
 }
 \usage{
 as.fts(x)
-as.fts.zoo(x)
 }
 
 \arguments{

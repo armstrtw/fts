@@ -1,6 +1,7 @@
 \name{frequency.convert}
 \alias{frequency.convert}
 \alias{to.weekly}
+\alias{to.day.of.week}
 \alias{to.monthly}
 \alias{to.quarterly}
 \alias{to.daily}
@@ -19,9 +20,14 @@
 to.weekly(x)
 to.monthly(x)
 to.quarterly(x)
+to.day.of.week(x,day.of.week,beginning.of.period=TRUE)
 }
 \arguments{
-  \item{x}{ An Fts object }
+  \item{x}{An Fts object.}
+  \item{day.of.week}{a numerical value indicating the day of week
+    following POSIXlt conventions.}
+  \item{beginning.of.period}{whether to shift the sampling dates to the
+    beginning of period dates.}
 }
 \value{
   an Fts object
