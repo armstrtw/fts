@@ -85,10 +85,10 @@ public:
     }
     
     // build tseries from SEXP
-    R_Backend_TSdata<double,VT,int>* stationaryTSData = R_Backend_TSdata<double,VT,int>::init(stationary);
+    R_Backend_TSdata<double,VT,int> stationaryTSData(stationary);
     TSeries<double,VT,int,R_Backend_TSdata,PosixDate> stationaryTS(stationaryTSData);
 
-    R_Backend_TSdata<double,VT,int>* movingTSData = R_Backend_TSdata<double,VT,int>::init(moving);
+    R_Backend_TSdata<double,VT,int> movingTSData(moving);
     TSeries<double,VT,int,R_Backend_TSdata,PosixDate> movingTS(movingTSData);
 
     TSeries<double,ansType,int,R_Backend_TSdata,PosixDate> ans = tslib::analog<ansType>(stationaryTS,movingTS,p);

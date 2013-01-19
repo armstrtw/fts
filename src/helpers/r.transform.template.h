@@ -22,7 +22,7 @@ public:
     typedef typename transformFunctionTraits<VT>::ReturnType ansType;
 
     // build tseries from SEXP x
-    R_Backend_TSdata<double,VT,int>* tsData = R_Backend_TSdata<double,VT,int>::init(x);
+    R_Backend_TSdata<double,VT,int> tsData(x);
     TSeries<double,VT,int,R_Backend_TSdata,PosixDate> ts(tsData);
 
     TSeries<double,ansType,int,R_Backend_TSdata,PosixDate> ans = ts.template transform<ansType,transformFunction>();
@@ -60,7 +60,7 @@ public:
     typedef typename transformFunctionTraits<VT>::ArgType ArgType;
 
     // build tseries from SEXP x
-    R_Backend_TSdata<double,VT,int>* tsData = R_Backend_TSdata<double,VT,int>::init(x);
+    R_Backend_TSdata<double,VT,int> tsData(x);
     TSeries<double,VT,int,R_Backend_TSdata,PosixDate> ts(tsData);
 
     TSeries<double,ansType,int,R_Backend_TSdata,PosixDate> ans = ts.template transform_1arg<ansType,transformFunction>(R_allocator<ArgType>::scalar(arg1));

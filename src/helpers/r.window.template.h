@@ -23,7 +23,7 @@ public:
     int p = static_cast<int>(Rtype<INTSXP>::scalar(periods));
 
     // build tseries from SEXP x
-    R_Backend_TSdata<double,VT,int>* tsData = R_Backend_TSdata<double,VT,int>::init(x);
+    R_Backend_TSdata<double,VT,int> tsData(x);
     TSeries<double,VT,int,R_Backend_TSdata,PosixDate> ts(tsData);
 
     TSeries<double,ansType,int,R_Backend_TSdata,PosixDate> ans = ts.template window<ansType,windowFunction>(p);
@@ -43,7 +43,7 @@ public:
     typedef typename windowFunctionTraits<VT>::ReturnType ansType;
 
     // build tseries from SEXP x
-    R_Backend_TSdata<double,VT,int>* tsData = R_Backend_TSdata<double,VT,int>::init(x);
+    R_Backend_TSdata<double,VT,int> tsData(x);
     TSeries<double,VT,int,R_Backend_TSdata,PosixDate> ts(tsData);
 
     TSeries<double,ansType,int,R_Backend_TSdata,PosixDate> ans = ts.template time_window<ansType, windowFunction, PFUNC>();
@@ -70,10 +70,10 @@ public:
     int p = static_cast<int>(Rtype<INTSXP>::scalar(periods));
 
     // build tseries from SEXP
-    R_Backend_TSdata<double,VT,int>* tsData1 = R_Backend_TSdata<double,VT,int>::init(x);
+    R_Backend_TSdata<double,VT,int> tsData1(x);
     TSeries<double,VT,int,R_Backend_TSdata,PosixDate> ts1(tsData1);
 
-    R_Backend_TSdata<double,VT,int>* tsData2 = R_Backend_TSdata<double,VT,int>::init(y);
+    R_Backend_TSdata<double,VT,int> tsData2(y);
     TSeries<double,VT,int,R_Backend_TSdata,PosixDate> ts2(tsData2);
 
     TSeries<double,ansType,int,R_Backend_TSdata,PosixDate> ans = window_function<ansType,windowFunction>(ts1,ts2,p);
