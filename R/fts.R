@@ -256,8 +256,8 @@ remove.all.na.rows <- function(x) {
     x[!row.all(is.na(x)),]
 }
 
-as.data.frame.fts <- function(x,row.names = NULL, optional = FALSE, ...) {
-    data.frame(asofdate=dates(x),as.data.frame.matrix(unclass(x)))
+as.data.frame.fts <- function(x,row.names = NULL, optional = FALSE, check.names = FALSE,...) {
+    data.frame(asofdate=dates(x),as.data.frame.matrix(unclass(x),optional=optional),check.names=check.names)
 }
 
 as.matrix.fts <- function(x, ...) {
