@@ -650,6 +650,10 @@ month <- function(x) {
     fts(dates=dates(x),data=as.POSIXlt(dates(x))$mon+1)
 }
 
+mday <- function(x) {
+    fts(dates = dates(x), data = as.POSIXlt(dates(x))$mday)
+}
+
 day <- function(x) {
     fts(dates = dates(x), data = as.POSIXlt(dates(x))$wday)
 }

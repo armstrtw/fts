@@ -81,6 +81,7 @@ export(
        rsi,
        year,
        month,
+       mday,
        day,
        ma.crossover.up,
        ma.crossover.down,
