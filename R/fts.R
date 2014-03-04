@@ -256,7 +256,7 @@ remove.all.na.rows <- function(x) {
     x[!row.all(is.na(x)),]
 }
 
-as.data.frame.fts <- function(x,row.names = NULL, optional = FALSE, check.names = FALSE,...) {
+as.data.frame.fts <- function(x,row.names = NULL, optional = FALSE, check.names = TRUE,...) {
     data.frame(asofdate=dates(x),as.data.frame.matrix(unclass(x),optional=optional),check.names=check.names)
 }
 
@@ -390,6 +390,10 @@ dates <- function(x) {
 
 
 dates.fts <- function(x) {
+    attr(x,"dates")
+}
+
+index.fts <- function(x) {
     attr(x,"dates")
 }
 

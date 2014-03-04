@@ -61,6 +61,7 @@ export(
        dates.fts,
        "dates<-",
        "dates<-.fts",
+       index.fts,
        event.dates,
        intersect.all,
 
