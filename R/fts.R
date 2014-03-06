@@ -39,8 +39,8 @@ fts <- function(data,dates) {
     rownames(ans) <- NULL
 
     ## set dates attribute of answer
-    attr(ans,"dates") <- dates
-    class(ans) <- c("fts","matrix")
+    attr(ans,"index") <- dates
+    class(ans) <- c("fts","zoo")
     ans
 }
 
@@ -97,8 +97,8 @@ Ops.fts <- function (e1, e2) {
 
     if(missing(e2)) {
         ans.data <- NextMethod()
-        attr(ans.data,"dates") <- dates(e1)
-        class(ans.data) <- c("fts","matrix")
+        attr(ans.data,"index") <- dates(e1)
+        class(ans.data) <- c("fts","zoo")
         ans.data
     } else {
 
@@ -131,8 +131,8 @@ Ops.fts <- function (e1, e2) {
                         stop("Ops.fts: non conformable data.")
                     }
                 }
-                attr(ans.data,"dates") <- i.dates
-                class(ans.data) <- c("fts","matrix")
+                attr(ans.data,"index") <- i.dates
+                class(ans.data) <- c("fts","zoo")
                 ans.data
             } else {
                 ## no matching dates, return NULL
@@ -142,12 +142,12 @@ Ops.fts <- function (e1, e2) {
         } else {
             ans.data <- NextMethod()
             if("fts"%in%c.e1) {
-                ans.dates <- attr(e1,"dates")
+                ans.dates <- attr(e1,"index")
             } else {
-                ans.dates <- attr(e2,"dates")
+                ans.dates <- attr(e2,"index")
             }
-            attr(ans.data,"dates") <- ans.dates
-            class(ans.data) <- c("fts","matrix")
+            attr(ans.data,"index") <- ans.dates
+            class(ans.data) <- c("fts","zoo")
             ans.data
         }
     }
@@ -185,8 +185,8 @@ print.fts <- function(x, ...) {
 
     ans.dates <- dates(x)[i]
     ans <- unclass(x)[i,j,...,drop=drop]
-    attr(ans,"dates") <- ans.dates
-    class(ans) <- c("fts","matrix")
+    attr(ans,"index") <- ans.dates
+    class(ans) <- c("fts","zoo")
 
     ticker <- attr(x,"ticker")
     if(!is.null(ticker)) attr(ans,"ticker") <- ticker
@@ -209,7 +209,7 @@ print.fts <- function(x, ...) {
     }
     x <- unclass(x)
     x <- NextMethod()
-    class(x) <- c("fts","matrix")
+    class(x) <- c("fts","zoo")
     x
 }
 
@@ -262,7 +262,7 @@ as.data.frame.fts <- function(x,row.names = NULL, optional = FALSE, check.names 
 
 as.matrix.fts <- function(x, ...) {
     rownames(x) <- format(dates(x))
-    attr(x,"dates") <- NULL
+    attr(x,"index") <- NULL
     class(x) <- "matrix"
     x
 }
@@ -320,8 +320,8 @@ cbind.fts <- function(...) {
     ## fix blank cnames
     cnames.list <- lapply(x,colnames)
     colnames(ans) <- fix.cnames(cnames.list)
-    attr(ans,"dates") <- ans.dates
-    class(ans) <- c("fts","matrix")
+    attr(ans,"index") <- ans.dates
+    class(ans) <- c("fts","zoo")
     ans
 }
 
@@ -381,7 +381,7 @@ cummin.fts <- function(x) {
 ###############################################################
 
 dates <- function(x) {
-    UseMethod("dates")
+    UseMethod("index")
 }
 
 "dates<-" <- function(x, value) {
@@ -390,18 +390,18 @@ dates <- function(x) {
 
 
 dates.fts <- function(x) {
-    attr(x,"dates")
+    attr(x,"index")
 }
 
 index.fts <- function(x) {
-    attr(x,"dates")
+    attr(x,"index")
 }
 
 "dates<-.fts" <- function(x, value) {
     ## FIXME: might put something here to convert
     ## POSIXlt to POSIXct
     stopifnot(length(value)==NROW(x))
-    attr(x,"dates") <- value
+    attr(x,"index") <- value
     x
 }
 
