@@ -1,1 +1,2 @@
+USE_CXX11 = true
 PKG_CXXFLAGS = -I./tslib -I./helpers
