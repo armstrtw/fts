@@ -23,6 +23,7 @@
 template<typename T>
 class R_allocator {
 public:
+  static SEXPTYPE getType();
   static SEXP Matrix(const R_len_t nr, const R_len_t nc);
   static SEXP Vector(const R_len_t len);
   static T* R_dataPtr(const SEXP x);
@@ -32,6 +33,7 @@ public:
 template<>
 class R_allocator<double> {
 public:
+  static SEXPTYPE getType() { return REALSXP; }
   static SEXP Matrix(const R_len_t nr, const R_len_t nc) { return allocMatrix(REALSXP,nr,nc); }
   static SEXP Vector(const R_len_t len) { return allocVector(REALSXP,len); }
   static double* R_dataPtr(const SEXP x) { return REAL(x); }
@@ -41,6 +43,7 @@ public:
 template<>
 class R_allocator<int> {
 public:
+  static SEXPTYPE getType() { return INTSXP; }
   static SEXP Matrix(const R_len_t nr, const R_len_t nc) { return allocMatrix(INTSXP,nr,nc); }
   static SEXP Vector(const R_len_t len) { return allocVector(INTSXP,len); }
   static int* R_dataPtr(const SEXP x) { return INTEGER(x); }
@@ -50,6 +53,7 @@ public:
 template<>
 class R_allocator<bool> {
 public:
+  static SEXPTYPE getType() { return LGLSXP; }
   static SEXP Matrix(const R_len_t nr, const R_len_t nc) { return allocMatrix(LGLSXP,nr,nc); }
   static SEXP Vector(const R_len_t len) { return allocVector(LGLSXP,len); }
   static int* R_dataPtr(const SEXP x) { return LOGICAL(x); }

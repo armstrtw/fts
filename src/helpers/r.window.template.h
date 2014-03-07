@@ -23,10 +23,10 @@ public:
     int p = static_cast<int>(Rtype<INTSXP>::scalar(periods));
 
     // build tseries from SEXP x
-    R_Backend_TSdata<double,VT,int> tsData(x);
-    TSeries<double,VT,int,R_Backend_TSdata,PosixDate> ts(tsData);
+    PosixBackend<double,VT,int> tsData(x);
+    TSeries<double,VT,int,PosixBackend,PosixDate> ts(tsData);
 
-    TSeries<double,ansType,int,R_Backend_TSdata,PosixDate> ans = ts.template window<ansType,windowFunction>(p);
+    TSeries<double,ansType,int,PosixBackend,PosixDate> ans = ts.template window<ansType,windowFunction>(p);
 
     return ans.getIMPL()->R_object;
   }
@@ -43,10 +43,10 @@ public:
     typedef typename windowFunctionTraits<VT>::ReturnType ansType;
 
     // build tseries from SEXP x
-    R_Backend_TSdata<double,VT,int> tsData(x);
-    TSeries<double,VT,int,R_Backend_TSdata,PosixDate> ts(tsData);
+    PosixBackend<double,VT,int> tsData(x);
+    TSeries<double,VT,int,PosixBackend,PosixDate> ts(tsData);
 
-    TSeries<double,ansType,int,R_Backend_TSdata,PosixDate> ans = ts.template time_window<ansType, windowFunction, PFUNC>();
+    TSeries<double,ansType,int,PosixBackend,PosixDate> ans = ts.template time_window<ansType, windowFunction, PFUNC>();
 
     return ans.getIMPL()->R_object;
   }
@@ -70,13 +70,13 @@ public:
     int p = static_cast<int>(Rtype<INTSXP>::scalar(periods));
 
     // build tseries from SEXP
-    R_Backend_TSdata<double,VT,int> tsData1(x);
-    TSeries<double,VT,int,R_Backend_TSdata,PosixDate> ts1(tsData1);
+    PosixBackend<double,VT,int> tsData1(x);
+    TSeries<double,VT,int,PosixBackend,PosixDate> ts1(tsData1);
 
-    R_Backend_TSdata<double,VT,int> tsData2(y);
-    TSeries<double,VT,int,R_Backend_TSdata,PosixDate> ts2(tsData2);
+    PosixBackend<double,VT,int> tsData2(y);
+    TSeries<double,VT,int,PosixBackend,PosixDate> ts2(tsData2);
 
-    TSeries<double,ansType,int,R_Backend_TSdata,PosixDate> ans = window_function<ansType,windowFunction>(ts1,ts2,p);
+    TSeries<double,ansType,int,PosixBackend,PosixDate> ans = window_function<ansType,windowFunction>(ts1,ts2,p);
 
     return ans.getIMPL()->R_object;
   }

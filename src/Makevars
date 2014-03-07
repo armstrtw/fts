@@ -1,2 +1,2 @@
 USE_CXX11 = true
-PKG_CXXFLAGS = -I./tslib -I./helpers
+PKG_CXXFLAGS = -I./tslib -I./helpers -std=c++11

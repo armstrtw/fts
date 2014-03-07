@@ -4,39 +4,44 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <exception>
 #include <Rinternals.h>
 #include <Rsexp.allocator.templates.hpp>
 
-template <typename TDATE,typename TDATA, typename TSDIM>
-class R_Backend_TSdata {
+
+class BackendBase {
 public:
   SEXP R_object;
-
-  ~R_Backend_TSdata() {
+  ~BackendBase() {
     if(R_object!=R_NilValue) {
       UNPROTECT_PTR(R_object);
     }
   }
 
-  R_Backend_TSdata(): R_object(R_NilValue) {}
-  R_Backend_TSdata(const R_Backend_TSdata& t): R_object(t.R_object) { PROTECT(R_object); }
+  BackendBase(): R_object(R_NilValue) {}
 
-  R_Backend_TSdata(const TSDIM rows, const TSDIM cols) {
-    // this object stays protected after we exit the constructor
-    PROTECT(R_object = R_allocator<TDATA>::Matrix(rows, cols));
+  // deep copy (do we need this)?
+  // BackendBase(const BackendBase& t): R_object(PROTECT(duplicate(t.R_object))) {};
 
-    // attach dates to R_object
-    SEXP R_dates = PROTECT(R_allocator<TDATE>::Vector(rows));
-    setAttrib(R_object,install("index"),R_dates);
-    UNPROTECT(1); // we can unprotect dates now
+  // delegating constructor
+  BackendBase(const BackendBase& t): BackendBase(t.R_object) {}
 
-    // create and add dates class to dates object
-    SEXP r_dates_class = PROTECT(allocVector(STRSXP, 2));
-    SET_STRING_ELT(r_dates_class, 0, mkChar("POSIXct"));
-    SET_STRING_ELT(r_dates_class, 1, mkChar("POSIXt"));
-    classgets(R_dates, r_dates_class);
-    UNPROTECT(1); // r_dates_class
+  // SEXP constructor assumes an existing fts object
+  // throw if fts class is missing or index is missing
+  BackendBase(const SEXP x): R_object(PROTECT(x)) {
+    if(getAttrib(R_object,R_ClassSymbol)==R_NilValue) {
+      throw std::logic_error("BackendBase(const SEXP x): Object has no classname.");
+    }
+    if(strcmp(CHAR(STRING_ELT(getAttrib(R_object,R_ClassSymbol),0)),"fts")!=0) {
+      throw std::logic_error("BackendBase(const SEXP x): not an fts object.");
+    }
+    if(getAttrib(R_object,install("index"))==R_NilValue) {
+      throw std::logic_error("BackendBase(const SEXP x): Object has no index.");
+    }
+  }
 
+  // use this constructor for new fts objects
+  BackendBase(SEXPTYPE rtype, R_len_t nr, R_len_t nc): R_object(PROTECT(allocMatrix(rtype,nr,nc))) {
     // add fts class to R_object
     SEXP r_tseries_class = PROTECT(allocVector(STRSXP, 2));
     SET_STRING_ELT(r_tseries_class, 0, mkChar("fts"));
@@ -45,17 +50,14 @@ public:
     UNPROTECT(1); // r_tseries_class
   }
 
-  R_Backend_TSdata(const SEXP x): R_object(x) { PROTECT(R_object); }
-
-  TSDIM nrow() const { return nrows(R_object); }
-  TSDIM ncol() const { return ncols(R_object); }
-  TDATA* getData() const { return R_allocator<TDATA>::R_dataPtr(R_object); }
-  TDATE* getDates() const { return R_allocator<TDATE>::R_dataPtr(getAttrib(R_object,install("index"))); }
+  R_len_t nrow() const { return nrows(R_object); }
+  R_len_t ncol() const { return ncols(R_object); }
 
   void setColnames(const std::vector<std::string>& cnames) {
     int protect_count(0);
 
-    if(static_cast<TSDIM>(cnames.size()) != ncols(R_object)) {
+    if(static_cast<R_len_t>(cnames.size()) != ncols(R_object)) {
+      REprintf("setColnames: colnames size does not match ncols(R_object)."); 
       return;
     }
 
@@ -93,6 +95,33 @@ public:
     }
     return 0;
   }
+};
+
+template <typename TDATE,typename TDATA, typename TSDIM>
+class PosixBackend : public BackendBase {
+public:
+  PosixBackend() {}
+  PosixBackend(const PosixBackend& t): BackendBase(t.R_object) {}
+  PosixBackend(const TSDIM rows, const TSDIM cols): BackendBase(R_allocator<TDATA>::getType(),rows, cols) {
+    // create dates
+    SEXP R_dates = PROTECT(R_allocator<TDATE>::Vector(rows));
+
+    // create and add dates class to dates object
+    SEXP r_dates_class = PROTECT(allocVector(STRSXP, 2));
+    SET_STRING_ELT(r_dates_class, 0, mkChar("POSIXct"));
+    SET_STRING_ELT(r_dates_class, 1, mkChar("POSIXt"));
+    classgets(R_dates, r_dates_class);
+
+    // attach dates to R_object
+    setAttrib(R_object,install("index"),R_dates);
+    UNPROTECT(2); // R_dates, r_dates_class
+  }
+  PosixBackend(const SEXP x): BackendBase(x) {}
+
+  TSDIM nrow() const { return BackendBase::nrow(); }
+  TSDIM ncol() const { return BackendBase::ncol(); }
+  TDATA* getData() const { return R_allocator<TDATA>::R_dataPtr(R_object); }
+  TDATE* getDates() const { return R_allocator<TDATE>::R_dataPtr(getAttrib(R_object,install("index"))); }
 };
 
 #endif // R_TSERIES_DATA_BACKEND_HPP

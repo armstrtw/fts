@@ -16,11 +16,11 @@ class r_convert;
 template<>
 class r_convert<REALSXP> {
 public:
-  static TSeries<double,Rtype<REALSXP>::ValueType,int,R_Backend_TSdata,PosixDate> apply(SEXP x) {
+  static TSeries<double,Rtype<REALSXP>::ValueType,int,PosixBackend,PosixDate> apply(SEXP x) {
 
     // build tseries from SEXP x
-    R_Backend_TSdata<double,Rtype<REALSXP>::ValueType,int> tsData(x);
-    TSeries<double,Rtype<REALSXP>::ValueType,int,R_Backend_TSdata,PosixDate> ts(tsData);
+    PosixBackend<double,Rtype<REALSXP>::ValueType,int> tsData(x);
+    TSeries<double,Rtype<REALSXP>::ValueType,int,PosixBackend,PosixDate> ts(tsData);
     return ts;
   }
 };
@@ -28,11 +28,11 @@ public:
 template<>
 class r_convert<INTSXP> {
 public:
-  static TSeries<double,Rtype<INTSXP>::ValueType,int,R_Backend_TSdata,PosixDate> apply(SEXP x) {
+  static TSeries<double,Rtype<INTSXP>::ValueType,int,PosixBackend,PosixDate> apply(SEXP x) {
 
     // build tseries from SEXP x
-    R_Backend_TSdata<double,Rtype<INTSXP>::ValueType,int> tsData(x);
-    TSeries<double,Rtype<INTSXP>::ValueType,int,R_Backend_TSdata,PosixDate> ts(tsData);
+    PosixBackend<double,Rtype<INTSXP>::ValueType,int> tsData(x);
+    TSeries<double,Rtype<INTSXP>::ValueType,int,PosixBackend,PosixDate> ts(tsData);
     return ts;
   }
 };
@@ -40,11 +40,11 @@ public:
 template<>
 class r_convert<LGLSXP> {
 public:
-  static TSeries<double,Rtype<LGLSXP>::ValueType,int,R_Backend_TSdata,PosixDate> apply(SEXP x) {
+  static TSeries<double,Rtype<LGLSXP>::ValueType,int,PosixBackend,PosixDate> apply(SEXP x) {
 
     // build tseries from SEXP x
-    R_Backend_TSdata<double,Rtype<LGLSXP>::ValueType,int> tsData(x);
-    TSeries<double,Rtype<LGLSXP>::ValueType,int,R_Backend_TSdata,PosixDate> ts(tsData);
+    PosixBackend<double,Rtype<LGLSXP>::ValueType,int> tsData(x);
+    TSeries<double,Rtype<LGLSXP>::ValueType,int,PosixBackend,PosixDate> ts(tsData);
     return ts;
   }
 };

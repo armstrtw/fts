@@ -3,10 +3,10 @@
 \alias{Ops.fts}
 \alias{[.fts}
 \alias{[<-.fts}
-\alias{dates}
-\alias{dates<-}
-\alias{dates.fts}
-\alias{dates<-.fts}
+\alias{index}
+\alias{index<-}
+\alias{index.fts}
+\alias{index<-.fts}
 \alias{cbind.fts}
 \alias{rbind.fts}
 \alias{print.fts}
@@ -18,8 +18,8 @@
 }
 \usage{
 fts(data, dates)
-\method{dates}{fts}(x)
-\method{dates}{fts}(x) <- value
+\method{index}{fts}(x)
+\method{index}{fts}(x) <- value
 }
 
 \arguments{

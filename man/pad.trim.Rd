@@ -29,7 +29,7 @@ filter.min.obs(x, obs.required)
 x <- fts(rnorm(5))
 pad(x,Sys.time()+60*60*24*200)
 
-trim.dts <- dates(x)[c(1,3)]
+trim.dts <- index(x)[c(1,3)]
 
 trim(x,trim.dts)
 }

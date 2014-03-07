@@ -22,11 +22,9 @@ public:
     typedef typename transformFunctionTraits<VT>::ReturnType ansType;
 
     // build tseries from SEXP x
-    R_Backend_TSdata<double,VT,int> tsData(x);
-    TSeries<double,VT,int,R_Backend_TSdata,PosixDate> ts(tsData);
-
-    TSeries<double,ansType,int,R_Backend_TSdata,PosixDate> ans = ts.template transform<ansType,transformFunction>();
-
+    PosixBackend<double,VT,int> tsData(x);
+    TSeries<double,VT,int,PosixBackend,PosixDate> ts(tsData);
+    TSeries<double,ansType,int,PosixBackend,PosixDate> ans = ts.template transform<ansType,transformFunction>();
     return ans.getIMPL()->R_object;
   }
 };
@@ -60,10 +58,10 @@ public:
     typedef typename transformFunctionTraits<VT>::ArgType ArgType;
 
     // build tseries from SEXP x
-    R_Backend_TSdata<double,VT,int> tsData(x);
-    TSeries<double,VT,int,R_Backend_TSdata,PosixDate> ts(tsData);
+    PosixBackend<double,VT,int> tsData(x);
+    TSeries<double,VT,int,PosixBackend,PosixDate> ts(tsData);
 
-    TSeries<double,ansType,int,R_Backend_TSdata,PosixDate> ans = ts.template transform_1arg<ansType,transformFunction>(R_allocator<ArgType>::scalar(arg1));
+    TSeries<double,ansType,int,PosixBackend,PosixDate> ans = ts.template transform_1arg<ansType,transformFunction>(R_allocator<ArgType>::scalar(arg1));
 
     return ans.getIMPL()->R_object;
   }

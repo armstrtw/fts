@@ -3,7 +3,8 @@
 \alias{above.ma}
 \alias{analog}
 \alias{below.ma}
-\alias{day}
+\alias{wday}
+\alias{mday}
 \alias{diff.fts}
 \alias{up}
 \alias{down}
@@ -59,7 +60,8 @@
 above.ma(x,n)
 analog(stationary,window,moving = stationary)
 below.ma(x,n)
-day(x)
+wday(x)
+mday(x)
 \method{diff}{fts}(x,k,\dots)
 up(x)
 down(x)

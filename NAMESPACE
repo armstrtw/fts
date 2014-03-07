@@ -57,11 +57,10 @@ export(
 
        plot.fts,
 
-       dates,
-       dates.fts,
-       "dates<-",
-       "dates<-.fts",
+       index,
        index.fts,
+       "index<-",
+       "index<-.fts",
        event.dates,
        intersect.all,
 
@@ -83,7 +82,7 @@ export(
        year,
        month,
        mday,
-       day,
+       wday,
        ma.crossover.up,
        ma.crossover.down,
        lower.low,

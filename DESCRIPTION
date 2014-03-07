@@ -3,6 +3,6 @@ Title: R interface to tslib (a time series library in c++)
 Version: 0.9.0
 Maintainer: Whit Armstrong <armstrong.whit@gmail.com>
 Author: Whit Armstrong <armstrong.whit@gmail.com>
-Depends: utils, stats
+Depends: utils, stats, zoo
 Description: fast operations for time series objects
 License: GPL-3

@@ -38,7 +38,7 @@ namespace tslib {
   const TSeries<TDATE,ReturnType,TSDIM,TSDATABACKEND,DatePolicy> analog(const TSeries<TDATE,TDATA,TSDIM,TSDATABACKEND,DatePolicy>& stationaryTS,
                                                                         const TSeries<TDATE,TDATA,TSDIM,TSDATABACKEND,DatePolicy>& movingTS,
                                                                         const size_t p) {
-    TSeries<double,ReturnType,int,R_Backend_TSdata,PosixDate> ans = TSeries<double,ReturnType,int,R_Backend_TSdata,PosixDate>(movingTS.nrow() - (p - 1), 1);
+    TSeries<double,ReturnType,int,PosixBackend,PosixDate> ans = TSeries<double,ReturnType,int,PosixBackend,PosixDate>(movingTS.nrow() - (p - 1), 1);
     std::copy(movingTS.getDates() + (p - 1), movingTS.getDates()+movingTS.nrow(), ans.getDates());
 
     std::vector<std::string> colnames;
@@ -85,13 +85,13 @@ public:
     }
     
     // build tseries from SEXP
-    R_Backend_TSdata<double,VT,int> stationaryTSData(stationary);
-    TSeries<double,VT,int,R_Backend_TSdata,PosixDate> stationaryTS(stationaryTSData);
+    PosixBackend<double,VT,int> stationaryTSData(stationary);
+    TSeries<double,VT,int,PosixBackend,PosixDate> stationaryTS(stationaryTSData);
 
-    R_Backend_TSdata<double,VT,int> movingTSData(moving);
-    TSeries<double,VT,int,R_Backend_TSdata,PosixDate> movingTS(movingTSData);
+    PosixBackend<double,VT,int> movingTSData(moving);
+    TSeries<double,VT,int,PosixBackend,PosixDate> movingTS(movingTSData);
 
-    TSeries<double,ansType,int,R_Backend_TSdata,PosixDate> ans = tslib::analog<ansType>(stationaryTS,movingTS,p);
+    TSeries<double,ansType,int,PosixBackend,PosixDate> ans = tslib::analog<ansType>(stationaryTS,movingTS,p);
     return ans.getIMPL()->R_object;
   }
 };

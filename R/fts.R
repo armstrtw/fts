@@ -75,13 +75,13 @@ as.fts.zoo <- function(x) {
 as.matrix.fts <- function(x, ...) {
     ans <- matrix(as.numeric(x),nrow=nrow(x),ncol=ncol(x))
     colnames(ans) <- colnames(x)
-    rownames(ans) <- format(dates(x),"%Y%m%d")
+    rownames(ans) <- format(index(x),"%Y%m%d")
     ans
 }
 
 as.dataframe.fts <- function(x, ...) {
     ans <- data.frame(x)
-    rownames(ans) <- format(dates(x),"%Y%m%d")
+    rownames(ans) <- format(index(x),"%Y%m%d")
     ans
 }
 
@@ -97,7 +97,7 @@ Ops.fts <- function (e1, e2) {
 
     if(missing(e2)) {
         ans.data <- NextMethod()
-        attr(ans.data,"index") <- dates(e1)
+        attr(ans.data,"index") <- index(e1)
         class(ans.data) <- c("fts","zoo")
         ans.data
     } else {
@@ -106,7 +106,7 @@ Ops.fts <- function (e1, e2) {
         c.e2 <- class(e2)
 
         if("fts"%in%c.e1 && "fts"%in%c.e2) {
-            i.dates <- intersect(dates(e1),dates(e2))
+            i.dates <- intersect(index(e1),index(e2))
             class(i.dates) <- c("POSIXt","POSIXct")
 
             ## if there is an intersection, the do the Op
@@ -155,7 +155,7 @@ Ops.fts <- function (e1, e2) {
 
 print.fts <- function(x, ...) {
     cnms <- colnames(x)
-    dnms <- list(format(dates(x)),cnms)
+    dnms <- list(format(index(x)),cnms)
     dims <- dim(x)
     attributes(x) <- NULL
     dim(x) <- dims
@@ -171,19 +171,19 @@ print.fts <- function(x, ...) {
 
     ##
     ##if(typeof(i)=="character") {
-    ##    i <- guess.dates(i,dates(x))
+    ##    i <- guess.index(i,index(x))
     ##}
 
     ## if we have dates, then use them
     if("POSIXct"%in%class(i)) {
-        i <- match(i,dates(x))
+        i <- match(i,index(x))
     }
 
     ## FIXME: not sure about this hack...
     ##i <- i[!is.na(i)]
     ##j <- j[!is.na(j)]
 
-    ans.dates <- dates(x)[i]
+    ans.dates <- index(x)[i]
     ans <- unclass(x)[i,j,...,drop=drop]
     attr(ans,"index") <- ans.dates
     class(ans) <- c("fts","zoo")
@@ -204,7 +204,7 @@ print.fts <- function(x, ...) {
     ## if we have dates, then use them
     if(!missing(i)) {
         if("POSIXct"%in%class(i)) {
-            i <- match(i,dates(x))
+            i <- match(i,index(x))
         }
     }
     x <- unclass(x)
@@ -223,7 +223,7 @@ row.apply <- function(x,FUN,...) {
     }
 
     fts(data=ans,
-        dates=dates(x))
+        dates=index(x))
 }
 
 
@@ -257,11 +257,11 @@ remove.all.na.rows <- function(x) {
 }
 
 as.data.frame.fts <- function(x,row.names = NULL, optional = FALSE, check.names = TRUE,...) {
-    data.frame(asofdate=dates(x),as.data.frame.matrix(unclass(x),optional=optional),check.names=check.names)
+    data.frame(asofdate=index(x),as.data.frame.matrix(unclass(x),optional=optional),check.names=check.names)
 }
 
 as.matrix.fts <- function(x, ...) {
-    rownames(x) <- format(dates(x))
+    rownames(x) <- format(index(x))
     attr(x,"index") <- NULL
     class(x) <- "matrix"
     x
@@ -282,7 +282,7 @@ rbind.fts <- function(...) {
     ans.data <- do.call(rbind,ans.unclass)
 
     ## get dates
-    ans.dates <- do.call(c,lapply(x,dates))
+    ans.dates <- do.call(c,lapply(x,index))
 
     ## sort it
     new.order <- order(ans.dates)
@@ -295,9 +295,9 @@ rbind.fts <- function(...) {
 cbind.fts <- function(...) {
     x <- list(...)
 
-    ans.dates <- sort(unique(unlist(lapply(x,dates))))
-    class(ans.dates) <- c("POSIXt","POSIXct")
-    nrow.ans <- length(ans.dates)
+    ans.index <- sort(unique(unlist(lapply(x,index))))
+    class(ans.index) <- c("POSIXt","POSIXct")
+    nrow.ans <- length(ans.index)
     ncol.list <- lapply(x,ncol)
     ncol.ans <- sum(unlist(ncol.list))
 
@@ -311,7 +311,7 @@ cbind.fts <- function(...) {
         ## guard against null contracts from LIM
         if(!is.null(x[[i]])) {
             end.col <- start.col + ncol.list[[i]] - 1
-            ans[match(dates(x[[i]]),ans.dates),start.col:end.col] <- x[[i]]
+            ans[match(index(x[[i]]),ans.index),start.col:end.col] <- x[[i]]
             start.col <- end.col + 1
         }
     }
@@ -320,7 +320,7 @@ cbind.fts <- function(...) {
     ## fix blank cnames
     cnames.list <- lapply(x,colnames)
     colnames(ans) <- fix.cnames(cnames.list)
-    attr(ans,"index") <- ans.dates
+    attr(ans,"index") <- ans.index
     class(ans) <- c("fts","zoo")
     ans
 }
@@ -336,7 +336,7 @@ fix.cnames <- function(cnames.list) {
 }
 
 trim <- function(x,trim.dates) {
-    new.dates <- sort(intersect(dates(x),trim.dates))
+    new.dates <- sort(intersect(index(x),trim.dates))
     class(new.dates) <- c("POSIXt","POSIXct")
     x[new.dates,]
 }
@@ -357,47 +357,41 @@ read.csv.fts <- function(file, date.column=1, date.format="%Y-%m-%d",...) {
 
 cumsum.fts <- function(x) {
     fts(data=apply(x,2,cumsum),
-        dates=dates(x))
+        dates=index(x))
 }
 
 cumprod.fts <- function(x) {
     fts(data=apply(x,2,cumprod),
-        dates=dates(x))
+        dates=index(x))
 }
 
 cummax.fts <- function(x) {
     fts(data=apply(x,2,cummax),
-        dates=dates(x))
+        dates=index(x))
 }
 
 cummin.fts <- function(x) {
     fts(data=apply(x,2,cummin),
-        dates=dates(x))
+        dates=index(x))
 }
 
 ###############################################################
 ################### Date Functions ############################
 ###############################################################
 ###############################################################
-
-dates <- function(x) {
+index <- function(x) {
     UseMethod("index")
 }
 
-"dates<-" <- function(x, value) {
-    UseMethod("dates<-")
-}
-
-
-dates.fts <- function(x) {
-    attr(x,"index")
+"index<-" <- function(x, value) {
+    UseMethod("index<-")
 }
 
 index.fts <- function(x) {
     attr(x,"index")
 }
 
-"dates<-.fts" <- function(x, value) {
+"index<-.fts" <- function(x, value) {
     ## FIXME: might put something here to convert
     ## POSIXlt to POSIXct
     stopifnot(length(value)==NROW(x))
@@ -408,13 +402,13 @@ index.fts <- function(x) {
 ## return the dates just when the fts is true
 event.dates <- function(x) {
     stopifnot(ncol(x)==1)
-    dates(x)[as.logical(x)&!is.na(x)]
+    index(x)[as.logical(x)&!is.na(x)]
 }
 
 ## find date intersection of all tseries
 intersect.all <- function(...) {
     x <- list(...)
-    dts <- lapply(x,dates)
+    dts <- lapply(x,index)
     ans <- dts[[1]]
 
     if(length(dts) > 1) {
@@ -559,17 +553,17 @@ to.second <- function(x) {
 }
 
 to.day.of.week <- function(x,day.of.week,beginning.of.period=TRUE) {
-    dts <- dates(x)
+    dts <- index(x)
     end.date <- dts[nrow(x)]
     end.date <- end.date + 6 * 60*60*24
     pad.days <- seq.POSIXt(from=dts[1],to=end.date,by="DSTday")
     pad.days <- pad.days[as.POSIXlt(pad.days)$wday==day.of.week]
     x.filled <- fill.fwd(pad(x,as.POSIXct(pad.days)))
-    ans <- x.filled[as.POSIXlt(dates(x.filled))$wday == day.of.week,]
+    ans <- x.filled[as.POSIXlt(index(x.filled))$wday == day.of.week,]
     if(beginning.of.period) {
-        new.dates <- dates(ans) - 60*60*24 * 6
-        new.dates <- new.dates - ((as.POSIXlt(new.dates)$hour + 1) %% 24 -1) * 60*60
-        dates(ans) <- new.dates
+        new.index <- index(ans) - 60*60*24 * 6
+        new.index <- new.index - ((as.POSIXlt(new.index)$hour + 1) %% 24 -1) * 60*60
+        index(ans) <- new.index
     }
     ans
 }
@@ -584,13 +578,13 @@ analog <- function(stationary, window, moving=stationary) {
 ###############################################################
 
 plot.fts <- function(x, type="l", xlab="Date", ylab=substitute(x), ...) {
-    x.range <- c(min(dates(x)), max(dates(x)))
+    x.range <- c(min(index(x)), max(index(x)))
     y.range <- c(min(x, na.rm=TRUE), max(x, na.rm=TRUE))
     plot(x.range, y.range, type="n", xlab=xlab, ylab=ylab, ...)
 
     params <- lapply(list(type = type, ...), rep, length.out = ncol(x))
     for (i in seq(ncol(x))) {
-        args <- c(list(xy.coords(dates(x), x[,i])),
+        args <- c(list(xy.coords(index(x), x[,i])),
                   lapply(params, `[`, i))
         do.call(plot.xy, args)
     }
@@ -604,7 +598,7 @@ plot.fts <- function(x, type="l", xlab="Date", ylab=substitute(x), ...) {
 lm.fts <- function(y,...,origin=F) {
     x <- list(...)
 
-    i.dts <- intersect(dates(y),
+    i.dts <- intersect(index(y),
                        do.call(intersect.all,x))
     class(i.dts) <- c("POSIXt","POSIXct")
 
@@ -647,19 +641,19 @@ rsi <- function(x,periods) {
 }
 
 year <- function(x) {
-    fts(dates=dates(x),data=as.POSIXlt(dates(x))$year+1900)
+    as.POSIXlt(index(x))$year+1900
 }
 
 month <- function(x) {
-    fts(dates=dates(x),data=as.POSIXlt(dates(x))$mon+1)
+    as.POSIXlt(index(x))$mon+1
 }
 
 mday <- function(x) {
-    fts(dates = dates(x), data = as.POSIXlt(dates(x))$mday)
+    as.POSIXlt(index(x))$mday
 }
 
-day <- function(x) {
-    fts(dates = dates(x), data = as.POSIXlt(dates(x))$wday)
+wday <- function(x) {
+    as.POSIXlt(index(x))$wday
 }
 
 ma.crossover.down <- function(x,n) {
@@ -910,7 +904,7 @@ trend.day <- function(x,thresh=.2) {
 }
 
 cor.by.row <- function(x,y) {
-    i.dts <- sort(intersect(dates(x),dates(y)))
+    i.dts <- sort(intersect(index(x),index(y)))
     class(i.dts) <- "POSIXct"
     ans <- template.fts(i.dts,"cor")
 
