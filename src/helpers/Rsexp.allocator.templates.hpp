@@ -23,8 +23,8 @@
 template<typename T>
 class R_allocator {
 public:
-  static SEXP Matrix(const int nr, const int nc);
-  static SEXP Vector(const int len);
+  static SEXP Matrix(const R_len_t nr, const R_len_t nc);
+  static SEXP Vector(const R_len_t len);
   static T* R_dataPtr(const SEXP x);
   static T scalar(const SEXP x);
 };
@@ -32,67 +32,28 @@ public:
 template<>
 class R_allocator<double> {
 public:
-  static SEXP Matrix(const int nr, const int nc) {
-    SEXP ans = allocMatrix(REALSXP,nr,nc);
-    return ans;
-  }
-
-  static SEXP Vector(const int len) {
-    SEXP ans = allocVector(REALSXP,len);
-    return ans;
-  }
-
-  static double* R_dataPtr(const SEXP x) {
-    return REAL(x);
-  }
-
-  static double scalar(const SEXP x) {
-    return REAL(x)[0];
-  }
+  static SEXP Matrix(const R_len_t nr, const R_len_t nc) { return allocMatrix(REALSXP,nr,nc); }
+  static SEXP Vector(const R_len_t len) { return allocVector(REALSXP,len); }
+  static double* R_dataPtr(const SEXP x) { return REAL(x); }
+  static double scalar(const SEXP x) { return REAL(x)[0]; }
 };
 
 template<>
 class R_allocator<int> {
 public:
-  static SEXP Matrix(const int nr, const int nc) {
-    SEXP ans = allocMatrix(INTSXP,nr,nc);
-    return ans;
-  }
-
-  static SEXP Vector(const int len) {
-    SEXP ans = allocVector(INTSXP,len);
-    return ans;
-  }
-
-  static int* R_dataPtr(const SEXP x) {
-    return INTEGER(x);
-  }
-
-  static int scalar(const SEXP x) {
-    return INTEGER(x)[0];
-  }
+  static SEXP Matrix(const R_len_t nr, const R_len_t nc) { return allocMatrix(INTSXP,nr,nc); }
+  static SEXP Vector(const R_len_t len) { return allocVector(INTSXP,len); }
+  static int* R_dataPtr(const SEXP x) { return INTEGER(x); }
+  static int scalar(const SEXP x) { return INTEGER(x)[0]; }
 };
 
 template<>
 class R_allocator<bool> {
 public:
-  static SEXP Matrix(const int nr, const int nc) {
-    SEXP ans = allocMatrix(LGLSXP,nr,nc);
-    return ans;
-  }
-
-  static SEXP Vector(const int len) {
-    SEXP ans = allocVector(LGLSXP,len);
-    return ans;
-  }
-
-  static int* R_dataPtr(const SEXP x) {
-    return LOGICAL(x);
-  }
-
-  static int scalar(const SEXP x) {
-    return LOGICAL(x)[0];
-  }
+  static SEXP Matrix(const R_len_t nr, const R_len_t nc) { return allocMatrix(LGLSXP,nr,nc); }
+  static SEXP Vector(const R_len_t len) { return allocVector(LGLSXP,len); }
+  static int* R_dataPtr(const SEXP x) { return LOGICAL(x); }
+  static int scalar(const SEXP x) { return LOGICAL(x)[0]; }
 };
 
 #endif // RSEXP_ALLOCATOR_TEMPLATES_HPP
