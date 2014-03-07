@@ -6,7 +6,6 @@
 #include <algorithm>
 #include <Rinternals.h>
 #include <Rsexp.allocator.templates.hpp>
-#include <Rutilities.hpp>
 
 template <typename TDATE,typename TDATA, typename TSDIM>
 class R_Backend_TSdata {
@@ -54,24 +53,21 @@ public:
   TDATE* getDates() const { return R_allocator<TDATE>::R_dataPtr(getAttrib(R_object,install("index"))); }
 
   void setColnames(const std::vector<std::string>& cnames) {
+    int protect_count(0);
+
     if(static_cast<TSDIM>(cnames.size()) != ncols(R_object)) {
       return;
     }
-    SEXP dimnames, cnames_sexp;
-    int protect_count = 0;
-
-    std::vector<std::string>::const_iterator beg = cnames.begin();
-    std::vector<std::string>::const_iterator end = cnames.end();
-
-    PROTECT(cnames_sexp = string2sexp(beg,end));
-    ++protect_count;
 
     // check if we have existing dimnames
-    dimnames = getAttrib(R_object, R_DimNamesSymbol);
+    SEXP dimnames = getAttrib(R_object, R_DimNamesSymbol);
     if(dimnames == R_NilValue) {
-      PROTECT(dimnames = allocVector(VECSXP, 2));
-      ++protect_count;
+      PROTECT(dimnames = allocVector(VECSXP, 2)); ++protect_count;
       SET_VECTOR_ELT(dimnames, 0, R_NilValue);
+    }
+    SEXP cnames_sexp = PROTECT(allocVector(STRSXP,cnames.size())); ++protect_count;
+    for(R_len_t i = 0; i < cnames.size(); ++i) {
+      SET_STRING_ELT(cnames_sexp, i, mkChar(cnames[i].c_str()));
     }
     SET_VECTOR_ELT(dimnames, 1, cnames_sexp);
     setAttrib(R_object, R_DimNamesSymbol, dimnames);
@@ -80,21 +76,13 @@ public:
 
   std::vector<std::string> getColnames() const {
     std::vector<std::string> ans;
-
-    SEXP dimnames = getAttrib(R_object, R_DimNamesSymbol);
-
-    if(dimnames==R_NilValue) {
-      return ans;
+    if(getAttrib(R_object, R_DimNamesSymbol)!=R_NilValue &&
+       VECTOR_ELT(getAttrib(R_object, R_DimNamesSymbol), 1)!=R_NilValue) {
+      SEXP cnames = VECTOR_ELT(getAttrib(R_object, R_DimNamesSymbol), 1);
+      for(R_len_t i = 0; i < length(cnames);++i) {
+        ans.push_back(CHAR(STRING_ELT(cnames,i)));
+      }
     }
-
-    SEXP cnames = VECTOR_ELT(dimnames, 1);
-
-    if(cnames==R_NilValue) {
-      return ans;
-    }
-    std::insert_iterator<std::vector<std::string> > insert_iter(ans,ans.begin());
-    sexp2string(cnames,insert_iter);
-
     return ans;
   }
 
