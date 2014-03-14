@@ -41,7 +41,6 @@ SEXP movingRank(SEXP x, SEXP periods) {
 }
 
 SEXP expandingMax(SEXP x) {
-  REprintf("%p\n",getAttrib(x,R_ClassSymbol));
   return transformSpecializer<ExpandingMaximum, fillTraits>(x);
 }
 

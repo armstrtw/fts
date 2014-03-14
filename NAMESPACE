@@ -1,7 +1,11 @@
 useDynLib(fts)
 
-importFrom(stats,
-           lag)
+importFrom(stats,lag)
+
+importFrom(zoo,coredata)
+importFrom(zoo, index)
+importFrom(zoo,'index<-')
+importFrom(zoo,'time<-')
 
 export(
        fts,
@@ -52,15 +56,10 @@ export(
        fill.fwd,
        fill.bwd,
        fill.value,
-       analog,
        monthly.sum,
 
        plot.fts,
 
-       index,
-       index.fts,
-       "index<-",
-       "index<-.fts",
        event.dates,
        intersect.all,
 
@@ -72,8 +71,6 @@ export(
        column.apply,
        col.any,
        col.all,
-
-       lm.fts,
        filter.min.obs,
 
        ## technical analysis

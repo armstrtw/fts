@@ -5,43 +5,11 @@
 
 ## layout of an fts object is
 ## a matrix with a dates attribute attached
-fts <- function(data,dates) {
-
-    if(missing(data) && !missing(dates)) {
-        data <- rep(NA,length(dates))
-    }
-
-    ## generate random data if no data provided
-    if(missing(data)) data <- 100 + cumsum(rnorm(1000))
-
-    if(is.null(dim(data))) dim(data) <- c(NROW(data),1)
-
-    if(missing(dates)) {
-        dates <- seq(from=as.POSIXct(format(Sys.time(),"%Y-%m-%d")),by="DSTday",length.out=NROW(data))
-    }
-
-    if(length(dates) != NROW(data) && length(data)==1) {
-        data <- rep(data,length(dates))
-        dim(data) <- c(NROW(data),1)
-    } else if (length(dates) != NROW(data)) {
-        stop("Dates and data must be same length.")
-    }
-
-    if(is.numeric(dates) && is.null(class(dates))){
-        class(dates) <- c("POSIXt","POSIXct")
-    } else {
-        dates <- as.POSIXct(dates)
-    }
-
-    ans <- as.matrix(data)
-
-    ## kill old rownames
-    rownames(ans) <- NULL
-
-    ## set dates attribute of answer
-    attr(ans,"index") <- dates
-    class(ans) <- c("fts","zoo")
-    ans
+fts <- function(index,data) {
+    if(missing(index)) stop("missing index")
+    if(missing(data)) stop("missing data")
+    stopifnot(length(index)==NROW(data))
+    structure(as.matrix(data),index=index,class=c("fts","zoo"))
 }
 
 as.fts <- function(x) {
@@ -54,30 +22,21 @@ as.fts.default <- function(x) {
     } else {
         dts <- names(x)
     }
-    fts(data=as.matrix(x),dates=dts)
+    fts(index=dts,data=x)
 }
 
 as.fts.data.frame <- function(x) {
     cnames <-  colnames(x)
-    ans <- fts(dates=x[,"asofdate"],
+    ans <- fts(index=x[,"asofdate"],
                data=as.matrix(x[,-match("asofdate",cnames)]))
     colnames(ans) <- cnames[-1]
     ans
 }
 
-as.fts.zoo <- function(x) {
-    stopifnot(inherits(attr(x,"index"), "POSIXct"))
+as.fts.zoo <- function(x) fts(index=attr(x,"index"),data=as.matrix(coredata(x)))
 
-    fts(data=unclass(x),
-        dates=attr(x,"index"))
-}
-
-as.matrix.fts <- function(x, ...) {
-    ans <- matrix(as.numeric(x),nrow=nrow(x),ncol=ncol(x))
-    colnames(ans) <- colnames(x)
-    rownames(ans) <- format(index(x),"%Y%m%d")
-    ans
-}
+as.matrix.fts <- function(x, ...)
+    structure(matrix(as.numeric(x),nrow=nrow(x),ncol=ncol(x)),dimnames=list(format(index(x),"%Y%m%d"),colnames(x)))
 
 as.dataframe.fts <- function(x, ...) {
     ans <- data.frame(x)
@@ -86,9 +45,9 @@ as.dataframe.fts <- function(x, ...) {
 }
 
 ## create an fts object given dates and column names
-template.fts <- function(dates,cnames) {
-    ans <- fts(dates=dates,
-               data=matrix(nrow=length(dates),ncol=length(cnames)))
+template.fts <- function(index,cnames) {
+    ans <- fts(index=index,
+               data=matrix(nrow=length(index),ncol=length(cnames)))
     colnames(ans) <- cnames
     ans
 }
@@ -96,60 +55,54 @@ template.fts <- function(dates,cnames) {
 Ops.fts <- function (e1, e2) {
 
     if(missing(e2)) {
-        ans.data <- NextMethod()
-        attr(ans.data,"index") <- index(e1)
-        class(ans.data) <- c("fts","zoo")
-        ans.data
+        .Class <- "matrix"
+        NextMethod()
     } else {
-
         c.e1 <- class(e1)
         c.e2 <- class(e2)
 
-        if("fts"%in%c.e1 && "fts"%in%c.e2) {
+        if("fts" %in% c.e1 && "fts" %in% c.e2) {
+            nce1 <- NCOL(e1)
+            nce2 <- NCOL(e2)
+
+            if(nce1!=nce2 && nce1!=1 && nce2!=1) {
+                stop("Ops.fts: non conformable data.")
+            }
+            stopifnot(all.equal(class(index(e1)),class(index(e2))))
             i.dates <- intersect(index(e1),index(e2))
-            class(i.dates) <- c("POSIXt","POSIXct")
+            class(i.dates) <- class(index(e1))
 
             ## if there is an intersection, the do the Op
             if(length(i.dates)) {
-
-                nce1 <- ncol(e1)
-                nce2 <- ncol(e2)
-
                 e1 <- e1[i.dates,]
                 e2 <- e2[i.dates,]
 
-                if(nce1==nce2) {
-                    ans.data <- NextMethod()
-                } else {
-                    if(nce1==1) {
-                        e1 <- rep(e1,nce2)
-                        ans.data <- NextMethod()
-                    } else if(nce2==1) {
-                        e2 <- rep(e2,nce1)
-                        ans.data <- NextMethod()
-                    } else {
-                        stop("Ops.fts: non conformable data.")
-                    }
+                if(nce1==1 && nce2!=1) {
+                    e1 <- rep(e1,nce2)
+                } else if(nce1!=1 && nce2==1) {
+                    e2 <- rep(e2,nce1)
                 }
-                attr(ans.data,"index") <- i.dates
-                class(ans.data) <- c("fts","zoo")
-                ans.data
+
+                .Class <- "matrix"
+                ans <- NextMethod()
+                attr(ans,"index") <- i.dates
+                class(ans) <- c("fts","zoo")
             } else {
                 ## no matching dates, return NULL
-                NULL
+                ans <- NULL
             }
-
         } else {
-            ans.data <- NextMethod()
-            if("fts"%in%c.e1) {
+            .Class <- "matrix"
+            ans <- NextMethod()
+            if("fts" %in% c.e1) {
                 ans.dates <- attr(e1,"index")
             } else {
                 ans.dates <- attr(e2,"index")
             }
-            attr(ans.data,"index") <- ans.dates
-            class(ans.data) <- c("fts","zoo")
-            ans.data
+            attr(ans,"index") <- ans.dates
+            class(ans) <- c("fts","zoo")
         }
+        ans
     }
 }
 
@@ -175,7 +128,7 @@ print.fts <- function(x, ...) {
     ##}
 
     ## if we have dates, then use them
-    if("POSIXct"%in%class(i)) {
+    if(any(c("Date","POSIXct") %in% class(i))) {
         i <- match(i,index(x))
     }
 
@@ -188,29 +141,20 @@ print.fts <- function(x, ...) {
     attr(ans,"index") <- ans.dates
     class(ans) <- c("fts","zoo")
 
-    ticker <- attr(x,"ticker")
-    if(!is.null(ticker)) attr(ans,"ticker") <- ticker
-
-    currency <- attr(x,"currency")
-    if(!is.null(currency)) attr(ans,"currency") <- currency
-
-    cfactor <- attr(x,"cfactor")
-    if(!is.null(cfactor)) attr(ans,"cfactor") <- cfactor
-
     ans
 }
 
 "[<-.fts" <- function(x, i = TRUE, j = TRUE, ..., value) {
     ## if we have dates, then use them
     if(!missing(i)) {
-        if("POSIXct"%in%class(i)) {
+        if(any(c("Date","POSIXct") %in% class(i))) {
             i <- match(i,index(x))
+        } else if (mode(i)=="logical") {
+            i <- which(i)
         }
     }
-    x <- unclass(x)
-    x <- NextMethod()
-    class(x) <- c("fts","zoo")
-    x
+    .Class <- "matrix"
+    NextMethod()
 }
 
 ## apply a function to an fts row
@@ -222,39 +166,22 @@ row.apply <- function(x,FUN,...) {
         rownames(ans) <- NULL
     }
 
-    fts(data=ans,
-        dates=index(x))
+    fts(index=index(x),data=ans)        
 }
 
-
-row.any <- function(x) {
-    apply(x,1,any)
-}
-
-row.all <- function(x) {
-    apply(x,1,all)
-}
-
-col.any <- function(x) {
-    apply(x,2,any)
-}
-
-col.all <- function(x) {
-    apply(x,2,all)
-}
+row.any <- function(x) apply(x,1,any)
+row.all <- function(x) apply(x,1,all)
+col.any <- function(x) apply(x,2,any)
+col.all <- function(x) apply(x,2,all)
 
 ## apply a function to an fts column
 column.apply <- function(x,FUN,...) {
     apply(x,2,FUN,...)
 }
 
-remove.na.rows <- function(x) {
-    x[!row.any(is.na(x)),]
-}
+remove.na.rows <- function(x) x[!row.any(is.na(x)),]
 
-remove.all.na.rows <- function(x) {
-    x[!row.all(is.na(x)),]
-}
+remove.all.na.rows <- function(x) x[!row.all(is.na(x)),]
 
 as.data.frame.fts <- function(x,row.names = NULL, optional = FALSE, check.names = TRUE,...) {
     data.frame(asofdate=index(x),as.data.frame.matrix(unclass(x),optional=optional),check.names=check.names)
@@ -289,14 +216,14 @@ rbind.fts <- function(...) {
     ## must do data before we sort dates
     ans.data <- ans.data[new.order,,drop=F]
     ans.dates <- ans.dates[new.order]
-    fts(dates=ans.dates,data=ans.data)
+    fts(index=ans.dates,data=ans.data)
 }
 
 cbind.fts <- function(...) {
     x <- list(...)
 
     ans.index <- sort(unique(unlist(lapply(x,index))))
-    class(ans.index) <- c("POSIXt","POSIXct")
+    class(ans.index) <- class(index(x[[1]]))
     nrow.ans <- length(ans.index)
     ncol.list <- lapply(x,ncol)
     ncol.ans <- sum(unlist(ncol.list))
@@ -337,7 +264,7 @@ fix.cnames <- function(cnames.list) {
 
 trim <- function(x,trim.dates) {
     new.dates <- sort(intersect(index(x),trim.dates))
-    class(new.dates) <- c("POSIXt","POSIXct")
+    class(new.dates) <- class(x)
     x[new.dates,]
 }
 
@@ -345,60 +272,25 @@ write.csv.fts <- function(x, file, ...) {
     write.csv(as.data.frame(x), file,row.names=FALSE, ...)
 }
 
-read.csv.fts <- function(file, date.column=1, date.format="%Y-%m-%d",...) {
+read.csv.fts <- function(file, date.column=1, date.format="%Y-%m-%d",date.convert.fun=as.Date,...) {
     fts.data <- read.csv(file,...)
 
     if(mode(date.column)=="character")
         date.column <- match(date.column,colnames(fts.data))
 
-    fts(dates=as.POSIXct(strptime(fts.data[,date.column],date.format)),
+    fts(index=date.convert.fun(strptime(fts.data[,date.column],date.format)),
         data=as.matrix(fts.data[, -date.column, drop=F]))
 }
 
-cumsum.fts <- function(x) {
-    fts(data=apply(x,2,cumsum),
-        dates=index(x))
-}
-
-cumprod.fts <- function(x) {
-    fts(data=apply(x,2,cumprod),
-        dates=index(x))
-}
-
-cummax.fts <- function(x) {
-    fts(data=apply(x,2,cummax),
-        dates=index(x))
-}
-
-cummin.fts <- function(x) {
-    fts(data=apply(x,2,cummin),
-        dates=index(x))
-}
+cumsum.fts <- function(x) fts(index=index(x),data=apply(x,2,cumsum))
+cumprod.fts <- function(x) fts(index=index(x),data=apply(x,2,cumprod))
+cummax.fts <- function(x) fts(index=index(x),data=apply(x,2,cummax))
+cummin.fts <- function(x) fts(index=index(x),data=apply(x,2,cummin))
 
 ###############################################################
 ################### Date Functions ############################
 ###############################################################
 ###############################################################
-index <- function(x) {
-    UseMethod("index")
-}
-
-"index<-" <- function(x, value) {
-    UseMethod("index<-")
-}
-
-index.fts <- function(x) {
-    attr(x,"index")
-}
-
-"index<-.fts" <- function(x, value) {
-    ## FIXME: might put something here to convert
-    ## POSIXlt to POSIXct
-    stopifnot(length(value)==NROW(x))
-    attr(x,"index") <- value
-    x
-}
-
 ## return the dates just when the fts is true
 event.dates <- function(x) {
     stopifnot(ncol(x)==1)
@@ -417,7 +309,7 @@ intersect.all <- function(...) {
         }
     }
 
-    class(ans) <- c("POSIXt","POSIXct")
+    class(ans) <- class(index(x[[1]]))
     ans
 }
 
@@ -568,10 +460,6 @@ to.day.of.week <- function(x,day.of.week,beginning.of.period=TRUE) {
     ans
 }
 
-analog <- function(stationary, window, moving=stationary) {
-    .Call("analog", stationary, moving, as.integer(window), PACKAGE="fts")
-}
-
 ###############################################################
 ############ Plotting functions for Fts Objects ###########
 ###############################################################
@@ -588,30 +476,6 @@ plot.fts <- function(x, type="l", xlab="Date", ylab=substitute(x), ...) {
                   lapply(params, `[`, i))
         do.call(plot.xy, args)
     }
-}
-
-###############################################################
-############ Regression for Fts Objects #######################
-###############################################################
-###############################################################
-
-lm.fts <- function(y,...,origin=F) {
-    x <- list(...)
-
-    i.dts <- intersect(index(y),
-                       do.call(intersect.all,x))
-    class(i.dts) <- c("POSIXt","POSIXct")
-
-    x <- lapply(x,"[",i.dts,)
-    x <- unclass(do.call(cbind,x))
-    y <- unclass(y[i.dts,])
-
-    if(origin) {
-        ans <- lm( y ~ 0 + x)
-    } else {
-        ans <- lm(y~x)
-    }
-    ans
 }
 
 ## drop out rows that do not have the required number of observations
@@ -905,7 +769,7 @@ trend.day <- function(x,thresh=.2) {
 
 cor.by.row <- function(x,y) {
     i.dts <- sort(intersect(index(x),index(y)))
-    class(i.dts) <- "POSIXct"
+    class(i.dts) <- class(index(x))
     ans <- template.fts(i.dts,"cor")
 
     for(i in 1:length(i.dts)) {

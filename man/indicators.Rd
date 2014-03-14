@@ -58,7 +58,6 @@
 }
 \usage{
 above.ma(x,n)
-analog(stationary,window,moving = stationary)
 below.ma(x,n)
 wday(x)
 mday(x)
@@ -104,7 +103,7 @@ rsi(x,periods)
 rsi.crossover(x,periods,thresh)
 rsi.crossover.down(x,periods,thresh)
 rsi.crossover.up(x,periods,thresh)
-template.fts(dates, cnames)
+template.fts(index, cnames)
 trend.day(x,thresh)
 trend.day.down(x,thresh)
 trend.day.up(x,thresh)
@@ -112,14 +111,11 @@ trend.day.up(x,thresh)
 \arguments{
   \item{x}{ An Fts object }
   \item{periods}{ number of periods}
-  \item{window}{ number of periods}
-  \item{stationary}{ stationary time series }
-  \item{moving}{ moving time series }
   \item{n}{ number of periods}
   \item{k}{ number of lags}
   \item{times}{ how many times }
   \item{thresh}{ threshold level}
-  \item{dates}{ dates to use to construct fts object}
+  \item{index}{ index to use to construct fts object}
   \item{cnames}{ colnames to use to construct fts object}
   \item{\dots}{ further arguments to function }
 }
@@ -131,7 +127,7 @@ trend.day.up(x,thresh)
 }
 \author{ Whit Armstrong }
 \examples{
-x <- fts(rnorm(5))
+x <- fts(index=seq(from=Sys.Date(),by="months",length.out=5),rnorm(5))
 print(x)
 lag(x,1)
 lead(x,1)

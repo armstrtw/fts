@@ -34,7 +34,7 @@ expanding.min(x)
 }
 \author{ Whit Armstrong }
 \examples{
-x <- fts()
+x <- fts(index=seq(from=Sys.Date(),by="days",length.out=100),data=rnorm(100))
 
 x.emax <- expanding.max(x)
 x.emin <- expanding.min(x)

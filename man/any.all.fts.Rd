@@ -23,7 +23,7 @@ row.all(x)
 }
 \author{ Whit Armstrong }
 \examples{
-x <- fts(matrix(rnorm(100),nrow=50))
+x <- fts(seq(from=Sys.Date(),by="months",length.out=50),matrix(rnorm(100),nrow=50))
 jj <- x > 0
 row.all(jj)
 row.any(jj)

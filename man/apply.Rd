@@ -24,13 +24,16 @@ row.apply(x, FUN, ...)
 }
 \author{ Whit Armstrong }
 \examples{
-x <- cbind(fts(),fts())
+x <- fts(index=seq(from=Sys.Date(),by="months",length.out=24),data=1:24)
+y <- fts(index=seq(from=Sys.Date(),by="months",length.out=24),data=1:24)
+
+z <- cbind(x,y)
 
 ## returns vector
-x.col.sum <- column.apply(x,sum)
+z.col.sum <- column.apply(z,sum)
 
 ## returns fts
-x.row.sum <- row.apply(x,sum)
+z.row.sum <- row.apply(z,sum)
 
 }
 \keyword{ts}

@@ -3,10 +3,6 @@
 \alias{Ops.fts}
 \alias{[.fts}
 \alias{[<-.fts}
-\alias{index}
-\alias{index<-}
-\alias{index.fts}
-\alias{index<-.fts}
 \alias{cbind.fts}
 \alias{rbind.fts}
 \alias{print.fts}
@@ -14,20 +10,15 @@
 
 \title{Fts: a fast timeseries library }
 \description{
-  create an fts object by specifying dates and data
+  create an fts object by specifying index and data
 }
 \usage{
-fts(data, dates)
-\method{index}{fts}(x)
-\method{index}{fts}(x) <- value
+fts(index,data)
 }
 
 \arguments{
+  \item{index}{a vector of dates}
   \item{data}{a matrix, dataframe, or vector}
-  \item{dates}{a vector of dates (default format is POSIXct) }
-  \item{x}{an fts object}
-  \item{value}{a vector of POSIXct dates}
-  \item{\dots}{further arguments to function}
 }
 \details{
 fts is an S3 class in which the fts object is represented as a
@@ -39,10 +30,8 @@ native R matrix and the dates are attached as an attribute to the matrix
 \author{ Whit Armstrong }
 \seealso{\code{\link{as.fts}}}
 \examples{
-x <- fts()
-y <- fts(data=1:100)
-z <- fts(dates=seq.POSIXt(from=as.POSIXct(Sys.time()),by="months",length.out=12))
-
+x <- fts(index=seq(from=Sys.Date(),by="months",length.out=24),data=1:24)
+y <- fts(index=seq(from=Sys.Date(),by="months",length.out=12),data=13:24)
 xx <- x[1:10,]
 
 ## intersection of dates is taken for Arith methods

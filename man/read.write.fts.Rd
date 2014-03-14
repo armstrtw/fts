@@ -8,7 +8,8 @@
   Read / Write files to csv or .RDS format
 }
 \usage{
-read.csv.fts(file, date.column=1, date.format="\%Y-\%m-\%d", ...)
+read.csv.fts(file, date.column=1, date.format="\%Y-\%m-\%d",
+date.convert.fun=as.Date, ...)
 write.csv.fts(x, file, ...)
 }
 \arguments{
@@ -16,6 +17,7 @@ write.csv.fts(x, file, ...)
   \item{file}{ filename of file to read/write}
   \item{date.column}{ column that = the dates are in }
   \item{date.format}{ the format of the date strings }
+  \item{date.convert.fun}{ function to convert dates into desired index class }
   \item{\dots}{ further arguments to underlying read/write functions }
 }
 \value{
