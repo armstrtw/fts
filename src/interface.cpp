@@ -7,8 +7,8 @@
 #include <R.tseries.data.backend.hpp>
 #include <R.tseries.object.convert.hpp>
 #include <Rsexp.allocator.templates.hpp>
-#include <r.window.template.h>
-#include <r.transform.template.h>
+#include <R.window.template.hpp>
+#include <R.transform.template.hpp>
 
 extern "C" SEXP movingMean(SEXP x, SEXP periods) {
   return windowSpecializer<Mean, meanTraits>(x,periods);
