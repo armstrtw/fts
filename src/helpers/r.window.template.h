@@ -116,24 +116,28 @@ SEXP windowSpecializer(SEXP x, SEXP periods) {
   const TsTypeTuple tsTypeInfo(x);
   if(tsTypeInfo.dateSEXPTYPE==REALSXP && tsTypeInfo.dataSEXPTYPE==REALSXP && tsTypeInfo.datePolicy== DatePolicyT::dateT) {
     return windowFun<double,double,R_len_t,JulianBackend,JulianDate,windowFunction,windowFunctionTraits>(x,periods);
-  // } else if(tsTypeInfo.dateSEXPTYPE==REALSXP && tsTypeInfo.dataSEXPTYPE==INTSXP && tsTypeInfo.datePolicy== DatePolicyT::dateT) {
-  // } else if(tsTypeInfo.dateSEXPTYPE==REALSXP && tsTypeInfo.dataSEXPTYPE==LGLSXP && tsTypeInfo.datePolicy== DatePolicyT::dateT) {
+  } else if(tsTypeInfo.dateSEXPTYPE==REALSXP && tsTypeInfo.dataSEXPTYPE==INTSXP && tsTypeInfo.datePolicy== DatePolicyT::dateT) {
+    return windowFun<double,int,R_len_t,JulianBackend,JulianDate,windowFunction,windowFunctionTraits>(x,periods);
+  } else if(tsTypeInfo.dateSEXPTYPE==REALSXP && tsTypeInfo.dataSEXPTYPE==LGLSXP && tsTypeInfo.datePolicy== DatePolicyT::dateT) {
+    return windowFun<double,int,R_len_t,JulianBackend,JulianDate,windowFunction,windowFunctionTraits>(x,periods);
   } else if(tsTypeInfo.dateSEXPTYPE==INTSXP && tsTypeInfo.dataSEXPTYPE==REALSXP && tsTypeInfo.datePolicy== DatePolicyT::dateT) {
     return windowFun<int,double,R_len_t,JulianBackend,JulianDate,windowFunction,windowFunctionTraits>(x,periods);
-  // } else if(tsTypeInfo.dateSEXPTYPE==INTSXP && tsTypeInfo.dataSEXPTYPE==INTSXP && tsTypeInfo.datePolicy== DatePolicyT::dateT) {
-  // } else if(tsTypeInfo.dateSEXPTYPE==INTSXP && tsTypeInfo.dataSEXPTYPE==LGLSXP && tsTypeInfo.datePolicy== DatePolicyT::dateT) {
+  } else if(tsTypeInfo.dateSEXPTYPE==INTSXP && tsTypeInfo.dataSEXPTYPE==INTSXP && tsTypeInfo.datePolicy== DatePolicyT::dateT) {
+    return windowFun<int,int,R_len_t,JulianBackend,JulianDate,windowFunction,windowFunctionTraits>(x,periods);
+  } else if(tsTypeInfo.dateSEXPTYPE==INTSXP && tsTypeInfo.dataSEXPTYPE==LGLSXP && tsTypeInfo.datePolicy== DatePolicyT::dateT) {
+    return windowFun<int,int,R_len_t,JulianBackend,JulianDate,windowFunction,windowFunctionTraits>(x,periods);
   } else if(tsTypeInfo.dateSEXPTYPE==REALSXP && tsTypeInfo.dataSEXPTYPE==REALSXP && tsTypeInfo.datePolicy==DatePolicyT::posixT) {
     return windowFun<double,double,R_len_t,PosixBackend,PosixDate,windowFunction,windowFunctionTraits>(x,periods);
   } else if(tsTypeInfo.dateSEXPTYPE==REALSXP && tsTypeInfo.dataSEXPTYPE==INTSXP && tsTypeInfo.datePolicy==DatePolicyT::posixT) {
     return windowFun<double,int,R_len_t,PosixBackend,PosixDate,windowFunction,windowFunctionTraits>(x,periods);
-  // } else if(tsTypeInfo.dateSEXPTYPE==REALSXP && tsTypeInfo.dataSEXPTYPE==LGLSXP && tsTypeInfo.datePolicy==DatePolicyT::posixT) {
-  //   return windowFun<double,bool,R_len_t,PosixBackend,PosixDate,windowFunction,windowFunctionTraits>(x,periods);
+  } else if(tsTypeInfo.dateSEXPTYPE==REALSXP && tsTypeInfo.dataSEXPTYPE==LGLSXP && tsTypeInfo.datePolicy==DatePolicyT::posixT) {
+    return windowFun<double,int,R_len_t,PosixBackend,PosixDate,windowFunction,windowFunctionTraits>(x,periods);
   } else if(tsTypeInfo.dateSEXPTYPE==INTSXP && tsTypeInfo.dataSEXPTYPE==REALSXP && tsTypeInfo.datePolicy==DatePolicyT::posixT) {
     return windowFun<int,double,R_len_t,PosixBackend,PosixDate,windowFunction,windowFunctionTraits>(x,periods);
   } else if(tsTypeInfo.dateSEXPTYPE==INTSXP && tsTypeInfo.dataSEXPTYPE==INTSXP && tsTypeInfo.datePolicy==DatePolicyT::posixT) {
     return windowFun<int,int,R_len_t,PosixBackend,PosixDate,windowFunction,windowFunctionTraits>(x,periods);
-  // } else if(tsTypeInfo.dateSEXPTYPE==INTSXP && tsTypeInfo.dataSEXPTYPE==LGLSXP && tsTypeInfo.datePolicy==DatePolicyT::posixT) {
-  //   return windowFun<int,bool,R_len_t,PosixBackend,PosixDate,windowFunction,windowFunctionTraits>(x,periods);
+  } else if(tsTypeInfo.dateSEXPTYPE==INTSXP && tsTypeInfo.dataSEXPTYPE==LGLSXP && tsTypeInfo.datePolicy==DatePolicyT::posixT) {
+    return windowFun<int,int,R_len_t,PosixBackend,PosixDate,windowFunction,windowFunctionTraits>(x,periods);
   } else {
     //throw std::logic_error("unable to classify time series.");
     REprintf("windowSpecializer: unable to classify time series.");
@@ -153,24 +157,30 @@ SEXP windowSpecializer(SEXP x, SEXP y, SEXP periods) {
     return R_NilValue;
   }
 
-  // if(tsTypeInfo.dateSEXPTYPE==REALSXP && tsTypeInfo.dataSEXPTYPE==REALSXP && tsTypeInfo.datePolicy== DatePolicyT::dateT) {
-  // } else if(tsTypeInfo.dateSEXPTYPE==REALSXP && tsTypeInfo.dataSEXPTYPE==INTSXP && tsTypeInfo.datePolicy== DatePolicyT::dateT) {
-  // } else if(tsTypeInfo.dateSEXPTYPE==REALSXP && tsTypeInfo.dataSEXPTYPE==LGLSXP && tsTypeInfo.datePolicy== DatePolicyT::dateT) {
-  // } else if(tsTypeInfo.dateSEXPTYPE==INTSXP && tsTypeInfo.dataSEXPTYPE==REALSXP && tsTypeInfo.datePolicy== DatePolicyT::dateT) {
-  // } else if(tsTypeInfo.dateSEXPTYPE==INTSXP && tsTypeInfo.dataSEXPTYPE==INTSXP && tsTypeInfo.datePolicy== DatePolicyT::dateT) {
-  // } else if(tsTypeInfo.dateSEXPTYPE==INTSXP && tsTypeInfo.dataSEXPTYPE==LGLSXP && tsTypeInfo.datePolicy== DatePolicyT::dateT) {
-  if(tsTypeInfoX.dateSEXPTYPE==REALSXP && tsTypeInfoX.dataSEXPTYPE==REALSXP && tsTypeInfoX.datePolicy==DatePolicyT::posixT) {
+  if(tsTypeInfoX.dateSEXPTYPE==REALSXP && tsTypeInfoX.dataSEXPTYPE==REALSXP && tsTypeInfoX.datePolicy== DatePolicyT::dateT) {
+    return windowFun<double,double,R_len_t,JulianBackend,JulianDate,windowFunction,windowFunctionTraits>(x,y,periods);
+  } else if(tsTypeInfoX.dateSEXPTYPE==REALSXP && tsTypeInfoX.dataSEXPTYPE==INTSXP && tsTypeInfoX.datePolicy== DatePolicyT::dateT) {
+    return windowFun<double,int,R_len_t,JulianBackend,JulianDate,windowFunction,windowFunctionTraits>(x,y,periods);
+  } else if(tsTypeInfoX.dateSEXPTYPE==REALSXP && tsTypeInfoX.dataSEXPTYPE==LGLSXP && tsTypeInfoX.datePolicy== DatePolicyT::dateT) {
+    return windowFun<double,int,R_len_t,JulianBackend,JulianDate,windowFunction,windowFunctionTraits>(x,y,periods);
+  } else if(tsTypeInfoX.dateSEXPTYPE==INTSXP && tsTypeInfoX.dataSEXPTYPE==REALSXP && tsTypeInfoX.datePolicy== DatePolicyT::dateT) {
+    return windowFun<int,double,R_len_t,JulianBackend,JulianDate,windowFunction,windowFunctionTraits>(x,y,periods);
+  } else if(tsTypeInfoX.dateSEXPTYPE==INTSXP && tsTypeInfoX.dataSEXPTYPE==INTSXP && tsTypeInfoX.datePolicy== DatePolicyT::dateT) {
+    return windowFun<int,int,R_len_t,JulianBackend,JulianDate,windowFunction,windowFunctionTraits>(x,y,periods);
+  } else if(tsTypeInfoX.dateSEXPTYPE==INTSXP && tsTypeInfoX.dataSEXPTYPE==LGLSXP && tsTypeInfoX.datePolicy== DatePolicyT::dateT) {
+    return windowFun<int,int,R_len_t,JulianBackend,JulianDate,windowFunction,windowFunctionTraits>(x,y,periods);
+  } else if(tsTypeInfoX.dateSEXPTYPE==REALSXP && tsTypeInfoX.dataSEXPTYPE==REALSXP && tsTypeInfoX.datePolicy==DatePolicyT::posixT) {
     return windowFun<double,double,R_len_t,PosixBackend,PosixDate,windowFunction,windowFunctionTraits>(x,y,periods);
   } else if(tsTypeInfoX.dateSEXPTYPE==REALSXP && tsTypeInfoX.dataSEXPTYPE==INTSXP && tsTypeInfoX.datePolicy==DatePolicyT::posixT) {
     return windowFun<double,int,R_len_t,PosixBackend,PosixDate,windowFunction,windowFunctionTraits>(x,y,periods);
-  // } else if(tsTypeInfoX.dateSEXPTYPE==REALSXP && tsTypeInfoX.dataSEXPTYPE==LGLSXP && tsTypeInfoX.datePolicy==DatePolicyT::posixT) {
-  //   return windowFun<double,bool,R_len_t,PosixBackend,PosixDate,windowFunction,windowFunctionTraits>(x,y,periods);
+  } else if(tsTypeInfoX.dateSEXPTYPE==REALSXP && tsTypeInfoX.dataSEXPTYPE==LGLSXP && tsTypeInfoX.datePolicy==DatePolicyT::posixT) {
+    return windowFun<double,int,R_len_t,PosixBackend,PosixDate,windowFunction,windowFunctionTraits>(x,y,periods);
   } else if(tsTypeInfoX.dateSEXPTYPE==INTSXP && tsTypeInfoX.dataSEXPTYPE==REALSXP && tsTypeInfoX.datePolicy==DatePolicyT::posixT) {
     return windowFun<int,double,R_len_t,PosixBackend,PosixDate,windowFunction,windowFunctionTraits>(x,y,periods);
   } else if(tsTypeInfoX.dateSEXPTYPE==INTSXP && tsTypeInfoX.dataSEXPTYPE==INTSXP && tsTypeInfoX.datePolicy==DatePolicyT::posixT) {
     return windowFun<int,int,R_len_t,PosixBackend,PosixDate,windowFunction,windowFunctionTraits>(x,y,periods);
-  // } else if(tsTypeInfoX.dateSEXPTYPE==INTSXP && tsTypeInfoX.dataSEXPTYPE==LGLSXP && tsTypeInfoX.datePolicy==DatePolicyT::posixT) {
-  //   return windowFun<int,bool,R_len_t,PosixBackend,PosixDate,windowFunction,windowFunctionTraits>(x,y,periods);
+  } else if(tsTypeInfoX.dateSEXPTYPE==INTSXP && tsTypeInfoX.dataSEXPTYPE==LGLSXP && tsTypeInfoX.datePolicy==DatePolicyT::posixT) {
+    return windowFun<int,int,R_len_t,PosixBackend,PosixDate,windowFunction,windowFunctionTraits>(x,y,periods);
   } else {
     //throw std::logic_error("unable to classify time series.");
     REprintf("windowSpecializer_2args: unable to classify time series.");
