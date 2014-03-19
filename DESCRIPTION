@@ -7,3 +7,4 @@ Depends: utils, stats, zoo
 LinkingTo: BH
 Description: fast operations for time series objects
 License: GPL-3
+BugReports: http://github.com/armstrtw/fts/issues
