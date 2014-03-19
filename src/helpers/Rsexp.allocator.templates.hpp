@@ -21,7 +21,7 @@
 #include <Rinternals.h>
 
 template<typename T>
-class R_allocator {
+class Rallocator {
 public:
   static SEXPTYPE getType();
   static SEXP Matrix(const R_len_t nr, const R_len_t nc);
@@ -31,7 +31,7 @@ public:
 };
 
 template<>
-class R_allocator<double> {
+class Rallocator<double> {
 public:
   static SEXPTYPE getType() { return REALSXP; }
   static SEXP Matrix(const R_len_t nr, const R_len_t nc) { return allocMatrix(REALSXP,nr,nc); }
@@ -41,7 +41,7 @@ public:
 };
 
 template<>
-class R_allocator<int> {
+class Rallocator<int> {
 public:
   static SEXPTYPE getType() { return INTSXP; }
   static SEXP Matrix(const R_len_t nr, const R_len_t nc) { return allocMatrix(INTSXP,nr,nc); }
@@ -51,7 +51,7 @@ public:
 };
 
 template<>
-class R_allocator<bool> {
+class Rallocator<bool> {
 public:
   static SEXPTYPE getType() { return LGLSXP; }
   static SEXP Matrix(const R_len_t nr, const R_len_t nc) { return allocMatrix(LGLSXP,nr,nc); }

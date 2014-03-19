@@ -102,9 +102,9 @@ class PosixBackend : public BackendBase {
 public:
   PosixBackend() {}
   PosixBackend(const PosixBackend& t): BackendBase(t.R_object) {}
-  PosixBackend(const TSDIM rows, const TSDIM cols): BackendBase(R_allocator<TDATA>::getType(),rows, cols) {
+  PosixBackend(const TSDIM rows, const TSDIM cols): BackendBase(Rallocator<TDATA>::getType(),rows, cols) {
     // create dates
-    SEXP R_dates = PROTECT(R_allocator<TDATE>::Vector(rows));
+    SEXP R_dates = PROTECT(Rallocator<TDATE>::Vector(rows));
 
     // create and add dates class to dates object
     SEXP r_dates_class = PROTECT(allocVector(STRSXP, 2));
@@ -120,8 +120,8 @@ public:
 
   TSDIM nrow() const { return BackendBase::nrow(); }
   TSDIM ncol() const { return BackendBase::ncol(); }
-  TDATA* getData() const { return R_allocator<TDATA>::R_dataPtr(R_object); }
-  TDATE* getDates() const { return R_allocator<TDATE>::R_dataPtr(getAttrib(R_object,install("index"))); }
+  TDATA* getData() const { return Rallocator<TDATA>::R_dataPtr(R_object); }
+  TDATE* getDates() const { return Rallocator<TDATE>::R_dataPtr(getAttrib(R_object,install("index"))); }
 };
 
 template <typename TDATE,typename TDATA, typename TSDIM>
@@ -129,9 +129,9 @@ class JulianBackend : public BackendBase {
 public:
   JulianBackend() {}
   JulianBackend(const JulianBackend& t): BackendBase(t.R_object) {}
-  JulianBackend(const TSDIM rows, const TSDIM cols): BackendBase(R_allocator<TDATA>::getType(),rows, cols) {
+  JulianBackend(const TSDIM rows, const TSDIM cols): BackendBase(Rallocator<TDATA>::getType(),rows, cols) {
     // create dates
-    SEXP R_dates = PROTECT(R_allocator<TDATE>::Vector(rows));
+    SEXP R_dates = PROTECT(Rallocator<TDATE>::Vector(rows));
 
     // create and add dates class to dates object
     SEXP r_dates_class = PROTECT(allocVector(STRSXP, 1));
@@ -146,8 +146,8 @@ public:
 
   TSDIM nrow() const { return BackendBase::nrow(); }
   TSDIM ncol() const { return BackendBase::ncol(); }
-  TDATA* getData() const { return R_allocator<TDATA>::R_dataPtr(R_object); }
-  TDATE* getDates() const { return R_allocator<TDATE>::R_dataPtr(getAttrib(R_object,install("index"))); }
+  TDATA* getData() const { return Rallocator<TDATA>::R_dataPtr(R_object); }
+  TDATE* getDates() const { return Rallocator<TDATE>::R_dataPtr(getAttrib(R_object,install("index"))); }
 };
 
 #endif // R_TSERIES_DATA_BACKEND_HPP

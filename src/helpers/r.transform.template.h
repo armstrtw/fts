@@ -45,7 +45,7 @@ SEXP transformFun(SEXP x, SEXP arg1) {
   typedef typename transformFunctionTraits<TDATA>::ArgType ArgType;
 
 
-  TSeries<TDATE,ReturnTDATA,TSDIM,TSDATABACKEND,DatePolicy> ans = ts.template transform_1arg<ReturnTDATA,transformFunction>(R_allocator<ArgType>::scalar(arg1));
+  TSeries<TDATE,ReturnTDATA,TSDIM,TSDATABACKEND,DatePolicy> ans = ts.template transform_1arg<ReturnTDATA,transformFunction>(Rallocator<ArgType>::scalar(arg1));
   return ans.getIMPL()->R_object;
 }
 
