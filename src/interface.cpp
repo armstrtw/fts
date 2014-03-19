@@ -5,7 +5,6 @@
 #include <tslib/vector.transform.hpp>
 
 #include <R.tseries.data.backend.hpp>
-#include <R.tseries.object.convert.hpp>
 #include <Rsexp.allocator.templates.hpp>
 #include <R.window.template.hpp>
 #include <R.transform.template.hpp>
