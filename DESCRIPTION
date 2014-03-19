@@ -4,5 +4,6 @@ Version: 0.9.1
 Maintainer: Whit Armstrong <armstrong.whit@gmail.com>
 Author: Whit Armstrong <armstrong.whit@gmail.com>
 Depends: utils, stats, zoo
+SystemRequirements: Boost
 Description: fast operations for time series objects
 License: GPL-3
