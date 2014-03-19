@@ -34,7 +34,7 @@ to.day.of.week(x,day.of.week,beginning.of.period=TRUE)
 }
 \author{ Whit Armstrong }
 \examples{
-x <- fts()
+x <- fts(index=seq(from=Sys.Date(),by="days",length.out=500),data=1:500)
 
 to.weekly(x)
 to.monthly(x)

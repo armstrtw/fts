@@ -15,10 +15,9 @@ a vector of dates
 }
 \author{ Whit Armstrong }
 \examples{
-x <- fts()
-y <- fts()
-y <- y[1:10,]
-
+x <- fts(index=seq(from=Sys.Date(),by="days",length.out=100),data=1:100)
+y <- fts(index=seq(from=Sys.Date(),by="days",length.out=100),data=1:100)
+y <- y[1:nrow(y) \%\% 2==0,]
 intersect.all(x,y)
 }
 \keyword{ts}

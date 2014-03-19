@@ -6,51 +6,9 @@
 #include <tslib/tseries.hpp>
 #include <R.tseries.data.backend.hpp>
 #include <Rtype.hpp>
+#include <fts.factory.hpp>
 
 using namespace tslib;
-
-enum class DatePolicyT { dateT, posixT, unknownDateTypeT };
-
-class TsTypeTuple {
-public:
-  SEXPTYPE dateSEXPTYPE;
-  SEXPTYPE dataSEXPTYPE;
-  DatePolicyT datePolicy;
-  TsTypeTuple(SEXPTYPE dateSEXPTYPE_, SEXPTYPE dataSEXPTYPE_, DatePolicyT datePolicy_):
-    dateSEXPTYPE(dateSEXPTYPE_), dataSEXPTYPE(dataSEXPTYPE_), datePolicy(datePolicy_) {}
-
-  bool operator==(const TsTypeTuple& other) const {
-    if(dateSEXPTYPE == other.dateSEXPTYPE &&
-       dataSEXPTYPE == other.dataSEXPTYPE &&
-       datePolicy == other.datePolicy) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-  bool operator!=(const TsTypeTuple& other) const {
-    return !(*this == other);
-  }
-};
-
-DatePolicyT getIndexPolicyType(SEXP x) {
-  SEXP klass = getAttrib(x,R_ClassSymbol);
-  if(klass==R_NilValue) {
-    throw std::logic_error("getIndexPolicyType: Object has no classname.");
-  }
-  if(strcmp(CHAR(STRING_ELT(klass,0)),"Date")==0) return DatePolicyT::dateT;
-  if(strcmp(CHAR(STRING_ELT(klass,0)),"POSIXct")==0) return DatePolicyT::posixT;
-  if(length(klass)>1 && strcmp(CHAR(STRING_ELT(klass,1)),"POSIXct")==0) return DatePolicyT::posixT;
-  return DatePolicyT::unknownDateTypeT;
-}
-
-const TsTypeTuple classifyTS(SEXP x) {
-  SEXP idx = getAttrib(x,install("index"));
-  if(idx==R_NilValue) {
-    throw std::logic_error("Object has no index.");
-  }
-  return TsTypeTuple(TYPEOF(x),TYPEOF(idx),getIndexPolicyType(idx));
-}
 
 template<typename TDATE, typename TDATA,
          typename TSDIM,
@@ -79,7 +37,7 @@ template<typename TDATE, typename TDATA,
          template<typename> class DatePolicy,
          template<class> class windowFunction,
          template<class> class windowFunctionTraits>
-SEXP windowFun2args(SEXP x_, SEXP y_, SEXP periods) {
+SEXP windowFun(SEXP x_, SEXP y_, SEXP periods) {
   // define our answer type based on windowFunctionTraits return type
   typedef typename windowFunctionTraits<TDATA>::ReturnType ReturnTDATA;
   int p = Rtype<INTSXP>::scalar(periods);
@@ -155,14 +113,16 @@ SEXP windowSpecializer(SEXP x, SEXP periods) {
   if(TYPEOF(periods)!=INTSXP) {
     REprintf("windowSpecializer: periods is not an integer.");
   };
-  const TsTypeTuple tsTypeInfo(classifyTS(x));
-  // if(tsTypeTuple.dateSEXPTYPE==REALSXP && tsTypeTuple.dataSEXPTYPE==REALSXP && tsTypeTuple.datePolicy== dateT) {
-  // } else if(tsTypeTuple.dateSEXPTYPE==REALSXP && tsTypeTuple.dataSEXPTYPE==INTSXP && tsTypeTuple.datePolicy== dateT) {
-  // } else if(tsTypeTuple.dateSEXPTYPE==REALSXP && tsTypeTuple.dataSEXPTYPE==LGLSXP && tsTypeTuple.datePolicy== dateT) {
-  // } else if(tsTypeTuple.dateSEXPTYPE==INTSXP && tsTypeTuple.dataSEXPTYPE==REALSXP && tsTypeTuple.datePolicy== dateT) {
-  // } else if(tsTypeTuple.dateSEXPTYPE==INTSXP && tsTypeTuple.dataSEXPTYPE==INTSXP && tsTypeTuple.datePolicy== dateT) {
-  // } else if(tsTypeTuple.dateSEXPTYPE==INTSXP && tsTypeTuple.dataSEXPTYPE==LGLSXP && tsTypeTuple.datePolicy== dateT) {
-  if(tsTypeInfo.dateSEXPTYPE==REALSXP && tsTypeInfo.dataSEXPTYPE==REALSXP && tsTypeInfo.datePolicy==DatePolicyT::posixT) {
+  const TsTypeTuple tsTypeInfo(x);
+  if(tsTypeInfo.dateSEXPTYPE==REALSXP && tsTypeInfo.dataSEXPTYPE==REALSXP && tsTypeInfo.datePolicy== DatePolicyT::dateT) {
+    return windowFun<double,double,R_len_t,JulianBackend,JulianDate,windowFunction,windowFunctionTraits>(x,periods);
+  // } else if(tsTypeInfo.dateSEXPTYPE==REALSXP && tsTypeInfo.dataSEXPTYPE==INTSXP && tsTypeInfo.datePolicy== DatePolicyT::dateT) {
+  // } else if(tsTypeInfo.dateSEXPTYPE==REALSXP && tsTypeInfo.dataSEXPTYPE==LGLSXP && tsTypeInfo.datePolicy== DatePolicyT::dateT) {
+  } else if(tsTypeInfo.dateSEXPTYPE==INTSXP && tsTypeInfo.dataSEXPTYPE==REALSXP && tsTypeInfo.datePolicy== DatePolicyT::dateT) {
+    return windowFun<int,double,R_len_t,JulianBackend,JulianDate,windowFunction,windowFunctionTraits>(x,periods);
+  // } else if(tsTypeInfo.dateSEXPTYPE==INTSXP && tsTypeInfo.dataSEXPTYPE==INTSXP && tsTypeInfo.datePolicy== DatePolicyT::dateT) {
+  // } else if(tsTypeInfo.dateSEXPTYPE==INTSXP && tsTypeInfo.dataSEXPTYPE==LGLSXP && tsTypeInfo.datePolicy== DatePolicyT::dateT) {
+  } else if(tsTypeInfo.dateSEXPTYPE==REALSXP && tsTypeInfo.dataSEXPTYPE==REALSXP && tsTypeInfo.datePolicy==DatePolicyT::posixT) {
     return windowFun<double,double,R_len_t,PosixBackend,PosixDate,windowFunction,windowFunctionTraits>(x,periods);
   } else if(tsTypeInfo.dateSEXPTYPE==REALSXP && tsTypeInfo.dataSEXPTYPE==INTSXP && tsTypeInfo.datePolicy==DatePolicyT::posixT) {
     return windowFun<double,int,R_len_t,PosixBackend,PosixDate,windowFunction,windowFunctionTraits>(x,periods);
@@ -182,35 +142,35 @@ SEXP windowSpecializer(SEXP x, SEXP periods) {
 }
 
 template<template<class> class windowFunction, template<class> class windowFunctionTraits>
-SEXP windowSpecializer_2args(SEXP x, SEXP y, SEXP periods) {
+SEXP windowSpecializer(SEXP x, SEXP y, SEXP periods) {
   if(TYPEOF(periods)!=INTSXP) {
     REprintf("windowSpecializer: periods is not an integer.");
   };
-  const TsTypeTuple tsTypeInfoX(classifyTS(x));
-  const TsTypeTuple tsTypeInfoY(classifyTS(y));
+  const TsTypeTuple tsTypeInfoX(x);
+  const TsTypeTuple tsTypeInfoY(y);
   if(tsTypeInfoX!=tsTypeInfoY) {
     REprintf("windowSpecializer_2args: x and y must be same time series types.");
     return R_NilValue;
   }
 
-  // if(tsTypeTuple.dateSEXPTYPE==REALSXP && tsTypeTuple.dataSEXPTYPE==REALSXP && tsTypeTuple.datePolicy== dateT) {
-  // } else if(tsTypeTuple.dateSEXPTYPE==REALSXP && tsTypeTuple.dataSEXPTYPE==INTSXP && tsTypeTuple.datePolicy== dateT) {
-  // } else if(tsTypeTuple.dateSEXPTYPE==REALSXP && tsTypeTuple.dataSEXPTYPE==LGLSXP && tsTypeTuple.datePolicy== dateT) {
-  // } else if(tsTypeTuple.dateSEXPTYPE==INTSXP && tsTypeTuple.dataSEXPTYPE==REALSXP && tsTypeTuple.datePolicy== dateT) {
-  // } else if(tsTypeTuple.dateSEXPTYPE==INTSXP && tsTypeTuple.dataSEXPTYPE==INTSXP && tsTypeTuple.datePolicy== dateT) {
-  // } else if(tsTypeTuple.dateSEXPTYPE==INTSXP && tsTypeTuple.dataSEXPTYPE==LGLSXP && tsTypeTuple.datePolicy== dateT) {
+  // if(tsTypeInfo.dateSEXPTYPE==REALSXP && tsTypeInfo.dataSEXPTYPE==REALSXP && tsTypeInfo.datePolicy== DatePolicyT::dateT) {
+  // } else if(tsTypeInfo.dateSEXPTYPE==REALSXP && tsTypeInfo.dataSEXPTYPE==INTSXP && tsTypeInfo.datePolicy== DatePolicyT::dateT) {
+  // } else if(tsTypeInfo.dateSEXPTYPE==REALSXP && tsTypeInfo.dataSEXPTYPE==LGLSXP && tsTypeInfo.datePolicy== DatePolicyT::dateT) {
+  // } else if(tsTypeInfo.dateSEXPTYPE==INTSXP && tsTypeInfo.dataSEXPTYPE==REALSXP && tsTypeInfo.datePolicy== DatePolicyT::dateT) {
+  // } else if(tsTypeInfo.dateSEXPTYPE==INTSXP && tsTypeInfo.dataSEXPTYPE==INTSXP && tsTypeInfo.datePolicy== DatePolicyT::dateT) {
+  // } else if(tsTypeInfo.dateSEXPTYPE==INTSXP && tsTypeInfo.dataSEXPTYPE==LGLSXP && tsTypeInfo.datePolicy== DatePolicyT::dateT) {
   if(tsTypeInfoX.dateSEXPTYPE==REALSXP && tsTypeInfoX.dataSEXPTYPE==REALSXP && tsTypeInfoX.datePolicy==DatePolicyT::posixT) {
-    return windowFun2args<double,double,R_len_t,PosixBackend,PosixDate,windowFunction,windowFunctionTraits>(x,y,periods);
+    return windowFun<double,double,R_len_t,PosixBackend,PosixDate,windowFunction,windowFunctionTraits>(x,y,periods);
   } else if(tsTypeInfoX.dateSEXPTYPE==REALSXP && tsTypeInfoX.dataSEXPTYPE==INTSXP && tsTypeInfoX.datePolicy==DatePolicyT::posixT) {
-    return windowFun2args<double,int,R_len_t,PosixBackend,PosixDate,windowFunction,windowFunctionTraits>(x,y,periods);
+    return windowFun<double,int,R_len_t,PosixBackend,PosixDate,windowFunction,windowFunctionTraits>(x,y,periods);
   // } else if(tsTypeInfoX.dateSEXPTYPE==REALSXP && tsTypeInfoX.dataSEXPTYPE==LGLSXP && tsTypeInfoX.datePolicy==DatePolicyT::posixT) {
-  //   return windowFun2args<double,bool,R_len_t,PosixBackend,PosixDate,windowFunction,windowFunctionTraits>(x,y,periods);
+  //   return windowFun<double,bool,R_len_t,PosixBackend,PosixDate,windowFunction,windowFunctionTraits>(x,y,periods);
   } else if(tsTypeInfoX.dateSEXPTYPE==INTSXP && tsTypeInfoX.dataSEXPTYPE==REALSXP && tsTypeInfoX.datePolicy==DatePolicyT::posixT) {
-    return windowFun2args<int,double,R_len_t,PosixBackend,PosixDate,windowFunction,windowFunctionTraits>(x,y,periods);
+    return windowFun<int,double,R_len_t,PosixBackend,PosixDate,windowFunction,windowFunctionTraits>(x,y,periods);
   } else if(tsTypeInfoX.dateSEXPTYPE==INTSXP && tsTypeInfoX.dataSEXPTYPE==INTSXP && tsTypeInfoX.datePolicy==DatePolicyT::posixT) {
-    return windowFun2args<int,int,R_len_t,PosixBackend,PosixDate,windowFunction,windowFunctionTraits>(x,y,periods);
+    return windowFun<int,int,R_len_t,PosixBackend,PosixDate,windowFunction,windowFunctionTraits>(x,y,periods);
   // } else if(tsTypeInfoX.dateSEXPTYPE==INTSXP && tsTypeInfoX.dataSEXPTYPE==LGLSXP && tsTypeInfoX.datePolicy==DatePolicyT::posixT) {
-  //   return windowFun2args<int,bool,R_len_t,PosixBackend,PosixDate,windowFunction,windowFunctionTraits>(x,y,periods);
+  //   return windowFun<int,bool,R_len_t,PosixBackend,PosixDate,windowFunction,windowFunctionTraits>(x,y,periods);
   } else {
     //throw std::logic_error("unable to classify time series.");
     REprintf("windowSpecializer_2args: unable to classify time series.");

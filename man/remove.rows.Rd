@@ -19,7 +19,7 @@ remove.all.na.rows(x)
 }
 \author{ Whit Armstrong }
 \examples{
-x <- fts(matrix(rnorm(20),ncol=2))
+x <- fts(index=seq(from=Sys.Date(),by="days",length.out=10),matrix(rnorm(20),ncol=2))
 
 x[5,1] <- NA
 x[10,] <- NA

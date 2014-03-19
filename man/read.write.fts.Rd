@@ -25,7 +25,7 @@ write.csv.fts(x, file, ...)
 }
 \author{ Whit Armstrong }
 \examples{
-x <- fts()
+x <- fts(index=seq(from=Sys.Date(),by="days",length.out=100),data=1:100)
 colnames(x) <- "big.ass.black.dog"
 
 csv.fname <- paste(tempfile(),".csv",sep="")

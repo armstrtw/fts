@@ -26,7 +26,7 @@
 }
 \author{ Whit Armstrong }
 \examples{
-x <- fts(rnorm(5))
+x <- fts(index=seq(from=Sys.Date(),by="days",length.out=10),data=1:10)
 print(x)
 lag(x,1)
 lead(x,1)

@@ -264,7 +264,7 @@ fix.cnames <- function(cnames.list) {
 
 trim <- function(x,trim.dates) {
     new.dates <- sort(intersect(index(x),trim.dates))
-    class(new.dates) <- class(x)
+    class(new.dates) <- class(index(x))
     x[new.dates,]
 }
 

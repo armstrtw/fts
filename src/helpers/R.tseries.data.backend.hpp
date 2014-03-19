@@ -124,4 +124,30 @@ public:
   TDATE* getDates() const { return R_allocator<TDATE>::R_dataPtr(getAttrib(R_object,install("index"))); }
 };
 
+template <typename TDATE,typename TDATA, typename TSDIM>
+class JulianBackend : public BackendBase {
+public:
+  JulianBackend() {}
+  JulianBackend(const JulianBackend& t): BackendBase(t.R_object) {}
+  JulianBackend(const TSDIM rows, const TSDIM cols): BackendBase(R_allocator<TDATA>::getType(),rows, cols) {
+    // create dates
+    SEXP R_dates = PROTECT(R_allocator<TDATE>::Vector(rows));
+
+    // create and add dates class to dates object
+    SEXP r_dates_class = PROTECT(allocVector(STRSXP, 1));
+    SET_STRING_ELT(r_dates_class, 0, mkChar("Date"));
+    classgets(R_dates, r_dates_class);
+
+    // attach dates to R_object
+    setAttrib(R_object,install("index"),R_dates);
+    UNPROTECT(2); // R_dates, r_dates_class
+  }
+  JulianBackend(const SEXP x): BackendBase(x) {}
+
+  TSDIM nrow() const { return BackendBase::nrow(); }
+  TSDIM ncol() const { return BackendBase::ncol(); }
+  TDATA* getData() const { return R_allocator<TDATA>::R_dataPtr(R_object); }
+  TDATE* getDates() const { return R_allocator<TDATE>::R_dataPtr(getAttrib(R_object,install("index"))); }
+};
+
 #endif // R_TSERIES_DATA_BACKEND_HPP

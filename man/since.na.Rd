@@ -15,7 +15,7 @@ since.na(x)
 }
 \author{ Whit Armstrong }
 \examples{
-x <- fts(rnorm(100))
+x <- fts(index=seq(from=Sys.Date(),by="days",length.out=100),rnorm(100))
 
 x[10,] <- NA
 

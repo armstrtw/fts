@@ -56,8 +56,8 @@ cor.by.row(x,y)
 }
 \author{ Whit Armstrong }
 \examples{
-x <- fts()
-y <- fts()
+x <- fts(index=seq(from=Sys.Date(),by="days",length.out=100),data=1:100)
+y <- fts(index=seq(from=Sys.Date(),by="days",length.out=100),data=1:100)
 
 x.mean <- moving.mean(x,20)
 x.sum <- moving.sum(x,20)
