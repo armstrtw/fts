@@ -2,7 +2,6 @@
 #ifndef R_TRANSFORM_TEMPLATE_HPP
 #define R_TRANSFORM_TEMPLATE_HPP
 
-#include <iostream>
 #include <Rinternals.h>
 #include <tslib/tseries.hpp>
 #include <R.tseries.data.backend.hpp>

@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include <tslib/tseries.hpp>
 #include <tslib/vector.summary.hpp>
 #include <tslib/vector.transform.hpp>
