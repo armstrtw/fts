@@ -14,8 +14,8 @@ template<typename TDATE, typename TDATA,
          template<typename> class DatePolicy>
 SEXP lagFun(SEXP x, SEXP periods) {
   int p = Rtype<INTSXP>::scalar(periods);
-  if(p <= 0) {
-    REprintf("lagFun: periods is not positive.");
+  if(p < 0) {
+    REprintf("lagFun: periods is not >= 0.");
     return R_NilValue;
   }
   // build tseries from SEXP x
