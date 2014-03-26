@@ -405,6 +405,9 @@ fill.value <- function(x,value) {
 }
 
 pad <- function(x,pad.dates) {
+    stopifnot(all.equal(class(index(x)),class(pad.dates)))
+    if(storage.mode(pad.dates)!=storage.mode(index(x))) storage.mode(pad.dates) <- storage.mode(index(x))
+
     .Call("pad",x,pad.dates,PACKAGE="fts")
 }
 
@@ -446,16 +449,17 @@ to.second <- function(x) {
 
 to.day.of.week <- function(x,day.of.week,beginning.of.period=TRUE) {
     dts <- index(x)
+    stopifnot(class(dts)=="Date")
     end.date <- dts[nrow(x)]
-    end.date <- end.date + 6 * 60*60*24
-    pad.days <- seq.POSIXt(from=dts[1],to=end.date,by="DSTday")
+    end.date <- end.date + 6
+    pad.days <- seq(from=dts[1],to=end.date,by="days")
+    ## seq changes storage mode
+    storage.mode(pad.days) <- storage.mode(dts)
     pad.days <- pad.days[as.POSIXlt(pad.days)$wday==day.of.week]
-    x.filled <- fill.fwd(pad(x,as.POSIXct(pad.days)))
+    x.filled <- fill.fwd(pad(x,pad.days))
     ans <- x.filled[as.POSIXlt(index(x.filled))$wday == day.of.week,]
     if(beginning.of.period) {
-        new.index <- index(ans) - 60*60*24 * 6
-        new.index <- new.index - ((as.POSIXlt(new.index)$hour + 1) %% 24 -1) * 60*60
-        index(ans) <- new.index
+        index(ans) <- index(ans) - 6
     }
     ans
 }
