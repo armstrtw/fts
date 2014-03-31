@@ -56,26 +56,22 @@ SEXP windowFun(SEXP x_, SEXP y_, SEXP periods) {
   return ans.getIMPL()->R_object;
 }
 
-template<SEXPTYPE RTYPE>
-class r_time_window {
-  typedef typename Rtype<RTYPE>::ValueType VT;
-public:
-  template<template<class> class windowFunction, template<class> class windowFunctionTraits, template<class, template<typename> class> class PFUNC>
-  static SEXP apply(SEXP x) {
-
-    // define our answer type based on windowFunctionTraits return type
-    typedef typename windowFunctionTraits<VT>::ReturnType ansType;
-
-    // build tseries from SEXP x
-    PosixBackend<double,VT,int> tsData(x);
-    TSeries<double,VT,int,PosixBackend,PosixDate> ts(tsData);
-
-    TSeries<double,ansType,int,PosixBackend,PosixDate> ans = ts.template time_window<ansType, windowFunction, PFUNC>();
-
-    return ans.getIMPL()->R_object;
-  }
-};
-
+template<typename TDATE, typename TDATA,
+         typename TSDIM,
+         template<typename,typename,typename> class TSDATABACKEND,
+         template<typename> class DatePolicy,
+         template<class> class windowFunction,
+         template<class> class windowFunctionTraits,
+         template<class, template<typename> class> class PFUNC>
+SEXP timeWindowFun(SEXP x) {
+  // define our answer type based on windowFunctionTraits return type
+  typedef typename windowFunctionTraits<TDATA>::ReturnType ReturnTDATA;
+  // build tseries from SEXP x
+  TSDATABACKEND<TDATE,TDATA,TSDIM> tsData(x);
+  TSeries<TDATE,TDATA,TSDIM,TSDATABACKEND,DatePolicy> ts(tsData);
+  TSeries<TDATE,ReturnTDATA,TSDIM,TSDATABACKEND,DatePolicy> ans = ts.template time_window<ReturnTDATA,windowFunction,PFUNC>();
+  return ans.getIMPL()->R_object;
+}
 
 template<SEXPTYPE RTYPE>
 class r_window_2args {
@@ -187,16 +183,36 @@ SEXP windowSpecializer(SEXP x, SEXP y, SEXP periods) {
   }
 }
 
-template<template<class> class windowFunction, template<class> class windowFunctionTraits, template<class, template<typename> class> class PFUNC>
+template<template<class> class windowFunction, template<class> class windowFunctionTraits,template<class, template<typename> class> class PFUNC>
 SEXP timeWindowSpecializer(SEXP x) {
-  switch(TYPEOF(x)) {
-  case REALSXP:
-    return r_time_window<REALSXP>::apply<windowFunction, windowFunctionTraits, PFUNC>(x);
-  case INTSXP:
-    return r_time_window<INTSXP>::apply<windowFunction, windowFunctionTraits, PFUNC>(x);
-  case LGLSXP:
-    return r_time_window<LGLSXP>::apply<windowFunction, windowFunctionTraits, PFUNC>(x);
-  default:
+  const TsTypeTuple tsTypeInfo(x);
+  if(tsTypeInfo.dateSEXPTYPE==REALSXP && tsTypeInfo.dataSEXPTYPE==REALSXP && tsTypeInfo.datePolicy== DatePolicyT::dateT) {
+    return timeWindowFun<double,double,R_len_t,JulianBackend,JulianDate,windowFunction,windowFunctionTraits,PFUNC>(x);
+  } else if(tsTypeInfo.dateSEXPTYPE==REALSXP && tsTypeInfo.dataSEXPTYPE==INTSXP && tsTypeInfo.datePolicy== DatePolicyT::dateT) {
+    return timeWindowFun<double,int,R_len_t,JulianBackend,JulianDate,windowFunction,windowFunctionTraits,PFUNC>(x);
+  } else if(tsTypeInfo.dateSEXPTYPE==REALSXP && tsTypeInfo.dataSEXPTYPE==LGLSXP && tsTypeInfo.datePolicy== DatePolicyT::dateT) {
+    return timeWindowFun<double,int,R_len_t,JulianBackend,JulianDate,windowFunction,windowFunctionTraits,PFUNC>(x);
+  } else if(tsTypeInfo.dateSEXPTYPE==INTSXP && tsTypeInfo.dataSEXPTYPE==REALSXP && tsTypeInfo.datePolicy== DatePolicyT::dateT) {
+    return timeWindowFun<int,double,R_len_t,JulianBackend,JulianDate,windowFunction,windowFunctionTraits,PFUNC>(x);
+  } else if(tsTypeInfo.dateSEXPTYPE==INTSXP && tsTypeInfo.dataSEXPTYPE==INTSXP && tsTypeInfo.datePolicy== DatePolicyT::dateT) {
+    return timeWindowFun<int,int,R_len_t,JulianBackend,JulianDate,windowFunction,windowFunctionTraits,PFUNC>(x);
+  } else if(tsTypeInfo.dateSEXPTYPE==INTSXP && tsTypeInfo.dataSEXPTYPE==LGLSXP && tsTypeInfo.datePolicy== DatePolicyT::dateT) {
+    return timeWindowFun<int,int,R_len_t,JulianBackend,JulianDate,windowFunction,windowFunctionTraits,PFUNC>(x);
+  } else if(tsTypeInfo.dateSEXPTYPE==REALSXP && tsTypeInfo.dataSEXPTYPE==REALSXP && tsTypeInfo.datePolicy==DatePolicyT::posixT) {
+    return timeWindowFun<double,double,R_len_t,PosixBackend,PosixDate,windowFunction,windowFunctionTraits,PFUNC>(x);
+  } else if(tsTypeInfo.dateSEXPTYPE==REALSXP && tsTypeInfo.dataSEXPTYPE==INTSXP && tsTypeInfo.datePolicy==DatePolicyT::posixT) {
+    return timeWindowFun<double,int,R_len_t,PosixBackend,PosixDate,windowFunction,windowFunctionTraits,PFUNC>(x);
+  } else if(tsTypeInfo.dateSEXPTYPE==REALSXP && tsTypeInfo.dataSEXPTYPE==LGLSXP && tsTypeInfo.datePolicy==DatePolicyT::posixT) {
+    return timeWindowFun<double,int,R_len_t,PosixBackend,PosixDate,windowFunction,windowFunctionTraits,PFUNC>(x);
+  } else if(tsTypeInfo.dateSEXPTYPE==INTSXP && tsTypeInfo.dataSEXPTYPE==REALSXP && tsTypeInfo.datePolicy==DatePolicyT::posixT) {
+    return timeWindowFun<int,double,R_len_t,PosixBackend,PosixDate,windowFunction,windowFunctionTraits,PFUNC>(x);
+  } else if(tsTypeInfo.dateSEXPTYPE==INTSXP && tsTypeInfo.dataSEXPTYPE==INTSXP && tsTypeInfo.datePolicy==DatePolicyT::posixT) {
+    return timeWindowFun<int,int,R_len_t,PosixBackend,PosixDate,windowFunction,windowFunctionTraits,PFUNC>(x);
+  } else if(tsTypeInfo.dateSEXPTYPE==INTSXP && tsTypeInfo.dataSEXPTYPE==LGLSXP && tsTypeInfo.datePolicy==DatePolicyT::posixT) {
+    return timeWindowFun<int,int,R_len_t,PosixBackend,PosixDate,windowFunction,windowFunctionTraits,PFUNC>(x);
+  } else {
+    //throw std::logic_error("unable to classify time series.");
+    REprintf("timeWindowSpecializer: unable to classify time series.");
     return R_NilValue;
   }
 }
