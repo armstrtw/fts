@@ -2,7 +2,6 @@
 #ifndef R_WINDOW_TEMPLATE_HPP
 #define R_WINDOW_TEMPLATE_HPP
 
-#include <Rinternals.h>
 #include <tslib/tseries.hpp>
 #include <R.tseries.data.backend.hpp>
 #include <Rtype.hpp>

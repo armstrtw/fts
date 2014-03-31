@@ -18,6 +18,7 @@
 #ifndef RTYPE_HPP
 #define RTYPE_HPP
 
+#define R_NO_REMAP
 #include <Rinternals.h>
 
 template<SEXPTYPE T>
