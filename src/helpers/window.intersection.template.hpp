@@ -1,4 +1,3 @@
-// -*- mode: C++; c-indent-level: 2; c-basic-offset: 2; tab-width: 8 -*-
 #ifndef WINDOW_INTERSECTION_TEMPLATE_HPP
 #define WINDOW_INTERSECTION_TEMPLATE_HPP
 

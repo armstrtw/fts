@@ -1,4 +1,3 @@
-// -*- mode: C++; c-indent-level: 2; c-basic-offset: 2; tab-width: 8 -*-
 #ifndef FTS_FACTORY_HPP
 #define FTS_FACTORY_HPP
 
