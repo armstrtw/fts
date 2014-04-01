@@ -9,7 +9,7 @@
 #include <window.intersection.template.hpp>
 #include <time.window.template.hpp>
 
-#include <R.transform.template.hpp>
+#include <transform.template.hpp>
 #include <freq.transform.template.hpp>
 
 extern "C" SEXP movingMean(SEXP x, SEXP periods) {

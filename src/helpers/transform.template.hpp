@@ -1,6 +1,5 @@
-// -*- mode: C++; c-indent-level: 2; c-basic-offset: 2; tab-width: 8 -*-
-#ifndef R_TRANSFORM_TEMPLATE_HPP
-#define R_TRANSFORM_TEMPLATE_HPP
+#ifndef TRANSFORM_TEMPLATE_HPP
+#define TRANSFORM_TEMPLATE_HPP
 
 #include <tslib/tseries.hpp>
 #include <R.tseries.data.backend.hpp>
@@ -117,4 +116,4 @@ SEXP transformSpecializer(SEXP x, SEXP arg1) {
   }
 }
 
-#endif // R_TRANSFORM_TEMPLATE_HPP
+#endif // TRANSFORM_TEMPLATE_HPP
