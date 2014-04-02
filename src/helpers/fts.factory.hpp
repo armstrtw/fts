@@ -7,17 +7,17 @@
 #define R_NO_REMAP
 #include <Rinternals.h>
 
-enum class DatePolicyT { dateT, posixT, unknownDateTypeT };
+enum DatePolicyT { dateT, posixT, unknownDateTypeT };
 
 class TsTypeTuple {
 public:
   static DatePolicyT getIndexPolicyType(SEXP x) {
     SEXP klass = Rf_getAttrib(x,R_ClassSymbol);
-    if(klass==R_NilValue) return DatePolicyT::unknownDateTypeT;
-    if(strcmp(CHAR(STRING_ELT(klass,0)),"Date")==0) return DatePolicyT::dateT;
-    if(strcmp(CHAR(STRING_ELT(klass,0)),"POSIXct")==0) return DatePolicyT::posixT;
-    if(Rf_length(klass)>1 && strcmp(CHAR(STRING_ELT(klass,1)),"POSIXct")==0) return DatePolicyT::posixT;
-    return DatePolicyT::unknownDateTypeT;
+    if(klass==R_NilValue) return unknownDateTypeT;
+    if(strcmp(CHAR(STRING_ELT(klass,0)),"Date")==0) return dateT;
+    if(strcmp(CHAR(STRING_ELT(klass,0)),"POSIXct")==0) return posixT;
+    if(Rf_length(klass)>1 && strcmp(CHAR(STRING_ELT(klass,1)),"POSIXct")==0) return posixT;
+    return unknownDateTypeT;
   }
   SEXPTYPE dateSEXPTYPE;
   SEXPTYPE dataSEXPTYPE;

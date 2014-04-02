@@ -23,9 +23,17 @@ public:
 
   // deep copy (do we need this)?
   // BackendBase(const BackendBase& t): R_object(PROTECT(duplicate(t.R_object))) {};
-
-  // delegating constructor
-  BackendBase(const BackendBase& t): BackendBase(t.R_object) {}
+  BackendBase(const BackendBase& t): R_object(PROTECT(t.R_object)) {
+    if(Rf_getAttrib(R_object,R_ClassSymbol)==R_NilValue) {
+      throw std::logic_error("BackendBase(const SEXP x): Object has no classname.");
+    }
+    if(strcmp(CHAR(STRING_ELT(Rf_getAttrib(R_object,R_ClassSymbol),0)),"fts")!=0) {
+      throw std::logic_error("BackendBase(const SEXP x): not an fts object.");
+    }
+    if(Rf_getAttrib(R_object,Rf_install("index"))==R_NilValue) {
+      throw std::logic_error("BackendBase(const SEXP x): Object has no index.");
+    }
+  }
 
   // SEXP constructor assumes an existing fts object
   // throw if fts class is missing or index is missing

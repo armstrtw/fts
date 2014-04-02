@@ -1,1 +1,1 @@
-PKG_CXXFLAGS = -I./tslib -I./helpers -std=c++11
+PKG_CXXFLAGS = -I./tslib -I./helpers
