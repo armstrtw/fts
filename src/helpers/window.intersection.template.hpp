@@ -46,17 +46,17 @@ SEXP windowSpecializer(SEXP x, SEXP y, SEXP periods) {
     return R_NilValue;
   }
 
-  if(tsTypeInfoX.dateSEXPTYPE==REALSXP && tsTypeInfoX.dataSEXPTYPE==REALSXP && tsTypeInfoX.datePolicy== dateT) {
+  if(tsTypeInfoX.dateSEXPTYPE==REALSXP && tsTypeInfoX.dataSEXPTYPE==REALSXP && tsTypeInfoX.datePolicy==dateT) {
     return windowFun<double,double,R_len_t,JulianBackend,JulianDate,windowFunction,windowFunctionTraits>(x,y,periods);
-  } else if(tsTypeInfoX.dateSEXPTYPE==REALSXP && tsTypeInfoX.dataSEXPTYPE==INTSXP && tsTypeInfoX.datePolicy== dateT) {
+  } else if(tsTypeInfoX.dateSEXPTYPE==REALSXP && tsTypeInfoX.dataSEXPTYPE==INTSXP && tsTypeInfoX.datePolicy==dateT) {
     return windowFun<double,int,R_len_t,JulianBackend,JulianDate,windowFunction,windowFunctionTraits>(x,y,periods);
-  } else if(tsTypeInfoX.dateSEXPTYPE==REALSXP && tsTypeInfoX.dataSEXPTYPE==LGLSXP && tsTypeInfoX.datePolicy== dateT) {
+  } else if(tsTypeInfoX.dateSEXPTYPE==REALSXP && tsTypeInfoX.dataSEXPTYPE==LGLSXP && tsTypeInfoX.datePolicy==dateT) {
     return windowFun<double,int,R_len_t,JulianBackend,JulianDate,windowFunction,windowFunctionTraits>(x,y,periods);
-  } else if(tsTypeInfoX.dateSEXPTYPE==INTSXP && tsTypeInfoX.dataSEXPTYPE==REALSXP && tsTypeInfoX.datePolicy== dateT) {
+  } else if(tsTypeInfoX.dateSEXPTYPE==INTSXP && tsTypeInfoX.dataSEXPTYPE==REALSXP && tsTypeInfoX.datePolicy==dateT) {
     return windowFun<int,double,R_len_t,JulianBackend,JulianDate,windowFunction,windowFunctionTraits>(x,y,periods);
-  } else if(tsTypeInfoX.dateSEXPTYPE==INTSXP && tsTypeInfoX.dataSEXPTYPE==INTSXP && tsTypeInfoX.datePolicy== dateT) {
+  } else if(tsTypeInfoX.dateSEXPTYPE==INTSXP && tsTypeInfoX.dataSEXPTYPE==INTSXP && tsTypeInfoX.datePolicy==dateT) {
     return windowFun<int,int,R_len_t,JulianBackend,JulianDate,windowFunction,windowFunctionTraits>(x,y,periods);
-  } else if(tsTypeInfoX.dateSEXPTYPE==INTSXP && tsTypeInfoX.dataSEXPTYPE==LGLSXP && tsTypeInfoX.datePolicy== dateT) {
+  } else if(tsTypeInfoX.dateSEXPTYPE==INTSXP && tsTypeInfoX.dataSEXPTYPE==LGLSXP && tsTypeInfoX.datePolicy==dateT) {
     return windowFun<int,int,R_len_t,JulianBackend,JulianDate,windowFunction,windowFunctionTraits>(x,y,periods);
   } else if(tsTypeInfoX.dateSEXPTYPE==REALSXP && tsTypeInfoX.dataSEXPTYPE==REALSXP && tsTypeInfoX.datePolicy==posixT) {
     return windowFun<double,double,R_len_t,PosixBackend,PosixDate,windowFunction,windowFunctionTraits>(x,y,periods);

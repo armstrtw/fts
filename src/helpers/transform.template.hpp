@@ -50,17 +50,17 @@ template<template<class> class transformFunction, template<class> class transfor
 SEXP transformSpecializer(SEXP x) {
   const TsTypeTuple tsTypeInfo(x);
 
-  if(tsTypeInfo.dateSEXPTYPE==REALSXP && tsTypeInfo.dataSEXPTYPE==REALSXP && tsTypeInfo.datePolicy== dateT) {
+  if(tsTypeInfo.dateSEXPTYPE==REALSXP && tsTypeInfo.dataSEXPTYPE==REALSXP && tsTypeInfo.datePolicy==dateT) {
     return transformFun<double,double,R_len_t,JulianBackend,JulianDate,transformFunction,transformFunctionTraits>(x);
-  } else if(tsTypeInfo.dateSEXPTYPE==REALSXP && tsTypeInfo.dataSEXPTYPE==INTSXP && tsTypeInfo.datePolicy== dateT) {
+  } else if(tsTypeInfo.dateSEXPTYPE==REALSXP && tsTypeInfo.dataSEXPTYPE==INTSXP && tsTypeInfo.datePolicy==dateT) {
     return transformFun<double,int,R_len_t,JulianBackend,JulianDate,transformFunction,transformFunctionTraits>(x);
-  } else if(tsTypeInfo.dateSEXPTYPE==REALSXP && tsTypeInfo.dataSEXPTYPE==LGLSXP && tsTypeInfo.datePolicy== dateT) {
+  } else if(tsTypeInfo.dateSEXPTYPE==REALSXP && tsTypeInfo.dataSEXPTYPE==LGLSXP && tsTypeInfo.datePolicy==dateT) {
     return transformFun<double,int,R_len_t,JulianBackend,JulianDate,transformFunction,transformFunctionTraits>(x);
-  } else if(tsTypeInfo.dateSEXPTYPE==INTSXP && tsTypeInfo.dataSEXPTYPE==REALSXP && tsTypeInfo.datePolicy== dateT) {
+  } else if(tsTypeInfo.dateSEXPTYPE==INTSXP && tsTypeInfo.dataSEXPTYPE==REALSXP && tsTypeInfo.datePolicy==dateT) {
     return transformFun<int,double,R_len_t,JulianBackend,JulianDate,transformFunction,transformFunctionTraits>(x);
-  } else if(tsTypeInfo.dateSEXPTYPE==INTSXP && tsTypeInfo.dataSEXPTYPE==INTSXP && tsTypeInfo.datePolicy== dateT) {
+  } else if(tsTypeInfo.dateSEXPTYPE==INTSXP && tsTypeInfo.dataSEXPTYPE==INTSXP && tsTypeInfo.datePolicy==dateT) {
     return transformFun<int,int,R_len_t,JulianBackend,JulianDate,transformFunction,transformFunctionTraits>(x);
-  } else if(tsTypeInfo.dateSEXPTYPE==INTSXP && tsTypeInfo.dataSEXPTYPE==LGLSXP && tsTypeInfo.datePolicy== dateT) {
+  } else if(tsTypeInfo.dateSEXPTYPE==INTSXP && tsTypeInfo.dataSEXPTYPE==LGLSXP && tsTypeInfo.datePolicy==dateT) {
     return transformFun<int,int,R_len_t,JulianBackend,JulianDate,transformFunction,transformFunctionTraits>(x);
   } else if(tsTypeInfo.dateSEXPTYPE==REALSXP && tsTypeInfo.dataSEXPTYPE==REALSXP && tsTypeInfo.datePolicy==posixT) {
     return transformFun<double,double,R_len_t,PosixBackend,PosixDate,transformFunction,transformFunctionTraits>(x);
@@ -85,17 +85,17 @@ template<template<class> class transformFunction, template<class> class transfor
 SEXP transformSpecializer(SEXP x, SEXP arg1) {
   const TsTypeTuple tsTypeInfo(x);
 
-  if(tsTypeInfo.dateSEXPTYPE==REALSXP && tsTypeInfo.dataSEXPTYPE==REALSXP && tsTypeInfo.datePolicy== dateT) {
+  if(tsTypeInfo.dateSEXPTYPE==REALSXP && tsTypeInfo.dataSEXPTYPE==REALSXP && tsTypeInfo.datePolicy==dateT) {
     return transformFun<double,double,R_len_t,JulianBackend,JulianDate,transformFunction,transformFunctionTraits>(x,arg1);
-  } else if(tsTypeInfo.dateSEXPTYPE==REALSXP && tsTypeInfo.dataSEXPTYPE==INTSXP && tsTypeInfo.datePolicy== dateT) {
+  } else if(tsTypeInfo.dateSEXPTYPE==REALSXP && tsTypeInfo.dataSEXPTYPE==INTSXP && tsTypeInfo.datePolicy==dateT) {
     return transformFun<double,int,R_len_t,JulianBackend,JulianDate,transformFunction,transformFunctionTraits>(x,arg1);
-  } else if(tsTypeInfo.dateSEXPTYPE==REALSXP && tsTypeInfo.dataSEXPTYPE==LGLSXP && tsTypeInfo.datePolicy== dateT) {
+  } else if(tsTypeInfo.dateSEXPTYPE==REALSXP && tsTypeInfo.dataSEXPTYPE==LGLSXP && tsTypeInfo.datePolicy==dateT) {
     return transformFun<double,int,R_len_t,JulianBackend,JulianDate,transformFunction,transformFunctionTraits>(x,arg1);
-  } else if(tsTypeInfo.dateSEXPTYPE==INTSXP && tsTypeInfo.dataSEXPTYPE==REALSXP && tsTypeInfo.datePolicy== dateT) {
+  } else if(tsTypeInfo.dateSEXPTYPE==INTSXP && tsTypeInfo.dataSEXPTYPE==REALSXP && tsTypeInfo.datePolicy==dateT) {
     return transformFun<int,double,R_len_t,JulianBackend,JulianDate,transformFunction,transformFunctionTraits>(x,arg1);
-  } else if(tsTypeInfo.dateSEXPTYPE==INTSXP && tsTypeInfo.dataSEXPTYPE==INTSXP && tsTypeInfo.datePolicy== dateT) {
+  } else if(tsTypeInfo.dateSEXPTYPE==INTSXP && tsTypeInfo.dataSEXPTYPE==INTSXP && tsTypeInfo.datePolicy==dateT) {
     return transformFun<int,int,R_len_t,JulianBackend,JulianDate,transformFunction,transformFunctionTraits>(x,arg1);
-  } else if(tsTypeInfo.dateSEXPTYPE==INTSXP && tsTypeInfo.dataSEXPTYPE==LGLSXP && tsTypeInfo.datePolicy== dateT) {
+  } else if(tsTypeInfo.dateSEXPTYPE==INTSXP && tsTypeInfo.dataSEXPTYPE==LGLSXP && tsTypeInfo.datePolicy==dateT) {
     return transformFun<int,int,R_len_t,JulianBackend,JulianDate,transformFunction,transformFunctionTraits>(x,arg1);
   } else if(tsTypeInfo.dateSEXPTYPE==REALSXP && tsTypeInfo.dataSEXPTYPE==REALSXP && tsTypeInfo.datePolicy==posixT) {
     return transformFun<double,double,R_len_t,PosixBackend,PosixDate,transformFunction,transformFunctionTraits>(x,arg1);
