@@ -18,7 +18,7 @@ SEXP padFun(SEXP x, SEXP dates) {
   TSDATABACKEND<TDATE,TDATA,TSDIM> tsData(x);
   TSeries<TDATE,TDATA,TSDIM,TSDATABACKEND,DatePolicy> ts(tsData);
   TSeries<TDATE,TDATA,TSDIM,TSDATABACKEND,DatePolicy> ans = ts.template pad(Rallocator<TDATE>::RdataPtr(dates),Rallocator<TDATE>::RdataPtr(dates) + Rf_length(dates));
-  return ans.getIMPL()->R_object;
+  return ans.getIMPL()->Robject;
 }
 
 SEXP padSpecializer(SEXP x, SEXP dates) {

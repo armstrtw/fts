@@ -26,7 +26,7 @@ SEXP windowFun(SEXP x, SEXP periods) {
   TSDATABACKEND<TDATE,TDATA,TSDIM> tsData(x);
   TSeries<TDATE,TDATA,TSDIM,TSDATABACKEND,DatePolicy> ts(tsData);
   TSeries<TDATE,ReturnTDATA,TSDIM,TSDATABACKEND,DatePolicy> ans = ts.template window<ReturnTDATA,windowFunction>(p);
-  return ans.getIMPL()->R_object;
+  return ans.getIMPL()->Robject;
 }
 
 template<template<class> class windowFunction, template<class> class windowFunctionTraits>

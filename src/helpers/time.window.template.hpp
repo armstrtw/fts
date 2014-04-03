@@ -22,7 +22,7 @@ SEXP timeWindowFun(SEXP x) {
   TSDATABACKEND<TDATE,TDATA,TSDIM> tsData(x);
   TSeries<TDATE,TDATA,TSDIM,TSDATABACKEND,DatePolicy> ts(tsData);
   TSeries<TDATE,ReturnTDATA,TSDIM,TSDATABACKEND,DatePolicy> ans = ts.template time_window<ReturnTDATA,windowFunction,PFUNC>();
-  return ans.getIMPL()->R_object;
+  return ans.getIMPL()->Robject;
 }
 
 template<template<class> class windowFunction, template<class> class windowFunctionTraits,template<class, template<typename> class> class PFUNC>

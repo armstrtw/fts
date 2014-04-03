@@ -22,7 +22,7 @@ SEXP transformFun(SEXP x) {
   TSDATABACKEND<TDATE,TDATA,TSDIM> tsData(x);
   TSeries<TDATE,TDATA,TSDIM,TSDATABACKEND,DatePolicy> ts(tsData);
   TSeries<TDATE,ReturnTDATA,TSDIM,TSDATABACKEND,DatePolicy> ans = ts.template transform<ReturnTDATA,transformFunction>();
-  return ans.getIMPL()->R_object;
+  return ans.getIMPL()->Robject;
 }
 
 template<typename TDATE, typename TDATA,
@@ -43,7 +43,7 @@ SEXP transformFun(SEXP x, SEXP arg1) {
 
 
   TSeries<TDATE,ReturnTDATA,TSDIM,TSDATABACKEND,DatePolicy> ans = ts.template transform_1arg<ReturnTDATA,transformFunction>(Rallocator<ArgType>::scalar(arg1));
-  return ans.getIMPL()->R_object;
+  return ans.getIMPL()->Robject;
 }
 
 template<template<class> class transformFunction, template<class> class transformFunctionTraits>
