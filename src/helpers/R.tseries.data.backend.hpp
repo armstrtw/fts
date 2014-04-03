@@ -129,8 +129,8 @@ public:
 
   TSDIM nrow() const { return BackendBase::nrow(); }
   TSDIM ncol() const { return BackendBase::ncol(); }
-  TDATA* getData() const { return Rallocator<TDATA>::R_dataPtr(R_object); }
-  TDATE* getDates() const { return Rallocator<TDATE>::R_dataPtr(Rf_getAttrib(R_object,Rf_install("index"))); }
+  TDATA* getData() const { return Rallocator<TDATA>::RdataPtr(R_object); }
+  TDATE* getDates() const { return Rallocator<TDATE>::RdataPtr(Rf_getAttrib(R_object,Rf_install("index"))); }
 };
 
 template <typename TDATE,typename TDATA, typename TSDIM>
@@ -155,8 +155,8 @@ public:
 
   TSDIM nrow() const { return BackendBase::nrow(); }
   TSDIM ncol() const { return BackendBase::ncol(); }
-  TDATA* getData() const { return Rallocator<TDATA>::R_dataPtr(R_object); }
-  TDATE* getDates() const { return Rallocator<TDATE>::R_dataPtr(Rf_getAttrib(R_object,Rf_install("index"))); }
+  TDATA* getData() const { return Rallocator<TDATA>::RdataPtr(R_object); }
+  TDATE* getDates() const { return Rallocator<TDATE>::RdataPtr(Rf_getAttrib(R_object,Rf_install("index"))); }
 };
 
 #endif // R_TSERIES_DATA_BACKEND_HPP
