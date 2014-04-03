@@ -77,7 +77,7 @@ public:
       SET_VECTOR_ELT(dimnames, 0, R_NilValue);
     }
     SEXP cnames_sexp = PROTECT(Rf_allocVector(STRSXP,cnames.size())); ++protect_count;
-    for(R_len_t i = 0; i < cnames.size(); ++i) {
+    for(size_t i = 0; i < cnames.size(); ++i) {
       SET_STRING_ELT(cnames_sexp, i, Rf_mkChar(cnames[i].c_str()));
     }
     SET_VECTOR_ELT(dimnames, 1, cnames_sexp);
