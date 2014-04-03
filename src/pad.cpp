@@ -1,3 +1,4 @@
+#define R_NO_REMAP
 #include <Rinternals.h>
 #include <tslib/tseries.hpp>
 #include <R.tseries.data.backend.hpp>
@@ -16,7 +17,7 @@ SEXP padFun(SEXP x, SEXP dates) {
   // build tseries from SEXP x
   TSDATABACKEND<TDATE,TDATA,TSDIM> tsData(x);
   TSeries<TDATE,TDATA,TSDIM,TSDATABACKEND,DatePolicy> ts(tsData);
-  TSeries<TDATE,TDATA,TSDIM,TSDATABACKEND,DatePolicy> ans = ts.template pad(Rallocator<TDATE>::R_dataPtr(dates),Rallocator<TDATE>::R_dataPtr(dates) + length(dates));
+  TSeries<TDATE,TDATA,TSDIM,TSDATABACKEND,DatePolicy> ans = ts.template pad(Rallocator<TDATE>::R_dataPtr(dates),Rallocator<TDATE>::R_dataPtr(dates) + Rf_length(dates));
   return ans.getIMPL()->R_object;
 }
 
