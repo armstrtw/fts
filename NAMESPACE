@@ -76,10 +76,6 @@ export(
        ## technical analysis
        ema,
        rsi,
-       year,
-       month,
-       mday,
-       wday,
        ma.crossover.up,
        ma.crossover.down,
        lower.low,

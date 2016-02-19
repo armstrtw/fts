@@ -508,22 +508,6 @@ rsi <- function(x,periods) {
     100 - 100/(1 - x.avg.up/x.avg.down)
 }
 
-year <- function(x) {
-    as.POSIXlt(index(x))$year+1900
-}
-
-month <- function(x) {
-    as.POSIXlt(index(x))$mon+1
-}
-
-mday <- function(x) {
-    as.POSIXlt(index(x))$mday
-}
-
-wday <- function(x) {
-    as.POSIXlt(index(x))$wday
-}
-
 ma.crossover.down <- function(x,n) {
     has.close <- !is.null(colnames(x)) && "close" %in% colnames(x)
     stopifnot(has.close || ncol(x) == 1)
