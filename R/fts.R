@@ -26,10 +26,10 @@ as.fts.default <- function(x) {
 }
 
 as.fts.data.frame <- function(x) {
-    cnames <-  colnames(x)
-    ans <- fts(index=x[,"asofdate"],
-               data=as.matrix(x[,-match("asofdate",cnames)]))
-    colnames(ans) <- cnames[-1]
+    stopifnot(ncol(x)>1)
+    stopifnot(any(c("Date","POSIXct") %in% class(x[,1])))
+    ans <- fts(index=x[,1],data=x[,-1])
+    colnames(ans) <- colnames(x)[-1]
     ans
 }
 
