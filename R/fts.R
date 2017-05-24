@@ -22,7 +22,7 @@ as.fts.default <- function(x) {
     } else {
         dts <- names(x)
     }
-    fts(index=dts,data=x)
+    fts(index=as.Date(dts),data=x)
 }
 
 as.fts.data.frame <- function(x) {
@@ -266,20 +266,6 @@ trim <- function(x,trim.dates) {
     new.dates <- sort(intersect(index(x),trim.dates))
     class(new.dates) <- class(index(x))
     x[new.dates,]
-}
-
-write.csv.fts <- function(x, file, ...) {
-    write.csv(as.data.frame(x), file,row.names=FALSE, ...)
-}
-
-read.csv.fts <- function(file, date.column=1, date.format="%Y-%m-%d",date.convert.fun=as.Date,...) {
-    fts.data <- read.csv(file,...)
-
-    if(mode(date.column)=="character")
-        date.column <- match(date.column,colnames(fts.data))
-
-    fts(index=date.convert.fun(strptime(fts.data[,date.column],date.format)),
-        data=as.matrix(fts.data[, -date.column, drop=F]))
 }
 
 cumsum.fts <- function(x) fts(index=index(x),data=apply(x,2,cumsum))

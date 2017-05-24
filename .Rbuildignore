@@ -2,3 +2,6 @@
 .gitignore
 .gitmodules
 test
+src/tslib/.gitignore
+src/tslib/test/.gitignore
+src/tslib/.git

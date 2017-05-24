@@ -32,8 +32,6 @@
 \alias{ma.crossover.up}
 \alias{ma.d}
 \alias{ma.distance}
-\alias{month}
-\alias{year}
 \alias{monthly.sum}
 \alias{new.high}
 \alias{new.low}
@@ -59,8 +57,6 @@
 \usage{
 above.ma(x,n)
 below.ma(x,n)
-wday(x)
-mday(x)
 \method{diff}{fts}(x,k,\dots)
 up(x)
 down(x)
@@ -88,8 +84,6 @@ ma.crossover.down(x,n)
 ma.crossover.up(x,n)
 ma.d(x,n)
 ma.distance(x,periods)
-month(x)
-year(x)
 monthly.sum(x)
 new.high(x,n)
 new.low(x,n)

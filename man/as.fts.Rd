@@ -29,8 +29,8 @@ as.fts(x)
 \examples{
 N <- 100
 xm <- matrix(rnorm(N))
-dts <- format(seq(from=Sys.Date(),length.out=N,by="days"),"\%Y-\%m-\%d")
-rownames(xm) <- dts
+dts <- seq(from=Sys.Date(),length.out=N,by="days")
+rownames(xm) <- format(dts,"\%Y-\%m-\%d")
 x.from.m <- as.fts(xm)
 x.from.df <- as.fts(data.frame(asofdate=dts,my.data=xm))
 }
