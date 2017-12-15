@@ -121,7 +121,8 @@ export(
     trend.day,
     trend.day.up,
     trend.day.down,
-    cor.by.row
+    cor.by.row,
+    stopr
 )
 
 S3method("Ops", "fts")

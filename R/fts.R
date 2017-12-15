@@ -751,3 +751,12 @@ cor.by.row <- function(x,y) {
     }
     ans
 }
+
+stopr <- function(x, level, p) {
+    stopifnot(level < 0)
+    stopifnot(p > 0)
+    stopifnot(length(level)==1L)
+    stopifnot(length(p)==1L)
+    ans <- .Call("stopr", x, as.double(level), as.integer(p),PACKAGE="fts")
+    ans
+}
