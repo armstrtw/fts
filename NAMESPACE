@@ -1,6 +1,7 @@
 useDynLib(fts)
 
 importFrom(stats,lag,cor)
+importFrom(utils,tail)
 importFrom(graphics,plot,plot.xy)
 importFrom(grDevices,xy.coords)
 importFrom(zoo,coredata)
