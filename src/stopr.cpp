@@ -31,25 +31,32 @@ SEXP stoprFun(SEXP x, SEXP level_, SEXP periods_) {
   int stop_count_down(0);
   double cummax(0), cumpnl(0), dd(0);
   for (TSDIM i = 0; i < ts.nrow(); ++i) {
-    // increment cumpnl
-    cumpnl += ts(i, 0);
-    // test/set cummax
-    if (cumpnl > cummax) { cummax = cumpnl; }
-    // calc drawdown
-    dd = cumpnl - cummax;
 
     // if we are not stopped then increment
     // otherwise keep
     if (stop_count_down == 0) {
+      // increment cumpnl
+      cumpnl += ts(i, 0);
       ans(i, 0) = ts(i, 0);
     } else {
       --stop_count_down;
       ans(i, 0) = 0;
     }
 
+    // test/set cummax
+    if (cumpnl > cummax) { cummax = cumpnl; }
+    // calc drawdown
+    dd = cumpnl - cummax;
+
     // if dd exceeds level (to the downside), then set the stop day couter
     // pnl will be set to 0 starting tomorrow (i.e. preserve the stopout loss for today)
-    if (dd < level) { stop_count_down = p; }
+    // reset pnls, so we don't immediately stop out again upon resumption of trading
+    // i.e. if 1st day of new trading is a loss, then stop out happens again
+    if (dd < level) {
+      stop_count_down = p;
+      cumpnl          = 0;
+      cummax          = 0;
+    }
   }
 
   return ans.getIMPL()->Robject;
