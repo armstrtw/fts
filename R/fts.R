@@ -753,6 +753,7 @@ cor.by.row <- function(x,y) {
 }
 
 stopr <- function(x, level, p) {
+    stopifnot(ncol(x)==1L)
     stopifnot(level < 0)
     stopifnot(p > 0)
     stopifnot(length(level)==1L)
