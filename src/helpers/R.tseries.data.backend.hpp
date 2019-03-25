@@ -94,7 +94,7 @@ public:
     return ans;
   }
 
-  const size_t getColnamesSize() const {
+  size_t getColnamesSize() const {
     if (Rf_getAttrib(Robject, R_DimNamesSymbol) != R_NilValue &&
         VECTOR_ELT(Rf_getAttrib(Robject, R_DimNamesSymbol), 1) != R_NilValue) {
       return Rf_length(VECTOR_ELT(Rf_getAttrib(Robject, R_DimNamesSymbol), 1));
